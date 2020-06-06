@@ -23,4 +23,4 @@ This decreases the grind for upgrading low tier troops and actually rewards the 
   - Implementation of optional configuration menu with mildeww's ModLib
   - Configurable Experience value for Heroes
   - Configurable Experience value for Generic Troops
-  - Toggleable linear escale for the Experience
+  - Toggleable linear escale Experience.
