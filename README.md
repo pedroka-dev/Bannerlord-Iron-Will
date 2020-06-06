@@ -19,7 +19,7 @@ This decreases the grind for upgrading low tier troops and actually rewards the 
 
 The mod works not only for the player, but for any mobile NPC parties too! That's right, even for the poor and dirty Looters! It only show as a message for the player character and his companions (to not spam messages into the Information manager)
 
-**Chec out now its [Bannerlord Nexus Mod Page](https://www.nexusmods.com/mountandblade2bannerlord/mods/1797) to Download it!**
+**Check out now its [Bannerlord Nexus Mod Page](https://www.nexusmods.com/mountandblade2bannerlord/mods/1797) to Download it!**
 
 # Features 
   - Adds Athletics Experience to **any** Hero wounded in battle (80xp by default. Almost 1/3 of de XP to upgrade a Aserai Recruit)
