@@ -10,11 +10,14 @@
 ---
 
 # Iron Will - Wound Experience
+
+![alt text](https://github.com/pedro-ca/bannerlord_iron_will/blob/master/WoundXP/Wound%20Experience%20Thumbnail.jpg?raw=true)
+
 The best way to get stronger is by struggle. **The mod Wound Experience** adds experience points to any troop which survives getting wounded. With inspirations from Kenshi, this true "survival of the fittest" experience makes your troop battle hardened by just the simple fact of not dying after a possible fatal blow. 
 
 This decreases the grind for upgrading low tier troops and actually rewards the player for letting his weak troopos risk their lives by fighting in battle. It also indirectly buffs Medicine skill, by making it kinda useful to upgrade troops. 
 
-The mod works not only for the player, but for any mobile NPC parties too! That's right, even for the poor and dirty Looters!
+The mod works not only for the player, but for any mobile NPC parties too! That's right, even for the poor and dirty Looters! It only show as a message for the player character and his companions (to not spam messages into the Information manager)
 
 # Features 
   - Adds Athletics Experience to **any** Hero wounded in battle (80xp by default. Almost 1/3 of de XP to upgrade a Aserai Recruit)
