@@ -17,8 +17,8 @@ This decreases the grind for upgrading low tier troops and actually rewards the 
 The mod works not only for the player, but for any mobile NPC parties too! That's right, even for the poor and dirty Looters!
 
 # Features 
-  - Adds Athletics Experience to **any** Hero wounded in battle (20xp by default)
-  - Adds Generic Experience to **any** Troop wounded in battle (20xp by default)
+  - Adds Athletics Experience to **any** Hero wounded in battle (80xp by default. Almost 1/3 of de XP to upgrade a Aserai Recruit)
+  - Adds Generic Experience to **any** Troop wounded in battle (80xp by default. Almost 1/6 of the Athletics XP nneded for level 25)
   - Only valid for **real** battles, so you can't cheese it by getting wounded many times in tournaments and arenas heh
 
 # To-do
