@@ -1,4 +1,4 @@
-# Iron Will
+# But what is Iron Will?
   Iron Will is a collection of mods for the game Mount & Blade 2: Bannerlord that adds many utilities to aid the player and his party to survive even in the harshest, rock botton environments. The main objetive is add immersive actions to balance the game difficulty curve without decreasing the challenge. This modpack might be useful with any mods that makes the game harder and more punishing. 
   
 # Current Mod List:
@@ -18,6 +18,8 @@ The best way to get stronger is by struggle. **The mod Wound Experience** adds e
 This decreases the grind for upgrading low tier troops and actually rewards the player for letting his weak troopos risk their lives by fighting in battle. It also indirectly buffs Medicine skill, by making it kinda useful to upgrade troops. 
 
 The mod works not only for the player, but for any mobile NPC parties too! That's right, even for the poor and dirty Looters! It only show as a message for the player character and his companions (to not spam messages into the Information manager)
+
+**Chec out now its [Bannerlord Nexus Mod Page](https://www.nexusmods.com/mountandblade2bannerlord/mods/1797) to Download it!**
 
 # Features 
   - Adds Athletics Experience to **any** Hero wounded in battle (80xp by default. Almost 1/3 of de XP to upgrade a Aserai Recruit)
