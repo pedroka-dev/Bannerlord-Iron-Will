@@ -22,7 +22,7 @@ The mod works not only for the player, but for any mobile NPC parties too! That'
 **Check out now its [Bannerlord Nexus Mod Page](https://www.nexusmods.com/mountandblade2bannerlord/mods/1797) to Download it!**
 
 # Features 
-  - Adds Athletics Experience to **any** Hero wounded in battle (80xp by default. Almost 1/6 of the Athletics XP nneded for level 25) 
+  - Adds Athletics Experience to **any** Hero wounded in battle (80xp by default. Almost 1/6 of the Athletics XP for level 25) 
   - Adds Generic Experience to **any** Troop wounded in battle (80xp by default. Almost 1/3 of de XP to upgrade a Aserai Recruit)
   - Only valid for **real** battles, so you can't cheese it by getting wounded many times in tournaments and arenas heh
   - Works globally to all troops in game, both in battle and campaing map.
