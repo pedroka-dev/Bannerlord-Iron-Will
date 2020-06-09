@@ -2,7 +2,7 @@
   Iron Will is a collection of mods for the game Mount & Blade 2: Bannerlord that adds many utilities to aid the player and his party to survive even in the harshest, rock botton environments. The main objetive is add immersive actions to balance the game difficulty curve without decreasing the challenge. This modpack might be useful with any mods that makes the game harder and more punishing. 
   
 # Current Mod List:
-  - Iron Will - Wound Experience
+  - [Iron Will - Wound Experience](https://www.nexusmods.com/mountandblade2bannerlord/mods/1797)
   - Iron Will - Shady Business (comming soon)
   - Iron Will - Battlefield Scavenging (comming soon)
   - Iron Will - Hunting Instincts (comming soon)
@@ -25,8 +25,10 @@ The mod works not only for the player, but for any mobile NPC parties too! That'
   - Adds Athletics Experience to **any** Hero wounded in battle (80xp by default. Almost 1/6 of the Athletics XP nneded for level 25) 
   - Adds Generic Experience to **any** Troop wounded in battle (80xp by default. Almost 1/3 of de XP to upgrade a Aserai Recruit)
   - Only valid for **real** battles, so you can't cheese it by getting wounded many times in tournaments and arenas heh
+  - Works globally to all troops in game, both in battle and campaing map.
   
-  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/WoundXP/generic%20troop%20exp%20example.JPG)
+  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/WoundXP/heroe%20athletic%20exp%20example.JPG)
+  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/WoundXP/generic%20troop%20exp%20example.JPG) 
   ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/WoundXP/debug%20on%20example.JPG)
   ![alt text](https://github.com/pedro-ca/bannerlord_iron_will/blob/master/WoundXP/Wound%20Experience%20Simple%20engine.png?raw=true)
 
