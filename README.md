@@ -26,6 +26,8 @@ The mod works not only for the player, but for any mobile NPC parties too! That'
   - Adds Generic Experience to **any** Troop wounded in battle (80xp by default. Almost 1/3 of de XP to upgrade a Aserai Recruit)
   - Only valid for **real** battles, so you can't cheese it by getting wounded many times in tournaments and arenas heh
   
+  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/WoundXP/generic%20troop%20exp%20example.JPG)
+  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/WoundXP/debug%20on%20example.JPG)
   ![alt text](https://github.com/pedro-ca/bannerlord_iron_will/blob/master/WoundXP/Wound%20Experience%20Simple%20engine.png?raw=true)
 
 # To-do
