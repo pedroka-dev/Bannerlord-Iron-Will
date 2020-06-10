@@ -1,6 +1,5 @@
 ﻿using System;
 using HarmonyLib;
-using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -13,28 +12,38 @@ namespace xWoundXP
     {
         static void Postfix(TroopRoster __instance, CharacterObject troop, int numberToWound, UniqueTroopDescriptor troopSeed)
          {
-            if (troop.IsHero)
+            try
             {
-                int xpValue = WoundXpSubModule.heroWoundXpValue;
-
-                Hero heroTroop = troop.HeroObject;
-                heroTroop.AddSkillXp(DefaultSkills.Athletics, xpValue);
-
-                if (troop.IsPlayerCharacter || heroTroop.IsPlayerCompanion || WoundXpSubModule.debugInfo)
+                if (troop.IsHero)
                 {
-                    InformationManager.DisplayMessage(new InformationMessage(heroTroop.Name + "received " + xpValue + " Athletics XP for survinving after being wounded."));
+                    int xpValue = WoundXpSubModule.settings.heroWoundXpValue;
+
+                    Hero heroTroop = troop.HeroObject;
+                    heroTroop.AddSkillXp(DefaultSkills.Athletics, xpValue);
+
+                    if (troop.IsPlayerCharacter || heroTroop.IsPlayerCompanion || WoundXpSubModule.settings.debugInfo)
+                    {
+                        InformationManager.DisplayMessage(new InformationMessage(heroTroop.Name + " received " + xpValue + " Athletics XP for survinving after being wounded.",Colors.Yellow));
+                        WoundXpSubModule.Log.Info("Hero Troop: " + troopSeed.ToString() + " | " + heroTroop.Name + " received Athletics XP value of " + xpValue);
+                    }
+                }
+                else
+                {
+                    int xpValue = WoundXpSubModule.settings.troopWoundXpValue;
+
+                    __instance.AddXpToTroop(xpValue, troop);
+
+                    if (WoundXpSubModule.settings.debugInfo)
+                    {
+                        InformationManager.DisplayMessage(new InformationMessage(troop.Name + " received " + xpValue + " XP for survinving after being wounded.", Colors.Yellow));
+                        WoundXpSubModule.Log.Info("Generic Troop: " + troopSeed.ToString() + " | " + troop.Name + " received XP value of " + xpValue);
+                    }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                int xpValue = WoundXpSubModule.troopWoundXpValue;
-
-                __instance.AddXpToTroop(xpValue, troop);
-
-                if(WoundXpSubModule.debugInfo)
-                {
-                    InformationManager.DisplayMessage(new InformationMessage(troop.Name + " received " + xpValue + " XP for survinving after being wounded."));
-                }
+                InformationManager.DisplayMessage(new InformationMessage("Something went wrong with Iron Will - Wound Experience. Please check the log file at \\bin\\Win64_Shipping_Client\\: " + WoundXpSubModule.LogFilePath, Colors.Red)); 
+                WoundXpSubModule.Log.Error(ex, "Error on Harmony Patch for WoundTroop.");
             }
         }
     }

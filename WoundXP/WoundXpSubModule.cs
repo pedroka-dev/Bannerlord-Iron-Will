@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using HarmonyLib;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Core;
@@ -19,30 +16,50 @@ namespace xxWoundXP
 {
     public class WoundXpSubModule : MBSubModuleBase
     {
-        public static int troopWoundXpValue = 20;
-        public static int heroWoundXpValue = 20;
-        public static bool debugInfo = false;
-
         protected override void OnSubModuleLoad()
         {
             base.OnSubModuleLoad();
 
-            //Module.CurrentModule.AddInitialStateOption(new InitialStateOption("Message",
-            //     new TextObject("Message", null), 9990,
-            //     () => { InformationManager.DisplayMessage(new InformationMessage("WoundXp loaded sucessfully.")); },
-            //false));
-            
+            LoggingConfiguration loggingConfiguration = new LoggingConfiguration();
+            FileTarget target = new FileTarget(LogFileTarget)
+            {
+                FileName = LogFilePath
+            };
+            loggingConfiguration.AddRule(LogLevel.Debug, LogLevel.Fatal, target, "*");
+            LogManager.Configuration = loggingConfiguration;
+
             try
             {
                 Harmony harmony = new Harmony("mod.bannerlord.woundxp");
                 harmony.PatchAll();
+                Log.Info("Harmony Initialized sucessfully.");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error Initialising Bannerlord Tweaks:\n\n" + ex.Message);
+                MessageBox.Show("Error Initialising Iron Will - Wound Experience:\n\n" + ex.Message);
+                Log.Error(ex, "Failed to initialize Harmony.");
             }
 
-            //InformationManager.DisplayMessage(new InformationMessage("WoundXp loaded sucessfully."));
+            
         }
+
+        protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
+        {
+            if (!(game.GameType is Campaign))
+            {
+                return;
+            }
+
+            InformationManager.DisplayMessage(new InformationMessage("Sucessfully Loaded Iron Will - Wound Experience", Colors.Green));
+            Log.Info("Campaing Game Initialized.");
+        }
+
+        public static readonly string LogFileTarget = "WoundExperienceLogFile";
+        public static readonly string LogFilePath = "WoundExperienceLog.txt";
+        
+        public static readonly NLog.Logger Log = LogManager.GetCurrentClassLogger();
+
+        public static ModuleSettings settings = new ModuleSettings();
     }
+
 }

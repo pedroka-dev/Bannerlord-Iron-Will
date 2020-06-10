@@ -2,7 +2,7 @@
 <Module>
      <Name value="Iron Will - Wound Experience"/>
      <Id value="xxWoundXP"/>
-     <Version value="e1.4.2"/>
+     <Version value="v1.1.0"/>
      <SingleplayerModule value="true"/>
      <MultiplayerModule value="false"/>
      <DependedModules>
