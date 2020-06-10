@@ -30,7 +30,6 @@ The mod works not only for the player, but for any mobile NPC parties too! That'
   ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/WoundXP/heroe%20athletic%20exp%20example.JPG)
   ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/WoundXP/generic%20troop%20exp%20example.JPG) 
   ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/WoundXP/debug%20on%20example.JPG)
-  ![alt text](https://github.com/pedro-ca/bannerlord_iron_will/blob/master/WoundXP/Wound%20Experience%20Simple%20engine.png?raw=true)
 
 # To-do
   - Implementation of optional configuration menu with [mildeww's ModLib](https://www.nexusmods.com/mountandblade2bannerlord/mods/592)
