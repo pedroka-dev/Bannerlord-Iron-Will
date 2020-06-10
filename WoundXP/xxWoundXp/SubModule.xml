@@ -2,13 +2,13 @@
 <Module>
      <Name value="Iron Will - Wound Experience"/>
      <Id value="xxWoundXP"/>
-     <Version value="e1.1.2"/>
+     <Version value="e1.4.2"/>
      <SingleplayerModule value="true"/>
      <MultiplayerModule value="false"/>
      <DependedModules>
          <DependedModule Id="Native"/>
          <DependedModule Id="SandBoxCore"/>
-         <DependedModule Id="Sandbox"/>s
+         <DependedModule Id="Sandbox"/>
          <DependedModule Id="CustomBattle"/>
          <DependedModule Id="StoryMode" />
      </DependedModules>
@@ -22,7 +22,5 @@
                  <Tag key="IsNoRenderModeElement" value="false" />
              </Tags>
          </SubModule>
-		 
      </SubModules>
-
  </Module>
