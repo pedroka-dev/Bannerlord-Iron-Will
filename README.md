@@ -26,6 +26,7 @@ The mod works not only for the player, but for any mobile NPC parties too! That'
   - Adds Generic Experience to **any** Troop wounded in battle (80xp by default. Almost 1/3 of de XP to upgrade a Aserai Recruit)
   - Only valid for **real** battles, so you can't cheese it by getting wounded many times in tournaments and arenas heh
   - Works globally to all troops in game, both in battle and campaing map.
+  - NLogger for debugging reasons at "\bin\Win64_Shipping_Client\WoundExperienceLog.txt"
   
   ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/WoundXP/heroe%20athletic%20exp%20example.JPG)
   ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/WoundXP/generic%20troop%20exp%20example.JPG) 
@@ -42,3 +43,10 @@ The mod works not only for the player, but for any mobile NPC parties too! That'
 Currently working with e1.4.0, e1.4.1 and e.1.4.2 versions. Should be compatible with must mods.
 
 If you have any issue, please adress it at the [Bugs tab](https://www.nexusmods.com/mountandblade2bannerlord/mods/1797?tab=bugs) in the mod page.
+
+# Changelog
+v1.1.0:
+- Changed the default experience value for both troops and heroes, from 20 to 80. 
+- Added NLogger to debug and find problems.
+- Information manager messages are now yellow, to increased visibility. 
+- Added initial sucess message on campaing start to inform the user that the module is working.
