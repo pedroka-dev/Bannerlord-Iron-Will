@@ -3,9 +3,10 @@
   
 # Current Mod List:
   - [Iron Will - Wound Experience](https://www.nexusmods.com/mountandblade2bannerlord/mods/1797)
-  - Iron Will - Shady Business (comming soon)
+  - Iron Will - Kleptomania  (comming soon)
   - Iron Will - Battlefield Scavenging (comming soon)
-  - Iron Will - Hunting Instincts (comming soon)
+  - Iron Will - Hunting Instinct (comming soon)
+  - Iron Will - Shady Business (comming soon)
 
 ---
 
