@@ -32,7 +32,7 @@ namespace xxWoundXP
             {
                 Harmony harmony = new Harmony("mod.bannerlord.woundxp");
                 harmony.PatchAll();
-                Log.Info("Harmony Initialized sucessfully.");
+                Log.Info("Module intialization | Harmony Initialized sucessfully.");
             }
             catch (Exception ex)
             {
@@ -51,7 +51,7 @@ namespace xxWoundXP
             }
 
             InformationManager.DisplayMessage(new InformationMessage("Sucessfully Loaded Iron Will - Wound Experience", Colors.Green));
-            Log.Info("Campaing Game Initialized.");
+            Log.Info("Module intialization | Campaing Game Initialized.");
         }
 
         public static readonly string LogFileTarget = "WoundExperienceLogFile";
