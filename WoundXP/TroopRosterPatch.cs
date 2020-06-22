@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -14,14 +15,18 @@ namespace xWoundXP
         {
             try
             {
+                //Reflection gimmicks to get "internal PartyBase OwnerParty" from TroopRoster 
+                PropertyInfo prop = __instance.GetType().GetProperty("OwnerParty", BindingFlags.NonPublic | BindingFlags.Instance);
+                PartyBase OwnerParty = (PartyBase)prop.GetValue(__instance);
+
                 if (troop.IsHero)
                 {
-                    int xpValue = WoundXpSubModule.settings.heroWoundXpValue;
+                    int xpValue = WoundXpSubModule.settings.HeroWoundXpValue;
 
                     Hero heroTroop = troop.HeroObject;
                     heroTroop.AddSkillXp(DefaultSkills.Athletics, xpValue);
 
-                    if (troop.IsPlayerCharacter || heroTroop.IsPlayerCompanion || WoundXpSubModule.settings.debugInfo)
+                    if (troop.IsPlayerCharacter || heroTroop.IsPlayerCompanion || WoundXpSubModule.settings.DebugInfo)
                     {
                         InformationManager.DisplayMessage(new InformationMessage(heroTroop.Name + " received " + xpValue + " Athletics XP for surviving after being wounded.", Colors.Yellow));
                         WoundXpSubModule.Log.Info("Hero Troop: " + troopSeed.ToString() + " | " + heroTroop.Name + " received Athletics XP value of " + xpValue);
@@ -29,11 +34,11 @@ namespace xWoundXP
                 }
                 else
                 {
-                    int xpValue = WoundXpSubModule.settings.troopWoundXpValue;
+                    int xpValue = WoundXpSubModule.settings.TroopWoundXpValue;
 
                     __instance.AddXpToTroop(xpValue, troop);
 
-                    if (WoundXpSubModule.settings.debugInfo)
+                    if (OwnerParty.Owner.IsHumanPlayerCharacter || WoundXpSubModule.settings.DebugInfo)
                     {
                         InformationManager.DisplayMessage(new InformationMessage(troop.Name + " received " + xpValue + " XP for surviving after being wounded.", Colors.Yellow));
                         WoundXpSubModule.Log.Info("Generic Troop: " + troopSeed.ToString() + " | " + troop.Name + " received XP value of " + xpValue);
