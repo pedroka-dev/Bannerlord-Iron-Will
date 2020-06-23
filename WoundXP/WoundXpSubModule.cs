@@ -7,11 +7,8 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Core;
-using TaleWorlds.GauntletUI.PrefabSystem;
 using TaleWorlds.Library;
-using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 
 namespace xxWoundXP
@@ -20,6 +17,7 @@ namespace xxWoundXP
     {
         public static readonly NLog.Logger Log = LogManager.GetCurrentClassLogger();
         public static ModuleSettings settings;
+
 
         protected override void OnSubModuleLoad()
         {
@@ -37,7 +35,7 @@ namespace xxWoundXP
 
             try
             {
-                if (!File.Exists(@"\"+ settings.SettingsFilePath))
+                if (!File.Exists(settings.SettingsFilePath))
                 {
                     SerializeSettings(settings.SettingsFilePath);
                 }
@@ -60,9 +58,9 @@ namespace xxWoundXP
             catch (Exception ex)
             {
                 MessageBox.Show("Error Initialising Iron Will - Wound Experience:\n\n" + ex.Message);
-                
             }
         }
+
 
         protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
         {
@@ -76,18 +74,19 @@ namespace xxWoundXP
         }
 
 
-        public void SerializeSettings(string fileName)  //Serializes default values
+        public void SerializeSettings(string path)
         {
             XmlSerializer s = new XmlSerializer(typeof(ModuleSettings));
-            TextWriter writer = new StreamWriter(fileName);
+            TextWriter writer = new StreamWriter(path);
 
             s.Serialize(writer, settings);
             writer.Close();
         }
 
-        public ModuleSettings DeserializeSettings(string fileName) //Deserialize from file
+
+        public ModuleSettings DeserializeSettings(string path)
         {
-            FileStream fs = new FileStream(fileName, FileMode.Open);
+            FileStream fs = new FileStream(path, FileMode.Open);
             XmlSerializer x = new XmlSerializer(typeof(ModuleSettings));
             ModuleSettings ms = (ModuleSettings)x.Deserialize(fs);
 

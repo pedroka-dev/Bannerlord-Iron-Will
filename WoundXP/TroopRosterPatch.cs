@@ -38,7 +38,7 @@ namespace xWoundXP
 
                     __instance.AddXpToTroop(xpValue, troop);
 
-                    if (OwnerParty.Owner.IsHumanPlayerCharacter || WoundXpSubModule.settings.DebugInfo)
+                    if (WoundXpSubModule.settings.DebugInfo || OwnerParty.Owner != null && OwnerParty.Owner.IsHumanPlayerCharacter)
                     {
                         InformationManager.DisplayMessage(new InformationMessage(troop.Name + " received " + xpValue + " XP for surviving after being wounded.", Colors.Yellow));
                         WoundXpSubModule.Log.Info("Generic Troop: " + troopSeed.ToString() + " | " + troop.Name + " received XP value of " + xpValue);
@@ -47,8 +47,8 @@ namespace xWoundXP
             }
             catch (Exception ex)
             {
-                InformationManager.DisplayMessage(new InformationMessage("Something went wrong with Iron Will - Wound Experience. Please check the log file at \\bin\\Win64_Shipping_Client\\: " + WoundXpSubModule.settings.LogFilePath, Colors.Red)); 
-                WoundXpSubModule.Log.Error(ex, "Error on Harmony Patch for WoundTroop.");
+                InformationManager.DisplayMessage(new InformationMessage("Something went wrong with Iron Will - Wound Experience: " + ex.Message, Colors.Red)); 
+                WoundXpSubModule.Log.Error("Error on Harmony Patch for WoundTroop. | " + ex.Message);
             }
         }
     }
