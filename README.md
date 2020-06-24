@@ -18,17 +18,24 @@ The best way to get stronger is by struggle. **The mod Wound Experience** adds e
 
 This decreases the grind for upgrading low tier troops and actually rewards the player for letting his weak troopos risk their lives by fighting in battle. It also indirectly buffs Medicine skill, by making it kinda useful to upgrade troops. 
 
-The mod works not only for the player, but for any mobile NPC parties too! That's right, even for the poor and dirty Looters! It only show as a message for the player character and his companions (to not spam messages into the Information manager)
+The mod works not only for the player, but for any mobile NPC parties too! That's right, even for the poor and dirty Looters! It only show as a message for the player character, his companions and owned troops by default.
 
-**Check out now its [Bannerlord Nexus Mod Page](https://www.nexusmods.com/mountandblade2bannerlord/mods/1797) to Download it!**
+# Download and Links
+
+  - [Iron Will - Wound Experience Nexus Mods page](https://www.nexusmods.com/mountandblade2bannerlord/mods/1797)
+  - Iron Will - Wound Experience TaleWorlds Forums page
+  - [Iron Will - Wound Experience ModDB page](https://www.moddb.com/mods/iron-will-wound-experience)
+  - [Iron Will Project GitHub](https://github.com/pedro-ca/bannerlord_iron_will)
 
 # Features 
   - Adds Athletics Experience to **any** Hero wounded in battle (80xp by default. Almost 1/6 of the Athletics XP for level 25) 
   - Adds Generic Experience to **any** Troop wounded in battle (80xp by default. Almost 1/3 of de XP to upgrade a Aserai Recruit)
-  - Only valid for **real** battles, so you can't cheese it by getting wounded many times in tournaments and arenas heh
+  - Player Character, Companions and Owned troops received XP appears in the ingame console.
   - Works globally to all troops in game, both in battle and campaing map.
   - Configurable Experience value for Heroes and  Generic Troops at "xxWoundXPSettings.xml"
   - NLogger for debugging reasons at "WoundExperienceLog.txt"
+  - Only valid for **real** battles, so you can't cheese it by getting wounded in tournaments and arenas heh
+
   
   ![alt text](https://github.com/pedro-ca/bannerlord_iron_will/blob/master/WoundXP/Thumbnails/heroe%20athletic%20exp%20example.JPG?raw=true)
   
@@ -43,13 +50,13 @@ The mod works not only for the player, but for any mobile NPC parties too! That'
 
 # To-do
   - Implementation of optional configuration menu with [mildeww's ModLib](https://www.nexusmods.com/mountandblade2bannerlord/mods/592)
-  - Toggleable linear escale Experience (off by default)
+  - Toggleable linear escale Experience
   
   
 # Compatibility
 Currently working with e1.4.0, e1.4.1 and e.1.4.2 versions. Should be compatible with most mods.
 
-If you have any issue, please adress it at the [Bugs tab](https://www.nexusmods.com/mountandblade2bannerlord/mods/1797?tab=bugs) in the mod page.
+If you have any issue, please adress it at the [Bugs tab](https://www.nexusmods.com/mountandblade2bannerlord/mods/1797?tab=bugs) in the Nexus mod page.
 
 # Changelog
 v1.1.0:
