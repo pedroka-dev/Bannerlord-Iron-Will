@@ -12,7 +12,7 @@
 
 # Iron Will - Wound Experience
 
-![alt text](https://github.com/pedro-ca/bannerlord_iron_will/blob/master/WoundXP/Wound%20Experience%20Thumbnail.jpg?raw=true)
+![alt text](https://github.com/pedro-ca/bannerlord_iron_will/blob/master/WoundXP/Thumbnails/Wound%20Experience%20Thumbnail.jpg?raw=true)
 
 The best way to get stronger is by struggle. **The mod Wound Experience** adds experience points to any troop which survives getting wounded. With inspirations from Kenshi, this true "survival of the fittest" experience makes your troop battle hardened by just the simple fact of not dying after a possible fatal blow. 
 
@@ -27,21 +27,27 @@ The mod works not only for the player, but for any mobile NPC parties too! That'
   - Adds Generic Experience to **any** Troop wounded in battle (80xp by default. Almost 1/3 of de XP to upgrade a Aserai Recruit)
   - Only valid for **real** battles, so you can't cheese it by getting wounded many times in tournaments and arenas heh
   - Works globally to all troops in game, both in battle and campaing map.
-  - NLogger for debugging reasons at "\bin\Win64_Shipping_Client\WoundExperienceLog.txt"
+  - Configurable Experience value for Heroes and  Generic Troops at "xxWoundXPSettings.xml"
+  - NLogger for debugging reasons at "WoundExperienceLog.txt"
   
-  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/WoundXP/heroe%20athletic%20exp%20example.JPG)
-  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/WoundXP/generic%20troop%20exp%20example.JPG) 
-  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/WoundXP/debug%20on%20example.JPG)
+  ![alt text](https://github.com/pedro-ca/bannerlord_iron_will/blob/master/WoundXP/Thumbnails/heroe%20athletic%20exp%20example.JPG?raw=true)
+  
+  ![alt text](https://github.com/pedro-ca/bannerlord_iron_will/blob/master/WoundXP/Thumbnails/generic%20troop%20exp%20example.JPG?raw=true) 
+  
+  ![alt text](https://github.com/pedro-ca/bannerlord_iron_will/blob/master/WoundXP/Thumbnails/owned%20troops%20in%20the%20console%20example.png?raw=true)
+  
+  ![alt text](https://github.com/pedro-ca/bannerlord_iron_will/blob/master/WoundXP/Thumbnails/Configurable%20xp%20example.JPG?raw=true)
+  
+  ![alt text](https://github.com/pedro-ca/bannerlord_iron_will/blob/master/WoundXP/Thumbnails/debug%20on%20example.JPG?raw=trueG)
+  
 
 # To-do
   - Implementation of optional configuration menu with [mildeww's ModLib](https://www.nexusmods.com/mountandblade2bannerlord/mods/592)
-  - Configurable Experience value for Heroes
-  - Configurable Experience value for Generic Troops
   - Toggleable linear escale Experience (off by default)
   
   
 # Compatibility
-Currently working with e1.4.0, e1.4.1 and e.1.4.2 versions. Should be compatible with must mods.
+Currently working with e1.4.0, e1.4.1 and e.1.4.2 versions. Should be compatible with most mods.
 
 If you have any issue, please adress it at the [Bugs tab](https://www.nexusmods.com/mountandblade2bannerlord/mods/1797?tab=bugs) in the mod page.
 
@@ -51,3 +57,9 @@ v1.1.0:
 - Added NLogger to debug and find problems.
 - Information manager messages are now yellow, to increased visibility. 
 - Added initial sucess message on campaing start to inform the user that the module is working.
+
+v1.2.0:
+  - Allows customization of values with xxWoundXPSettings.xml, located at the mod folder
+  - All player owned troops that receives xp appears in the Console and Nlogger
+  - WoundExperienceLog.txt NLogger is now at the mod folder and some log are more informative
+  - The Information manager now shows more clearly any mod error/exception
