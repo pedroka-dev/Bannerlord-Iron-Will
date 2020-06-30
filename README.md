@@ -23,7 +23,7 @@ The mod works not only for the player, but for any mobile NPC parties too! That'
 # Download and Links
 
   - [Iron Will - Wound Experience Nexus Mods page](https://www.nexusmods.com/mountandblade2bannerlord/mods/1797)
-  - Iron Will - Wound Experience TaleWorlds Forums page
+  - [Iron Will - Wound Experience TaleWorlds Forums page](https://forums.taleworlds.com/index.php?threads/iron-will-wound-experience.426533/)
   - [Iron Will - Wound Experience ModDB page](https://www.moddb.com/mods/iron-will-wound-experience)
   - [Iron Will Project GitHub](https://github.com/pedro-ca/bannerlord_iron_will)
 
