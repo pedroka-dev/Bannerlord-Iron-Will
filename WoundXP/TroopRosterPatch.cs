@@ -4,9 +4,8 @@ using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using xxWoundXP;
 
-namespace xWoundXP
+namespace xxWoundXP
 {
     [HarmonyPatch(typeof(TroopRoster), "WoundTroop")]
     public class TroopRosterPatch
