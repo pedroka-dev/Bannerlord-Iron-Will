@@ -18,6 +18,10 @@ namespace xxKleptomania
             {
                 return;
             }
+           
+            CampaignGameStarter campaignGameStarter = (CampaignGameStarter)gameStarterObject;
+
+            campaignGameStarter.AddBehavior(new StealSuppliesBehaviour());
 
             InformationManager.DisplayMessage(new InformationMessage("Sucessfully Loaded Iron Will - Kleptomania", Colors.Green));
             //Log.Info("Module intialization | Campaing Game Initialized.");
