@@ -7,8 +7,8 @@
     <ProjectGuid>{84CA9E18-CA43-4DAD-998C-ABD04658B43A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Kleptomania</RootNamespace>
-    <AssemblyName>Kleptomania</AssemblyName>
+    <RootNamespace>xxKleptomania</RootNamespace>
+    <AssemblyName>xxKleptomania</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

@@ -15,7 +15,7 @@
      <SubModules>
          <SubModule>
              <Name value="xxKleptomania"/>
-             <DLLName value="xxWKleptomania.dll"/>
+             <DLLName value="xxKleptomania.dll"/>
              <SubModuleClassType value="xxKleptomania.KleptomaniaSubModule"/>
              <Tags>
                  <Tag key="DedicatedServerType" value="none" />

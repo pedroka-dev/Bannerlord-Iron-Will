@@ -1,4 +1,6 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using System;
+using System.Windows;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -18,13 +20,21 @@ namespace xxKleptomania
             {
                 return;
             }
-           
-            CampaignGameStarter campaignGameStarter = (CampaignGameStarter)gameStarterObject;
 
-            campaignGameStarter.AddBehavior(new StealSuppliesBehaviour());
+            try
+            {
+                CampaignGameStarter campaignGameStarter = (CampaignGameStarter)gameStarterObject;
 
-            InformationManager.DisplayMessage(new InformationMessage("Sucessfully Loaded Iron Will - Kleptomania", Colors.Green));
-            //Log.Info("Module intialization | Campaing Game Initialized.");
-        }
+                campaignGameStarter.AddBehavior(new StealSuppliesBehaviour());
+
+                InformationManager.DisplayMessage(new InformationMessage("Sucessfully Loaded Iron Will - Kleptomania", Colors.Green));
+                //Log.Info("Module intialization | Campaing Game Initialized.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error Initialising Iron Will - Wound Experience:\n\n" + ex.Message);
+            }
+   
+}
     }
 }
