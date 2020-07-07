@@ -32,7 +32,7 @@ namespace xxKleptomania
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error Initialising Iron Will - Wound Experience:\n\n" + ex.Message);
+                MessageBox.Show("Error Initialising Iron Will - Kleptomania:\n\n" + ex.Message);
             }
    
 }
