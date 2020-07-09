@@ -46,8 +46,8 @@ namespace xxWoundXP
             }
             catch (Exception ex)
             {
-                InformationManager.DisplayMessage(new InformationMessage("Something went wrong with Iron Will - Wound Experience: " + ex.Message, Colors.Red)); 
                 WoundXpSubModule.Log.Error("Error on Harmony Patch for WoundTroop. | " + ex.Message);
+                InformationManager.DisplayMessage(new InformationMessage("Something went wrong with Iron Will - Wound Experience: " + ex.Message, Colors.Red)); 
             }
         }
     }

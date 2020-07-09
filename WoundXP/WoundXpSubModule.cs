@@ -15,9 +15,6 @@ namespace xxWoundXP
 {
     public class WoundXpSubModule : MBSubModuleBase
     {
-        public static readonly NLog.Logger Log = LogManager.GetCurrentClassLogger();
-        public static ModuleSettings settings;
-
 
         protected override void OnSubModuleLoad()
         {
@@ -73,7 +70,6 @@ namespace xxWoundXP
             Log.Info("Module intialization | Campaing Game Initialized.");
         }
 
-
         public void SerializeSettings(string path)
         {
             XmlSerializer s = new XmlSerializer(typeof(ModuleSettings));
@@ -92,6 +88,10 @@ namespace xxWoundXP
 
             return ms;
         }
+
+        public static readonly NLog.Logger Log = LogManager.GetCurrentClassLogger();
+        public static ModuleSettings settings;
+
     }
 
 }

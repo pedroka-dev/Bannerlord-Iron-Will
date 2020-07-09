@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NLog;
+using NLog.Fluent;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using TaleWorlds.CampaignSystem;
@@ -15,6 +17,7 @@ namespace xxKleptomania
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(this.OnSessionLaunched));
+            KleptomaniaSubModule.Log.Info("Behaviour intialization | Sucessfully added CampaignGameStarter Listener");
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -31,6 +34,8 @@ namespace xxKleptomania
             
             this.AddTownStealMenu(campaignGameStarter);
             this.AddVillageStealMenu(campaignGameStarter);
+
+            KleptomaniaSubModule.Log.Info("Behaviour intialization | Sucessfully added Steal Menus");
         }
 
         
@@ -46,7 +51,7 @@ namespace xxKleptomania
                 }, delegate (MenuCallbackArgs args)
                 {
                     GameMenu.SwitchToMenu("town_steal");
-                }, false, 6, false);
+                }, false, 7, false);
 
 
                 campaignGameStarter.AddGameMenuOption("town_steal", "town_steal_atempt", "Look for opportunities to steal supplies",
@@ -62,10 +67,13 @@ namespace xxKleptomania
                 {
                     GameMenu.SwitchToMenu(Hero.MainHero.CurrentSettlement.IsTown ? "town" : "village");
                 }, false, -1, false);
+
+                KleptomaniaSubModule.Log.Info("Behaviour intialization | Sucessfully added Town Steal Menus");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error Adding town steal menus:\n\n" + ex.Message);
+                InformationManager.DisplayMessage(new InformationMessage("Something went wrong with Iron Will - Wound Experience: " + ex.Message, Colors.Red));
+                KleptomaniaSubModule.Log.Error("Error on adding StealSuppliesBehaviour for Towns | " + ex.Message);
             }
         }
 
@@ -81,7 +89,7 @@ namespace xxKleptomania
                 }, delegate (MenuCallbackArgs args)
                 {
                     GameMenu.SwitchToMenu("village_steal");
-                }, false, 5, false);
+                }, false, 4, false);
 
 
                 campaignGameStarter.AddGameMenuOption("village_steal", "village_steal_atempt", "Look for opportunities to steal supplies",
@@ -98,10 +106,12 @@ namespace xxKleptomania
                 {
                     GameMenu.SwitchToMenu(Hero.MainHero.CurrentSettlement.IsTown ? "town" : "village");
                 }, false, -1, false);
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error Adding village steal menus:\n\n" + ex.Message);
+                InformationManager.DisplayMessage(new InformationMessage("Something went wrong with Iron Will - Wound Experience: " + ex.Message, Colors.Red));
+                KleptomaniaSubModule.Log.Error("Error on adding StealSuppliesBehaviour for Villages | " + ex.Message);
             }
         }
 
@@ -123,16 +133,20 @@ namespace xxKleptomania
                         this._settlementLastStealDetectionTimeDictionary.Remove(Settlement.CurrentSettlement.StringId);
                     }
                 }
+
                 int num = MathF.Ceiling((float)Settlement.CurrentSettlement.ItemRoster.TotalFood * 0.2f);
+
                 if (MobileParty.MainParty.CurrentSettlement != null && num <= 0)
                 {
                     args.IsEnabled = false;
                     args.Tooltip = new TextObject("This settlement has no goods to steal.", null);
                 }
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error on settlement_steal_atempt_condition:\n\n" + ex.Message);
+                InformationManager.DisplayMessage(new InformationMessage("Something went wrong with Iron Will - Wound Experience: " + ex.Message, Colors.Red));
+                KleptomaniaSubModule.Log.Error("Error on initiaizing StealSuppliesBehaviour | " + ex.Message);
             }
             return true;
         }
@@ -146,7 +160,6 @@ namespace xxKleptomania
         {
             InformationManager.DisplayMessage(new InformationMessage("Steal attempt at village"));
         }
-
 
        
         public Dictionary<string, CampaignTime> _settlementLastStealDetectionTimeDictionary;
