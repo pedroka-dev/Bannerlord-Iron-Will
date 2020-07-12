@@ -13,18 +13,11 @@ namespace xxKleptomania
         [XmlElement(DataType = "boolean", ElementName = "DebugInfo")]
         public bool DebugInfo { get; set; } = false;
 
+        [XmlElement(DataType = "int", ElementName = "BaseDetectionChance")]
+        public int BaseDetectionChance { get; set; } = 80;
 
-        //[XmlElement(DataType = "boolean", ElementName = "ScalableSkillXp")]
-        //public bool ScalableSkillXp { get; set; } = true;
-
-
-        //[XmlElement(DataType = "int", ElementName = "TroopWoundXpValue")]
-        //public int TroopWoundXpValue { get; set; } = 80;
-
-
-        //[XmlElement(DataType = "int", ElementName = "HeroWoundXpValue")]
-        //public int HeroWoundXpValue { get; set; } = 80;
-
+        [XmlElement(DataType = "int", ElementName = "BaseMinimunGoods")]
+        public int BaseMinimunGoods { get; set; } = 30;
 
         public string ModName
         {
