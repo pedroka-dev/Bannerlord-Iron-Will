@@ -14,7 +14,7 @@ namespace xxKleptomania
         public bool DebugInfo { get; set; } = false;
 
         [XmlElement(DataType = "int", ElementName = "BaseDetectionChance")]
-        public int BaseDetectionChance { get; set; } = 80;
+        public int BaseDetectionChance { get; set; } = 75;
 
         [XmlElement(DataType = "int", ElementName = "BaseMinimunGoods")]
         public int BaseMinimunGoods { get; set; } = 30;
