@@ -35,20 +35,22 @@ namespace xxKleptomania
         }
 
         #region AddGameMenu       
-        private void AddTownStealMenu(CampaignGameStarter campaignGameStarter)      //MUDAR _steal_wait para bonus de -10% detection risk, e não proibir a noite
+        private void AddTownStealMenu(CampaignGameStarter campaignGameStarter)     
         {
             try
             {
-                campaignGameStarter.AddGameMenu("town_steal", "{TOWN_STEAL_INTRO}", this.game_menu_settlement_steal_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
-                //campaignGameStarter.AddWaitGameMenu("town_steal_wait", "Wait for any opportunity to steal the goods to appear.", null, this.game_menu_steal_wait_on_condition, null, null, GameMenu.MenuAndOptionType.WaitMenuHideProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 0f, GameMenu.MenuFlags.none, null);
-                campaignGameStarter.AddGameMenu("town_steal_receive", "{SETTLEMENT_STEAL_RECEIVE} {SETTLEMENT_STEAL_RECEIVE_LOOT} {SETTLEMENT_STEAL_RECEIVE_DETECT}", this.game_menu_settlement_steal_receive_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
+                //Game Menus
+                campaignGameStarter.AddGameMenu("town_steal", "{TOWN_STEAL_INTRO} {SETTLEMENT_STEAL_INTRO_DETECTION} {SETTLEMENT_STEAL_INTRO_MIN_GOODS}", this.game_menu_steal_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
+                campaignGameStarter.AddGameMenu("town_steal_receive", "{SETTLEMENT_STEAL_RECEIVE} {SETTLEMENT_STEAL_RECEIVE_LOOT} {SETTLEMENT_STEAL_RECEIVE_DETECT}", this.game_menu_steal_receive_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
+                campaignGameStarter.AddWaitGameMenu("town_steal_wait", "Wait for some opportunity to steal the supplies to appear at {SETTLEMENT_NAME}...", null, this.game_menu_steal_wait_on_condition, this.game_menu_steal_wait_on_consequence, this.game_menu_steal_wait_on_tick, GameMenu.MenuAndOptionType.WaitMenuHideProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 0f, GameMenu.MenuFlags.none, null);
 
 
-                campaignGameStarter.AddGameMenuOption("town", "town_steal", "Steal supplies from the traders", this.game_menu_settlement_steal_condition, this.game_menu_settlement_steal_consequence, false, 7, false);
-                campaignGameStarter.AddGameMenuOption("town_steal", "town_steal_atempt", "Look for opportunities to steal supplies", this.game_menu_settlement_steal_atempt_condition, this.game_menu_settlement_steal_atempt_consequence, false, 1, false);
-                campaignGameStarter.AddGameMenuOption("town_steal", "town_steal_back", "Leave", this.game_menu_settlement_steal_leave_condition, this.game_menu_settlement_steal_leave_consequence, false, -1, false);
-                //campaignGameStarter.AddGameMenuOption("town_steal_wait", "town_steal_wait_back", "Leave", this.game_menu_settlement_steal_leave_condition, this.game_menu_settlement_steal_leave_consequence, false, -1, false);
-                campaignGameStarter.AddGameMenuOption("town_steal_receive", "town_steal_loot", "Loot the supplies.", this.game_menu_settlement_steal_receive_condition, this.game_menu_settlement_steal_receive_consequence, false, -1, false);
+                //Game Menu Options
+                campaignGameStarter.AddGameMenuOption("town", "town_steal", "Steal supplies from the traders.", this.game_menu_steal_on_condition, this.game_menu_steal_on_consequence, false, 7, false);
+                campaignGameStarter.AddGameMenuOption("town_steal", "town_steal_atempt", "Look for opportunities to steal supplies.", this.game_menu_steal_atempt_on_condition, this.game_menu_steal_atempt_on_consequence, false, 1, false);
+                campaignGameStarter.AddGameMenuOption("town_steal", "town_steal_back", "Leave.", this.game_menu_steal_leave_on_condition, this.game_menu_steal_leave_on_consequence, false, -1, false);
+                campaignGameStarter.AddGameMenuOption("town_steal_wait", "town_steal_wait_back", "Forget it.", this.game_menu_steal_leave_on_condition, this.game_menu_steal_leave_on_consequence, false, -1, false);
+                campaignGameStarter.AddGameMenuOption("town_steal_receive", "town_steal_loot", "Loot the supplies.", this.game_menu_steal_receive_on_condition, this.game_menu_steal_receive_on_consequence, false, -1, false);
 
                 KleptomaniaSubModule.Log.Info("Behaviour intialization | Sucessfully added Town Steal Menus");
             }
@@ -59,21 +61,22 @@ namespace xxKleptomania
             }
         }
 
-
         private void AddVillageStealMenu(CampaignGameStarter campaignGameStarter)
         {
             try
             {
-                campaignGameStarter.AddGameMenu("village_steal", "{VILLAGE_STEAL_INTRO}", this.game_menu_settlement_steal_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
-                //campaignGameStarter.AddWaitGameMenu("village_steal_wait", "Wait for any opportunity to steal the goods to appear.", null, this.game_menu_steal_wait_on_condition, null, null, GameMenu.MenuAndOptionType.WaitMenuHideProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 0f, GameMenu.MenuFlags.none, null);
-                campaignGameStarter.AddGameMenu("village_steal_receive", "{SETTLEMENT_STEAL_RECEIVE} {SETTLEMENT_STEAL_RECEIVE_LOOT} {SETTLEMENT_STEAL_RECEIVE_DETECT}", this.game_menu_settlement_steal_receive_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
+                //Game Menus
+                campaignGameStarter.AddGameMenu("village_steal", "{VILLAGE_STEAL_INTRO} {SETTLEMENT_STEAL_INTRO_DETECTION} {SETTLEMENT_STEAL_INTRO_MIN_GOODS}", this.game_menu_steal_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
+                campaignGameStarter.AddGameMenu("village_steal_receive", "{SETTLEMENT_STEAL_RECEIVE} {SETTLEMENT_STEAL_RECEIVE_LOOT} {SETTLEMENT_STEAL_RECEIVE_DETECT}", this.game_menu_steal_receive_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
+                campaignGameStarter.AddWaitGameMenu("village_steal_wait", "Wait for some opportunity to steal the supplies to appear at {SETTLEMENT_NAME}...", null, this.game_menu_steal_wait_on_condition, this.game_menu_steal_wait_on_consequence, this.game_menu_steal_wait_on_tick, GameMenu.MenuAndOptionType.WaitMenuHideProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 0f, GameMenu.MenuFlags.none, null);
 
 
-                campaignGameStarter.AddGameMenuOption("village", "village_steal", "Steal supplies from the peasants", this.game_menu_settlement_steal_condition, this.game_menu_settlement_steal_consequence, false, 4, false);
-                campaignGameStarter.AddGameMenuOption("village_steal", "village_steal_atempt", "Look for opportunities to steal supplies", this.game_menu_settlement_steal_atempt_condition, this.game_menu_settlement_steal_atempt_consequence, false, 1, false);
-                campaignGameStarter.AddGameMenuOption("village_steal", "village_steal_back", "Leave", this.game_menu_settlement_steal_leave_condition, this.game_menu_settlement_steal_leave_consequence, false, -1, false);
-                //campaignGameStarter.AddGameMenuOption("village_steal_wait", "village_steal_wait_back", "Leave", this.game_menu_settlement_steal_leave_condition, this.game_menu_settlement_steal_leave_consequence, false, -1, false);
-                campaignGameStarter.AddGameMenuOption("village_steal_receive", "village_steal_loot", "Loot the supplies.", this.game_menu_settlement_steal_receive_condition, this.game_menu_settlement_steal_receive_consequence, false, -1, false);
+                //Game Menu Options
+                campaignGameStarter.AddGameMenuOption("village", "village_steal", "Steal supplies from the peasants.", this.game_menu_steal_on_condition, this.game_menu_steal_on_consequence, false, 4, false);
+                campaignGameStarter.AddGameMenuOption("village_steal", "village_steal_atempt", "Look for opportunities to steal supplies.", this.game_menu_steal_atempt_on_condition, this.game_menu_steal_atempt_on_consequence, false, 1, false);
+                campaignGameStarter.AddGameMenuOption("village_steal", "village_steal_back", "Leave.", this.game_menu_steal_leave_on_condition, this.game_menu_steal_leave_on_consequence, false, -1, false);
+                campaignGameStarter.AddGameMenuOption("village_steal_wait", "village_steal_wait_back", "Forget it.", this.game_menu_steal_leave_on_condition, this.game_menu_steal_leave_on_consequence, false, -1, false);
+                campaignGameStarter.AddGameMenuOption("village_steal_receive", "village_steal_loot", "Loot the supplies.", this.game_menu_steal_receive_on_condition, this.game_menu_steal_receive_on_consequence, false, -1, false);
 
                 KleptomaniaSubModule.Log.Info("Behaviour intialization | Sucessfully added Village Steal Menus");
             }
@@ -132,30 +135,34 @@ namespace xxKleptomania
         }
         #endregion
 
-        #region init, condition and consequence
-        private void game_menu_settlement_steal_init(MenuCallbackArgs args)
+        #region on_init, on_condition and on_consequence
+        //init
+        private void game_menu_steal_on_init(MenuCallbackArgs args)
         {
             CalculateDetectionBonus();
             CalculateLootBonus();
-            string detectionMsg = "\n\n- Current change of detection: " + currentDetectionChance.ToString() + "%";
+            string detectionMsg = "\n\n- Current chance of detection: " + currentDetectionChance.ToString() + "%";
             string minimunGoodsMsg = "\n- Current garanteed minimun goods: " + currentMinimunGoods.ToString() + "%";
 
             if (isNight)
             {
-                detectionMsg = detectionMsg + "\n  - From Night Time : -10%";
+                detectionMsg = detectionMsg + "\n  * From Night Time : -10%";
             }
 
             if (Hero.MainHero.CurrentSettlement.IsTown)
             {
-                MBTextManager.SetTextVariable("TOWN_STEAL_INTRO", "The Town is full of rich traders trying to sell goods in the street and bargaining for the most profitable deal. If you look long enough, there might appear a way to 'relieve' them from their supplies." + detectionMsg + minimunGoodsMsg, false);
+                MBTextManager.SetTextVariable("TOWN_STEAL_INTRO", "The Town is full of rich traders trying to sell goods in the street and bargaining for the most profitable deal. If you look long enough, there might appear a way to 'relieve' them from their supplies. \n", false);
             }
             else if (Hero.MainHero.CurrentSettlement.IsVillage)
             {
-                MBTextManager.SetTextVariable("VILLAGE_STEAL_INTRO", "In this Village, you see peasants working day and night in the fields to feed the community. There might be considerable amount of supplies  hidden somewhere, waiting to be yours." + detectionMsg + minimunGoodsMsg, false);
+                MBTextManager.SetTextVariable("VILLAGE_STEAL_INTRO", "In this Village, you see peasants working day and night in the fields to feed the community. There might be considerable amount of supplies  hidden somewhere, waiting to be yours. \n", false);
             }
+
+            MBTextManager.SetTextVariable("SETTLEMENT_STEAL_INTRO_DETECTION", detectionMsg, false);
+            MBTextManager.SetTextVariable("SETTLEMENT_STEAL_INTRO_MIN_GOODS", minimunGoodsMsg, false);
         }
 
-        private void game_menu_settlement_steal_receive_init(MenuCallbackArgs args)
+        private void game_menu_steal_receive_on_init(MenuCallbackArgs args)
         {
             CalculateDetectionResult();
             CalculateLootResult();
@@ -165,49 +172,58 @@ namespace xxKleptomania
 
             if (isDetectedResult)
             {
-                detectMsg = "\n\n  - You were detected. Somebody witnessed you stealling the loot. ";
+                detectMsg = "\n\n  - Detected. Somebody witnessed you stealling the loot. ";
             }
             else
             {
-                detectMsg = "\n\n  - You were not detected. Thankfully, nobody saw you getting in and out with the loot. ";
+                detectMsg = "\n\n  - Not Detected. Nobody saw you getting in and out with the loot. ";
             }
 
 
             if (lootQuantityResult >= 80)
             {
-                lootMsg =  "\n  - You stole a huge ammount of supplies (" + lootQuantityResult.ToString() + "%).";
+                lootMsg =  "\n  - Stole a huge ammount of supplies (" + lootQuantityResult.ToString() + "%).";
             }
             else if(lootQuantityResult >= 50)
             {
-                lootMsg = "\n  - You stole a considerable ammount of supplies (" + lootQuantityResult.ToString() + "%).";
+                lootMsg = "\n  - Stole a considerable ammount of supplies (" + lootQuantityResult.ToString() + "%).";
             }
             else if(lootQuantityResult >= 30){
-                lootMsg = "\n  - You stole a small ammount of supplies (" + lootQuantityResult.ToString() + "%).";
+                lootMsg = "\n  - Stole a small ammount of supplies (" + lootQuantityResult.ToString() + "%).";
             }
             else
             {
-                lootMsg = "\n  - You stole a  pretty much nothing (" + lootQuantityResult.ToString() + "%).";
+                lootMsg = "\n  - Stole a  pretty much nothing (" + lootQuantityResult.ToString() + "%).";
             }
 
-            MBTextManager.SetTextVariable("SETTLEMENT_STEAL_RECEIVE", "You were able to secure the supplies stolen from " + Hero.MainHero.CurrentSettlement.Name, false);
+            MBTextManager.SetTextVariable("SETTLEMENT_STEAL_RECEIVE", "You were able to secure the supplies stolen from " + Hero.MainHero.CurrentSettlement.Name + "\n", false);
             MBTextManager.SetTextVariable("SETTLEMENT_STEAL_RECEIVE_DETECT", detectMsg, false);
             MBTextManager.SetTextVariable("SETTLEMENT_STEAL_RECEIVE_LOOT", lootMsg, false);
         }
 
 
-        private bool game_menu_settlement_steal_condition(MenuCallbackArgs args)
+        //condition
+        private bool game_menu_steal_on_condition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.ForceToGiveGoods;      //Option icon
             return true;
         }
 
-        private bool game_menu_settlement_steal_leave_condition(MenuCallbackArgs args)
+        private bool game_menu_steal_leave_on_condition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Leave;      //Option icon
             return true;
         }
 
-        private bool game_menu_settlement_steal_atempt_condition(MenuCallbackArgs args)
+        private bool game_menu_steal_wait_on_condition(MenuCallbackArgs args)       //FIX BUG: deve comparar a hora e O DIA. atualmente compara só hora.
+        {
+            args.MenuContext.GameMenu.AllowWaitingAutomatically();
+            initialStealTime = CampaignTime.Now.ToHours;
+            MBTextManager.SetTextVariable("SETTLEMENT_NAME", Settlement.CurrentSettlement.Name, false);
+            return true;
+        }
+
+        private bool game_menu_steal_atempt_on_condition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.ForceToGiveGoods;      //Option icon
             if (this._settlementLastStealDetectionTimeDictionary != null && this._settlementLastStealDetectionTimeDictionary.ContainsKey(Settlement.CurrentSettlement.StringId))
@@ -233,14 +249,31 @@ namespace xxKleptomania
             return true;
         }
 
-        private bool game_menu_settlement_steal_receive_condition(MenuCallbackArgs args)
+        private bool game_menu_steal_receive_on_condition(MenuCallbackArgs args)
         {
-            args.optionLeaveType = GameMenuOption.LeaveType.Leave;      //Option icon
+            args.optionLeaveType = GameMenuOption.LeaveType.ForceToGiveGoods;      //Option icon
             return true;
         }
 
+        //on_tick
+        private void game_menu_steal_wait_on_tick(MenuCallbackArgs args, CampaignTime dt)   //FIX BUG: deve comparar a hora e O DIA. atualmente compara só hora.
+        {
+            double currentStealTime = CampaignTime.Now.ToHours;
+            if (currentStealTime >= initialStealTime + 4f)      //calls after 4 ingame hours wainting
+            {
+                if (Hero.MainHero.CurrentSettlement.IsTown)
+                {
+                    GameMenu.SwitchToMenu("town_steal_receive");
+                }
+                else if (Hero.MainHero.CurrentSettlement.IsVillage)
+                {
+                    GameMenu.SwitchToMenu("village_steal_receive");
+                }
+            }
+        }
 
-        private void game_menu_settlement_steal_consequence(MenuCallbackArgs args)
+        //on_consequence
+        private void game_menu_steal_on_consequence(MenuCallbackArgs args)
         {
             if (Hero.MainHero.CurrentSettlement.IsTown)
             {
@@ -252,31 +285,32 @@ namespace xxKleptomania
             }
         }
 
-        private void game_menu_settlement_steal_leave_consequence(MenuCallbackArgs args)
+        private void game_menu_steal_leave_on_consequence(MenuCallbackArgs args)
         {
             GameMenu.SwitchToMenu(Hero.MainHero.CurrentSettlement.IsTown ? "town" : "village");
         }
 
-        private void game_menu_settlement_steal_atempt_consequence(MenuCallbackArgs args)
+        private void game_menu_steal_wait_on_consequence(MenuCallbackArgs args)
         {
-            //GameMenu.SwitchToMenu("town_steal_wait");
-            //GameMenu.SwitchToMenu("village_steal_wait");
+            PlayerEncounter.Finish(true);
+        }
 
+        private void game_menu_steal_atempt_on_consequence(MenuCallbackArgs args)
+        {
             if (Hero.MainHero.CurrentSettlement.IsTown)
             {
-                GameMenu.SwitchToMenu("town_steal_receive");
+                GameMenu.SwitchToMenu("town_steal_wait");
             }
             else if (Hero.MainHero.CurrentSettlement.IsVillage)
             {
-                GameMenu.SwitchToMenu("village_steal_receive");
+                GameMenu.SwitchToMenu("village_steal_wait");
             }    
         }
 
-        
-        private void game_menu_settlement_steal_receive_consequence(MenuCallbackArgs args)
+        private void game_menu_steal_receive_on_consequence(MenuCallbackArgs args)
         {
-            InformationManager.DisplayMessage(new InformationMessage("Steal received at settlement. Quantity: " + lootQuantityResult.ToString() + "% . Detected: "+ isDetectedResult.ToString()));
-            KleptomaniaSubModule.Log.Info("Stealing | Steal sucessfull .Quantity: " + lootQuantityResult.ToString() + " % .Detected: "+ isDetectedResult.ToString());
+            InformationManager.DisplayMessage(new InformationMessage("Steal received at settlement. Quantity: " + lootQuantityResult.ToString() + "%. Detected: "+ isDetectedResult.ToString()));
+            KleptomaniaSubModule.Log.Info("Stealing | Steal sucessfull. Quantity: " + lootQuantityResult.ToString() + " %. Detected: "+ isDetectedResult.ToString());
             PlayerEncounter.LeaveSettlement();
             PlayerEncounter.Finish(true);
         }
@@ -287,6 +321,7 @@ namespace xxKleptomania
 
         private int currentDetectionChance;
         private int currentMinimunGoods;
+        private double initialStealTime;
         private bool isNight;
 
         private int lootQuantityResult;
