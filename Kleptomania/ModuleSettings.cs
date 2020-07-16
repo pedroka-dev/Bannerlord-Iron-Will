@@ -19,6 +19,9 @@ namespace xxKleptomania
         [XmlElement(DataType = "int", ElementName = "BaseMinimunGoods")]
         public int BaseMinimunGoods { get; set; } = 30;
 
+        [XmlElement(DataType = "float", ElementName = "HoursWaitingToSteal")]
+        public float HoursWaitingToSteal { get; set; } = 4;
+
         public string ModName
         {
             get {
