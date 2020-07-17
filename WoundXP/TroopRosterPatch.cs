@@ -4,9 +4,8 @@ using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using xxWoundXP;
 
-namespace xWoundXP
+namespace xxWoundXP
 {
     [HarmonyPatch(typeof(TroopRoster), "WoundTroop")]
     public class TroopRosterPatch
@@ -47,8 +46,8 @@ namespace xWoundXP
             }
             catch (Exception ex)
             {
-                InformationManager.DisplayMessage(new InformationMessage("Something went wrong with Iron Will - Wound Experience: " + ex.Message, Colors.Red)); 
                 WoundXpSubModule.Log.Error("Error on Harmony Patch for WoundTroop. | " + ex.Message);
+                InformationManager.DisplayMessage(new InformationMessage("Something went wrong with Iron Will - Wound Experience: " + ex.Message, Colors.Red)); 
             }
         }
     }
