@@ -54,7 +54,7 @@ The mod works not only for the player, but for any mobile NPC parties too! That'
   
   
 # Compatibility
-Currently working with e1.4.0, e1.4.1 and e.1.4.2 versions. Should be compatible with most mods.
+Currently tested and working with e.1.4.2 version. Should be compatible with most mods.
 
 If you have any issue, please adress it at the [Bugs tab](https://www.nexusmods.com/mountandblade2bannerlord/mods/1797?tab=bugs) in the Nexus mod page.
 
