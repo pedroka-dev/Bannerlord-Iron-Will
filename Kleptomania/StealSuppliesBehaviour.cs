@@ -248,6 +248,13 @@ namespace xxKleptomania
                 args.IsEnabled = false;
                 args.Tooltip = new TextObject("This settlement has no goods to steal.", null);
             }
+
+            if(Hero.MainHero.Clan == Hero.MainHero.CurrentSettlement.OwnerClan)
+            {
+                args.IsEnabled = false;
+                args.Tooltip = new TextObject("This settlement is owned by your clan.", null);
+            }
+
             return true;
         }
 
@@ -316,16 +323,22 @@ namespace xxKleptomania
         {
             InformationManager.DisplayMessage(new InformationMessage("Steal received at settlement. Quantity: " + lootQuantityResult.ToString() + "%. Detected: "+ isDetectedResult.ToString()));
             KleptomaniaSubModule.Log.Info("Stealing | Steal sucessfull. Quantity: " + lootQuantityResult.ToString() + " %. Detected: "+ isDetectedResult.ToString());
-            
-            if(isDetectedResult)
+            //TENTAR MUDAR TODOS Hero.MainHero.CurrentSettlement PARA Settlement.CurrentSettlement
+            if (isDetectedResult)
             {
                 if (Hero.MainHero.CurrentSettlement.IsTown)
                 {
-                    ChangeCrimeRatingAction.Apply(Hero.MainHero.CurrentSettlement.MapFaction, 40f, true);
+                    ChangeCrimeRatingAction.Apply(Settlement.CurrentSettlement.MapFaction, 35f, true);
                 }
                 else if (Hero.MainHero.CurrentSettlement.IsVillage)
                 {
-                    ChangeCrimeRatingAction.Apply(Hero.MainHero.CurrentSettlement.MapFaction, 30f, true);
+                    ChangeCrimeRatingAction.Apply(Settlement.CurrentSettlement.MapFaction, 30f, true);
+                }
+
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, Settlement.CurrentSettlement.OwnerClan.Leader, -15, true);
+                foreach (Hero notableHero in Settlement.CurrentSettlement.Notables)
+                {
+                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, notableHero, -15, true);
                 }
             }
             
