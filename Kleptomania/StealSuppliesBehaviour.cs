@@ -10,6 +10,7 @@ using TaleWorlds.CampaignSystem.Overlay;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.CampaignSystem.Actions;
 
 namespace xxKleptomania
 {
@@ -86,8 +87,6 @@ namespace xxKleptomania
                 KleptomaniaSubModule.Log.Error("Error on adding StealSuppliesBehaviour for Villages | " + ex.Message);
             }
         }
-
-        
         #endregion
 
         #region CalculateSteal
@@ -317,6 +316,19 @@ namespace xxKleptomania
         {
             InformationManager.DisplayMessage(new InformationMessage("Steal received at settlement. Quantity: " + lootQuantityResult.ToString() + "%. Detected: "+ isDetectedResult.ToString()));
             KleptomaniaSubModule.Log.Info("Stealing | Steal sucessfull. Quantity: " + lootQuantityResult.ToString() + " %. Detected: "+ isDetectedResult.ToString());
+            
+            if(isDetectedResult)
+            {
+                if (Hero.MainHero.CurrentSettlement.IsTown)
+                {
+                    ChangeCrimeRatingAction.Apply(Hero.MainHero.CurrentSettlement.MapFaction, 40f, true);
+                }
+                else if (Hero.MainHero.CurrentSettlement.IsVillage)
+                {
+                    ChangeCrimeRatingAction.Apply(Hero.MainHero.CurrentSettlement.MapFaction, 30f, true);
+                }
+            }
+            
             PlayerEncounter.LeaveSettlement();
             PlayerEncounter.Finish(true);
         }
