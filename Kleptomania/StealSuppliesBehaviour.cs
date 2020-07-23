@@ -249,7 +249,7 @@ namespace xxKleptomania
                 args.Tooltip = new TextObject("This settlement has no goods to steal.", null);
             }
 
-            if(Hero.MainHero.Clan == Hero.MainHero.CurrentSettlement.OwnerClan)
+            if(Hero.MainHero.Clan == Settlement.CurrentSettlement.OwnerClan)
             {
                 args.IsEnabled = false;
                 args.Tooltip = new TextObject("This settlement is owned by your clan.", null);
@@ -270,11 +270,11 @@ namespace xxKleptomania
             CampaignTime currentStealTime = CampaignTime.Now;
             if (currentStealTime.CompareTo(GoalStealTime) == 1)     //calls if in the future of the goal time
             {
-                if (Hero.MainHero.CurrentSettlement.IsTown)
+                if (Settlement.CurrentSettlement.IsTown)
                 {
                     GameMenu.SwitchToMenu("town_steal_receive");
                 }
-                else if (Hero.MainHero.CurrentSettlement.IsVillage)
+                else if (Settlement.CurrentSettlement.IsVillage)
                 {
                     GameMenu.SwitchToMenu("village_steal_receive");
                 }
@@ -284,11 +284,11 @@ namespace xxKleptomania
         //on_consequence
         private void game_menu_steal_on_consequence(MenuCallbackArgs args)
         {
-            if (Hero.MainHero.CurrentSettlement.IsTown)
+            if (Settlement.CurrentSettlement.IsTown)
             {
                 GameMenu.SwitchToMenu("town_steal");
             }
-            else if (Hero.MainHero.CurrentSettlement.IsVillage)
+            else if (Settlement.CurrentSettlement.IsVillage)
             {
                 GameMenu.SwitchToMenu("village_steal");
             }
@@ -296,7 +296,7 @@ namespace xxKleptomania
 
         private void game_menu_steal_leave_on_consequence(MenuCallbackArgs args)
         {
-            GameMenu.SwitchToMenu(Hero.MainHero.CurrentSettlement.IsTown ? "town" : "village");
+            GameMenu.SwitchToMenu(Settlement.CurrentSettlement.IsTown ? "town" : "village");
         }
 
         private void game_menu_steal_wait_on_consequence(MenuCallbackArgs args)
@@ -309,11 +309,11 @@ namespace xxKleptomania
             CalculateDetectionBonus();
             CalculateLootBonus();
 
-            if (Hero.MainHero.CurrentSettlement.IsTown)
+            if (Settlement.CurrentSettlement.IsTown)
             {
                 GameMenu.SwitchToMenu("town_steal_wait");
             }
-            else if (Hero.MainHero.CurrentSettlement.IsVillage)
+            else if (Settlement.CurrentSettlement.IsVillage)
             {
                 GameMenu.SwitchToMenu("village_steal_wait");
             }    
@@ -323,22 +323,33 @@ namespace xxKleptomania
         {
             InformationManager.DisplayMessage(new InformationMessage("Steal received at settlement. Quantity: " + lootQuantityResult.ToString() + "%. Detected: "+ isDetectedResult.ToString()));
             KleptomaniaSubModule.Log.Info("Stealing | Steal sucessfull. Quantity: " + lootQuantityResult.ToString() + " %. Detected: "+ isDetectedResult.ToString());
-            //TENTAR MUDAR TODOS Hero.MainHero.CurrentSettlement PARA Settlement.CurrentSettlement
+
+            float currentTownStealCrimeRating = KleptomaniaSubModule.settings.TownStealCrimeRating;
+            float villageStealCrimeRating = KleptomaniaSubModule.settings.VillageStealCrimeRating;
+            int stealRelationPenalty = KleptomaniaSubModule.settings.StealRelationPenalty;
+
             if (isDetectedResult)
             {
-                if (Hero.MainHero.CurrentSettlement.IsTown)
+                if (Settlement.CurrentSettlement.IsTown)
                 {
-                    ChangeCrimeRatingAction.Apply(Settlement.CurrentSettlement.MapFaction, 35f, true);
+                    ChangeCrimeRatingAction.Apply(Settlement.CurrentSettlement.MapFaction, currentTownStealCrimeRating, true);
                 }
-                else if (Hero.MainHero.CurrentSettlement.IsVillage)
+                else if (Settlement.CurrentSettlement.IsVillage)
                 {
-                    ChangeCrimeRatingAction.Apply(Settlement.CurrentSettlement.MapFaction, 30f, true);
+                    ChangeCrimeRatingAction.Apply(Settlement.CurrentSettlement.MapFaction, villageStealCrimeRating, true);
                 }
 
-                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, Settlement.CurrentSettlement.OwnerClan.Leader, -15, true);
-                foreach (Hero notableHero in Settlement.CurrentSettlement.Notables)
+                if(Hero.MainHero.MapFaction == Settlement.CurrentSettlement.MapFaction)     //if from player faction: realtion penalty x2, decreases relation with players faction leader
                 {
-                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, notableHero, -15, true);
+                    stealRelationPenalty = stealRelationPenalty * 2;
+                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, Settlement.CurrentSettlement.MapFaction.Leader, stealRelationPenalty, true);
+                }
+
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, Settlement.CurrentSettlement.OwnerClan.Leader, stealRelationPenalty, true);        //decreases relation with settlement owner
+
+                foreach (Hero notableHero in Settlement.CurrentSettlement.Notables)     //decreases relation with notables
+                {
+                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, notableHero, stealRelationPenalty, true);
                 }
             }
             
