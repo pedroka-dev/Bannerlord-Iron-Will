@@ -22,6 +22,15 @@ namespace xxKleptomania
         [XmlElement(DataType = "float", ElementName = "HoursWaitingToSteal")]
         public float HoursWaitingToSteal { get; set; } = 4;
 
+        [XmlElement(DataType = "float", ElementName = "TownStealCrimeRating")]
+        public float TownStealCrimeRating { get; set; } = 35f;
+
+        [XmlElement(DataType = "float", ElementName = "VillageStealCrimeRating")]
+        public float VillageStealCrimeRating { get; set; } = 30f;
+
+        [XmlElement(DataType = "int", ElementName = "StealRelationPenalty")]
+        public int StealRelationPenalty { get; set; } = -15;
+
         public string ModName
         {
             get {
