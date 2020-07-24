@@ -35,7 +35,7 @@ namespace xxKleptomania
             KleptomaniaSubModule.Log.Info("Behaviour intialization | Sucessfully added Steal Menus");
         }
 
-        private string TextPrefixFromValue(int value)
+        private string TextPrefixFromValue(int value)       //to add string prefixes to a given value
         {
             string message;
             if (value > 80)
@@ -69,7 +69,7 @@ namespace xxKleptomania
                 //Game Menus
                 campaignGameStarter.AddGameMenu("town_steal", "{TOWN_STEAL_INTRO}  \n{SETTLEMENT_STEAL_INTRO_CONSEQUENCE}", this.game_menu_steal_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
                 campaignGameStarter.AddGameMenu("town_steal_receive", "{SETTLEMENT_STEAL_RECEIVE}  \n{SETTLEMENT_STEAL_RECEIVE_DETECT}  \n{SETTLEMENT_STEAL_RECEIVE_LOOT}", this.game_menu_steal_receive_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
-                campaignGameStarter.AddWaitGameMenu("town_steal_wait", "{SETTLEMENT_STEAL_WAIT} {SETTLEMENT_STEAL_WAIT_DETECTION}  \n{SETTLEMENT_STEAL_WAIT_MIN_GOODS}", this.game_menu_steal_wait_on_init, this.game_menu_steal_wait_on_condition, this.game_menu_steal_wait_on_consequence, this.game_menu_steal_wait_on_tick, GameMenu.MenuAndOptionType.WaitMenuHideProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 0f, GameMenu.MenuFlags.none, null);
+                campaignGameStarter.AddWaitGameMenu("town_steal_wait", "{SETTLEMENT_STEAL_WAIT}  \n{SETTLEMENT_STEAL_WAIT_DETECTION}  \n{SETTLEMENT_STEAL_WAIT_MIN_GOODS}", this.game_menu_steal_wait_on_init, this.game_menu_steal_wait_on_condition, this.game_menu_steal_wait_on_consequence, this.game_menu_steal_wait_on_tick, GameMenu.MenuAndOptionType.WaitMenuHideProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 0f, GameMenu.MenuFlags.none, null);
 
 
                 //Game Menu Options
@@ -116,9 +116,17 @@ namespace xxKleptomania
         #endregion
 
         #region CalculateSteal
-        private void CalculateDetectionBonus()      //current bonuses: Night = -10%
+        private void CalculateDetectionBonus()      //current bonuses: Night = -10%, From Skill = Roguery LvL /5
         {
             currentDetectionChance = KleptomaniaSubModule.settings.BaseDetectionChance;
+
+            detectionSkillBonus = MathF.Ceiling(Hero.MainHero.GetSkillValue(DefaultSkills.Roguery) / 5);
+            if(detectionSkillBonus > 50)        //Max detection bonus from roguery skill = -50%
+            {
+                detectionSkillBonus = 50;
+            }
+            currentDetectionChance = currentDetectionChance - detectionSkillBonus;
+
             if (CampaignTime.Now.IsNightTime)
             {
                 currentDetectionChance = currentDetectionChance - 10;
@@ -126,9 +134,16 @@ namespace xxKleptomania
             }
         }
 
-        private void CalculateLootBonus()       //current bonuses:
+        private void CalculateLootBonus()       //current bonuses: From Skill = Roguery LvL /10
         {
             currentMinimunGoods = KleptomaniaSubModule.settings.BaseMinimunGoods;
+
+            minimunGoodsSkillBonus = MathF.Ceiling(Hero.MainHero.GetSkillValue(DefaultSkills.Roguery) / 10);
+            if (minimunGoodsSkillBonus > 30)        //Max minimun goods bonus from roguery skill = +30%
+            {
+                minimunGoodsSkillBonus = 30;
+            }
+            currentMinimunGoods = currentMinimunGoods + minimunGoodsSkillBonus;
         }
 
         private void CalculateDetectionResult()     //to be undetected, random number stealDetectionResult should be bigger than the currentDetectionChance
@@ -185,7 +200,7 @@ namespace xxKleptomania
             }
             else
             {
-                settlementIntroConsequenceMsg = settlementIntroConsequenceMsg + "as this is owned by your faction, your relation will decrease A LOT with the faction leader, settlement owner and influent people living here.";
+                settlementIntroConsequenceMsg = settlementIntroConsequenceMsg + "as this is owned by your faction, your relation will decrease a lot with the faction leader, settlement owner and influent people living here.";
             }
 
             MBTextManager.SetTextVariable("SETTLEMENT_STEAL_INTRO_CONSEQUENCE", settlementIntroConsequenceMsg, false);
@@ -197,18 +212,18 @@ namespace xxKleptomania
             string minimunGoodsMsg;
 
             detectionMsg = "\n - " + TextPrefixFromValue(currentDetectionChance) + " chance of detection during the steal attempt (" + currentDetectionChance.ToString() + "% probability of detection).";
-
+            detectionMsg = detectionMsg + "\n  * From Roguery skill level (-" + detectionSkillBonus.ToString() + "%)  ";
             if (isNight)
             {
-                detectionMsg = detectionMsg + "\n  * From night time (-10%)";
+                detectionMsg = detectionMsg + "\n  * From night time (-10%)  ";
             }
 
            minimunGoodsMsg = "\n - " + TextPrefixFromValue(currentDetectionChance) + " ammount of garanteed minimun goods (at least " + currentMinimunGoods.ToString() + "% of the storage).";
+           minimunGoodsMsg = minimunGoodsMsg + "\n  * From Roguery skill level (+" + minimunGoodsSkillBonus.ToString() + "%)  ";
 
-
-            MBTextManager.SetTextVariable("SETTLEMENT_STEAL_WAIT", "Wait for some opportunity to steal the supplies to appear at " + Settlement.CurrentSettlement.Name + "...", false);
-            MBTextManager.SetTextVariable("SETTLEMENT_STEAL_WAIT_DETECTION", detectionMsg, false);
-            MBTextManager.SetTextVariable("SETTLEMENT_STEAL_WAIT_MIN_GOODS", minimunGoodsMsg, false);
+           MBTextManager.SetTextVariable("SETTLEMENT_STEAL_WAIT", "Wait for some opportunity to steal the supplies to appear at " + Settlement.CurrentSettlement.Name + "...", false);
+           MBTextManager.SetTextVariable("SETTLEMENT_STEAL_WAIT_DETECTION", detectionMsg, false);
+           MBTextManager.SetTextVariable("SETTLEMENT_STEAL_WAIT_MIN_GOODS", minimunGoodsMsg, false);
         }
 
         private void game_menu_steal_receive_on_init(MenuCallbackArgs args)
@@ -221,7 +236,7 @@ namespace xxKleptomania
 
             if (isDetectedResult)
             {
-                detectMsg = "\nAs you leave you hear someone yell at you: 'Thief!'. You run off as quickly as you can.";
+                detectMsg = "\nAs you leave you hear someone yell at you: 'Thief!'. You run off as quickly as you can. ";
             }
             else
             {
@@ -396,8 +411,12 @@ namespace xxKleptomania
 
         private Dictionary<string, CampaignTime> _settlementLastStealDetectionTimeDictionary = new Dictionary<string, CampaignTime>();
 
+        private int detectionSkillBonus;
+        private int minimunGoodsSkillBonus;
         private int currentDetectionChance;
         private int currentMinimunGoods;
+
+
         private CampaignTime GoalStealTime;
         private bool isNight;
 
