@@ -11,6 +11,8 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
+using System.Windows.Documents;
 
 namespace xxKleptomania
 {
@@ -35,33 +37,8 @@ namespace xxKleptomania
             KleptomaniaSubModule.Log.Info("Behaviour intialization | Sucessfully added Steal Menus");
         }
 
-        private string TextPrefixFromValue(int value)       //to add string prefixes to a given value
-        {
-            string message;
-            if (value > 80)
-            {
-                message = "Very High";
-            }
-            else if(value > 60)
-            {
-                message = "High";
-            }
-            else if(value > 40)
-            {
-                message = "Medium";
-            }
-            else if(value > 20)
-            {
-                message = "Low";
-            }
-            else
-            {
-                message = "Very Low";
-            }
-            return message;
-        }
-
-        #region AddGameMenu       
+        
+        
         private void AddTownStealMenu(CampaignGameStarter campaignGameStarter)     
         {
             try
@@ -113,74 +90,13 @@ namespace xxKleptomania
                 KleptomaniaSubModule.Log.Error("Error on adding StealSuppliesBehaviour for Villages | " + ex.Message);
             }
         }
-        #endregion
-
-        #region CalculateSteal
-        private void CalculateDetectionBonus()      //current bonuses: Night = -10%, From Skill = Roguery LvL /5
-        {
-            currentDetectionChance = KleptomaniaSubModule.settings.BaseDetectionChance;
-
-            detectionSkillBonus = MathF.Ceiling(Hero.MainHero.GetSkillValue(DefaultSkills.Roguery) / 5);
-            if(detectionSkillBonus > 50)        //Max detection bonus from roguery skill = -50%
-            {
-                detectionSkillBonus = 50;
-            }
-            currentDetectionChance = currentDetectionChance - detectionSkillBonus;
-
-            if (CampaignTime.Now.IsNightTime)
-            {
-                currentDetectionChance = currentDetectionChance - 10;
-                isNight = true;
-            }
-        }
-
-        private void CalculateLootBonus()       //current bonuses: From Skill = Roguery LvL /10
-        {
-            currentMinimunGoods = KleptomaniaSubModule.settings.BaseMinimunGoods;
-
-            minimunGoodsSkillBonus = MathF.Ceiling(Hero.MainHero.GetSkillValue(DefaultSkills.Roguery) / 10);
-            if (minimunGoodsSkillBonus > 30)        //Max minimun goods bonus from roguery skill = +30%
-            {
-                minimunGoodsSkillBonus = 30;
-            }
-            currentMinimunGoods = currentMinimunGoods + minimunGoodsSkillBonus;
-        }
-
-        private void CalculateDetectionResult()     //to be undetected, random number stealDetectionResult should be bigger than the currentDetectionChance
-        {
-            int stealDetectionResult = MBRandom.RandomInt(1, 100);
-
-            if (stealDetectionResult >= currentDetectionChance)
-            {
-                isDetectedResult = false;
-            }
-            else
-            {
-                _settlementLastStealDetectionTimeDictionary.Add(Settlement.CurrentSettlement.StringId, CampaignTime.Now);
-                isDetectedResult = true;
-            }
-        }
-
-        private void CalculateLootResult()      //get a random ammount of goods. but if its smaller than the currentMinimunGoods, gets currentMinimunGoods instead
-        {
-            int stealLootResult = MBRandom.RandomInt(1, 100);
-
-            if (stealLootResult >= currentMinimunGoods)
-            {
-                lootQuantityResult = stealLootResult;
-            }
-            else
-            {
-                lootQuantityResult = currentMinimunGoods;
-            }
-        }
-        #endregion
-
-        #region on_init, on_condition and on_consequence
+        
         //init
         private void game_menu_steal_on_init(MenuCallbackArgs args)
         {
             string settlementIntroMsg;
+            string settlementIntroConsequenceMsg;
+
             if (Settlement.CurrentSettlement.IsTown)
             {
                 settlementIntroMsg = "The Town is full of rich traders trying to sell goods in the street and bargaining for the most profitable deal. By looking long enough, there might appear a way to 'relieve' them from their supplies. \n";
@@ -192,7 +108,7 @@ namespace xxKleptomania
                 MBTextManager.SetTextVariable("VILLAGE_STEAL_INTRO", settlementIntroMsg, false);
             }
 
-            string settlementIntroConsequenceMsg = "\nIf you get caught stealing, your criminal rating with the faction will increase and ";
+            settlementIntroConsequenceMsg = "\nIf you get caught stealing, your criminal rating with the faction will increase and ";
 
             if(Hero.MainHero.MapFaction != Settlement.CurrentSettlement.MapFaction)
             {
@@ -208,17 +124,24 @@ namespace xxKleptomania
 
         private void game_menu_steal_wait_on_init(MenuCallbackArgs args)
         {
-            string detectionMsg ;
+            string detectionMsg;
             string minimunGoodsMsg;
+            bool isNight = CampaignTime.Now.IsNightTime;
 
-            detectionMsg = "\n - " + TextPrefixFromValue(currentDetectionChance) + " chance of detection during the steal attempt (" + currentDetectionChance.ToString() + "% probability of detection).";
+            int detectionSkillBonus = MathF.Ceiling(Hero.MainHero.GetSkillValue(DefaultSkills.Roguery) / 5);
+            int minimunGoodsSkillBonus = MathF.Ceiling(Hero.MainHero.GetSkillValue(DefaultSkills.Roguery) / 10);
+
+            currentDetectionChance = stealUtils.CalculateDetectionBonus(detectionSkillBonus, isNight);
+            currentMinimunGoods = stealUtils.CalculateLootBonus(minimunGoodsSkillBonus);
+
+            detectionMsg = "\n - " + stealUtils.TextPrefixFromValue(currentDetectionChance) + " chance of detection during the steal attempt (" + currentDetectionChance.ToString() + "% probability of detection).";
             detectionMsg = detectionMsg + "\n  * From Roguery skill level (-" + detectionSkillBonus.ToString() + "%)  ";
             if (isNight)
             {
                 detectionMsg = detectionMsg + "\n  * From night time (-10%)  ";
             }
 
-           minimunGoodsMsg = "\n - " + TextPrefixFromValue(currentDetectionChance) + " ammount of garanteed minimun goods (at least " + currentMinimunGoods.ToString() + "% of the storage).";
+           minimunGoodsMsg = "\n - " + stealUtils.TextPrefixFromValue(currentDetectionChance) + " ammount of garanteed minimun goods (at least " + currentMinimunGoods.ToString() + "% of the storage).";
            minimunGoodsMsg = minimunGoodsMsg + "\n  * From Roguery skill level (+" + minimunGoodsSkillBonus.ToString() + "%)  ";
 
            MBTextManager.SetTextVariable("SETTLEMENT_STEAL_WAIT", "Wait for some opportunity to steal the supplies to appear at " + Settlement.CurrentSettlement.Name + "...", false);
@@ -228,13 +151,13 @@ namespace xxKleptomania
 
         private void game_menu_steal_receive_on_init(MenuCallbackArgs args)
         {
-            CalculateDetectionResult();
-            CalculateLootResult();
-            
             string detectMsg;
             string lootMsg;
 
-            if (isDetectedResult)
+            isDetected = stealUtils.CalculateDetectionResult(currentDetectionChance);
+            stealQuantity = stealUtils.CalculateLootResult(currentMinimunGoods);
+
+            if (isDetected)
             {
                 detectMsg = "\nAs you leave you hear someone yell at you: 'Thief!'. You run off as quickly as you can. ";
             }
@@ -243,7 +166,7 @@ namespace xxKleptomania
                 detectMsg = "\nYou sneak out of the village without being seen by anyone. ";
             }
 
-            lootMsg = "\nIn your bag, there is a " + TextPrefixFromValue(lootQuantityResult) + " ammount of stolen supplies (" + lootQuantityResult.ToString() + "% of the storage).";
+            lootMsg = "\nIn your bag, there is a " + stealUtils.TextPrefixFromValue(stealQuantity) + " ammount of stolen supplies (" + stealQuantity.ToString() + "% of the storage).";
 
             MBTextManager.SetTextVariable("SETTLEMENT_STEAL_RECEIVE", "You were able to secure the supplies stolen from " + Settlement.CurrentSettlement.Name + "\n", false);
             MBTextManager.SetTextVariable("SETTLEMENT_STEAL_RECEIVE_DETECT", detectMsg, false);
@@ -356,9 +279,6 @@ namespace xxKleptomania
 
         private void game_menu_steal_atempt_on_consequence(MenuCallbackArgs args)
         {
-            CalculateDetectionBonus();
-            CalculateLootBonus();
-
             if (Settlement.CurrentSettlement.IsTown)
             {
                 GameMenu.SwitchToMenu("town_steal_wait");
@@ -371,15 +291,17 @@ namespace xxKleptomania
 
         private void game_menu_steal_receive_on_consequence(MenuCallbackArgs args)
         {
-            InformationManager.DisplayMessage(new InformationMessage("Steal received at settlement. Quantity: " + lootQuantityResult.ToString() + "%. Detected: "+ isDetectedResult.ToString()));
-            KleptomaniaSubModule.Log.Info("Stealing | Steal sucessfull. Quantity: " + lootQuantityResult.ToString() + " %. Detected: "+ isDetectedResult.ToString());
-
             float currentTownStealCrimeRating = KleptomaniaSubModule.settings.TownStealCrimeRating;
             float villageStealCrimeRating = KleptomaniaSubModule.settings.VillageStealCrimeRating;
             int stealRelationPenalty = KleptomaniaSubModule.settings.StealRelationPenalty;
 
-            if (isDetectedResult)
+            InformationManager.DisplayMessage(new InformationMessage("Steal received at settlement. Quantity: " + stealQuantity.ToString() + "%. Detected: "+ isDetected.ToString()));
+            KleptomaniaSubModule.Log.Info("Stealing | Steal sucessfull. Quantity: " + stealQuantity.ToString() + " %. Detected: "+ isDetected.ToString());
+
+            if (isDetected)
             {
+                _settlementLastStealDetectionTimeDictionary.Add(Settlement.CurrentSettlement.StringId, CampaignTime.Now);
+
                 if (Settlement.CurrentSettlement.IsTown)
                 {
                     ChangeCrimeRatingAction.Apply(Settlement.CurrentSettlement.MapFaction, currentTownStealCrimeRating, true);
@@ -406,21 +328,16 @@ namespace xxKleptomania
             PlayerEncounter.LeaveSettlement();
             PlayerEncounter.Finish(true);
         }
-        #endregion
 
+        public Dictionary<string, CampaignTime> _settlementLastStealDetectionTimeDictionary = new Dictionary<string, CampaignTime>();
+        private StealSuppliesUtils stealUtils = new StealSuppliesUtils();
+        
+        CampaignTime GoalStealTime;
 
-        private Dictionary<string, CampaignTime> _settlementLastStealDetectionTimeDictionary = new Dictionary<string, CampaignTime>();
+        int currentDetectionChance;
+        int currentMinimunGoods;
 
-        private int detectionSkillBonus;
-        private int minimunGoodsSkillBonus;
-        private int currentDetectionChance;
-        private int currentMinimunGoods;
-
-
-        private CampaignTime GoalStealTime;
-        private bool isNight;
-
-        private int lootQuantityResult;
-        private bool isDetectedResult;
+        public bool isDetected;
+        public int stealQuantity;
     }
 }
