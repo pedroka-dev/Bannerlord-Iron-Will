@@ -32,29 +32,24 @@ namespace xxKleptomania
             return message;
         }
 
-        public int CalculateDetectionBonus(int skillBonus, bool isNight)      //current bonuses: Night = -10%, From Skill = Roguery LvL /5. current penalty: Moderate crime rating = +10%, Severe crime rating = +20%
+        public int CalculateDetectionBonus(int skillBonus, bool hasHighCrime, bool isNight)      //current bonuses: Night = -10%, From Skill = Roguery LvL /5. current penalty: High crime rating = 15%
         {
             int detectionChanceBonus = KleptomaniaSubModule.settings.BaseDetectionChance;
-
-            //DefaultCrimeModel crimeModel = new DefaultCrimeModel();
-            //if (crimeModel.IsPlayerCrimeRatingModerate(Settlement.CurrentSettlement.MapFaction))
-            //{
-            //    detectionChanceBonus = detectionChanceBonus + 10;
-            //}
-            //else if (crimeModel.IsPlayerCrimeRatingSevere(Settlement.CurrentSettlement.MapFaction))
-            //{
-            //    detectionChanceBonus = detectionChanceBonus + 20;
-            //}
 
             if (skillBonus > 50)        //Max detection bonus from roguery skill = -50%
             {
                 skillBonus = 50;
             }
-            detectionChanceBonus = detectionChanceBonus - skillBonus;
+            detectionChanceBonus -= skillBonus;
+
+            if (hasHighCrime)
+            {
+                detectionChanceBonus += 20;
+            }
 
             if (isNight)
             {
-                detectionChanceBonus = detectionChanceBonus - 10;
+                detectionChanceBonus -= 10;
             }
 
             return detectionChanceBonus;
@@ -68,7 +63,7 @@ namespace xxKleptomania
             {
                 skillBonus = 30;
             }
-            minimunGoodsBonus = minimunGoodsBonus + skillBonus;
+            minimunGoodsBonus += skillBonus;
 
             return minimunGoodsBonus;
         }
