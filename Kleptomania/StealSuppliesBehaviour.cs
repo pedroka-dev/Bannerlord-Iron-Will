@@ -50,7 +50,7 @@ namespace xxKleptomania
 
 
                 //Game Menu Options
-                campaignGameStarter.AddGameMenuOption("town", "town_steal", "Steal supplies from the traders.", this.game_menu_steal_on_condition, this.game_menu_steal_on_consequence, false, 7, false);
+                campaignGameStarter.AddGameMenuOption("town", "town_steal", "Steal supplies from the traders.", this.game_menu_steal_on_condition, this.game_menu_steal_on_consequence, false, 10, false);
                 campaignGameStarter.AddGameMenuOption("town_steal", "town_steal_atempt", "Look for opportunities to steal supplies.", this.game_menu_steal_atempt_on_condition, this.game_menu_steal_atempt_on_consequence, false, 1, false);
                 campaignGameStarter.AddGameMenuOption("town_steal", "town_steal_back", "Leave.", this.game_menu_steal_leave_on_condition, this.game_menu_steal_leave_on_consequence, false, -1, false);
                 campaignGameStarter.AddGameMenuOption("town_steal_wait", "town_steal_wait_back", "Forget it.", this.game_menu_steal_leave_on_condition, this.game_menu_steal_leave_on_consequence, false, -1, false);
@@ -76,7 +76,7 @@ namespace xxKleptomania
 
 
                 //Game Menu Options
-                campaignGameStarter.AddGameMenuOption("village", "village_steal", "Steal supplies from the peasants.", this.game_menu_steal_on_condition, this.game_menu_steal_on_consequence, false, 4, false);
+                campaignGameStarter.AddGameMenuOption("village", "village_steal", "Steal supplies from the peasants.", this.game_menu_steal_on_condition, this.game_menu_steal_on_consequence, false, 6, false);
                 campaignGameStarter.AddGameMenuOption("village_steal", "village_steal_atempt", "Look for opportunities to steal supplies.", this.game_menu_steal_atempt_on_condition, this.game_menu_steal_atempt_on_consequence, false, 1, false);
                 campaignGameStarter.AddGameMenuOption("village_steal", "village_steal_back", "Leave.", this.game_menu_steal_leave_on_condition, this.game_menu_steal_leave_on_consequence, false, -1, false);
                 campaignGameStarter.AddGameMenuOption("village_steal_wait", "village_steal_wait_back", "Forget it.", this.game_menu_steal_leave_on_condition, this.game_menu_steal_leave_on_consequence, false, -1, false);
@@ -310,8 +310,25 @@ namespace xxKleptomania
             float villageStealCrimeRating = KleptomaniaSubModule.settings.VillageStealCrimeRating;
             int stealRelationPenalty = KleptomaniaSubModule.settings.StealRelationPenalty;
 
-            InformationManager.DisplayMessage(new InformationMessage("Steal received at settlement. Quantity: " + stealQuantity.ToString() + "%. Detected: "+ isDetected.ToString()));
             KleptomaniaSubModule.Log.Info("Stealing | Steal sucessfull. Quantity: " + stealQuantity.ToString() + " %. Detected: "+ isDetected.ToString());
+
+
+            if (Settlement.CurrentSettlement.IsTown)
+            {
+                GameMenu.SwitchToMenu("town");
+                Settlement.CurrentSettlement.Prosperity -= prosperityGoodsAmmount;
+                
+            }
+            else if (Settlement.CurrentSettlement.IsVillage)
+            {
+                GameMenu.SwitchToMenu("village");
+                Settlement.CurrentSettlement.Village.Hearth -= prosperityGoodsAmmount;
+            }
+            KleptomaniaSubModule.Log.Info("Stealing | Settlement "+ Settlement.CurrentSettlement.Name + " hearth/prosperity decreased by " + prosperityGoodsAmmount.ToString());
+            LootStolenGoods();
+            PlayerEncounter.Current.FinalizeBattle();
+            
+            //PlayerEncounter.LeaveSettlement();
 
             if (isDetected)
             {
@@ -340,18 +357,7 @@ namespace xxKleptomania
                 }
             }
 
-            if (Settlement.CurrentSettlement.IsTown)
-            {
-                GameMenu.SwitchToMenu("town");
-            }
-            else if (Settlement.CurrentSettlement.IsVillage)
-            {
-                GameMenu.SwitchToMenu("village");
-            }
-            LootStolenGoods();
-            PlayerEncounter.Current.FinalizeBattle();
-            Settlement.CurrentSettlement.Prosperity -= 15f;
-            //PlayerEncounter.LeaveSettlement();
+            
         }
 
         public void LootStolenGoods()
@@ -380,6 +386,7 @@ namespace xxKleptomania
                 }
             }
 
+            KleptomaniaSubModule.Log.Info("Stealing | Total number of stolen goods: " + itemRoster.Count.ToString());
             InventoryManager.OpenScreenAsLoot(new Dictionary<PartyBase, ItemRoster>
             {
                 {
