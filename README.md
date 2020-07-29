@@ -25,7 +25,6 @@ The mod works not only for the player, but for any mobile NPC parties too! That'
   - [Iron Will - Wound Experience Nexus Mods page](https://www.nexusmods.com/mountandblade2bannerlord/mods/1797)
   - [Iron Will - Wound Experience TaleWorlds Forums page](https://forums.taleworlds.com/index.php?threads/iron-will-wound-experience.426533/)
   - [Iron Will - Wound Experience ModDB page](https://www.moddb.com/mods/iron-will-wound-experience)
-  - [Iron Will Project GitHub](https://github.com/pedro-ca/bannerlord_iron_will)
 
 # Features 
   - Adds Athletics Experience to **any** Hero wounded in battle (80xp by default. Almost 1/6 of the Athletics XP for level 25) 
@@ -70,3 +69,54 @@ v1.2.0:
   - All player owned troops that receives xp appears in the Console and Nlogger
   - WoundExperienceLog.txt NLogger is now at the mod folder and some log are more informative
   - The Information manager now shows more clearly any mod error/exception
+  
+---
+  
+# Iron Will - Kleptomania
+
+![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/Kleptomania%20Thumbnail.jpg)
+
+Being a criminal in Bannerlord is now more viable and flavorfull, with **the mod Kleptomania**'s ability to steal trade goods and food from towns and villages. Although the interactions are limited to in-game menus, the goal is to create a Stealing mechanic with a feeling of risk vs reward similar from games like Skyrim, Kenshi, Fallout, Thief, and even Tabletop RPG.
+
+After a simple Roguery skill check, you might be able to get an dynamic ammount of loot and leave without been seen by anyone. But BEWARE, if you get caught there will be consequences.
+
+Keep in mind Stealing is different from the Native's Hostile Action "Force Peasants to give you supplies". The most important differences is that you dont have to fight the militia, chance to not get detected at all, can loot from towns, variable ammount of loot (sometimes more, sometimes less), amongst other things.
+
+For now, only the player can interact with the steal menus.
+
+# Download and Links
+ - [Iron Will - Kleptomania Nexus Mods page](https://www.nexusmods.com/mountandblade2bannerlord/mods/1997)
+ - Iron Will - Kleptomania TaleWorlds Forums page
+ - Iron Will - Kleptomania ModDB page
+
+# Features
+ - 3 new menus for stealing from Villages and Towns, which allows player to steal trading goods and food.
+ - Can steal without being detected (RNG, chances of detection decreases with Roguery Skill, Night Time and increases by Severe Criminal rating).
+ - If detected, decreases relationship with the settlement owner and settlement notables  (-15 by default, double if from same faction and also decreases with faction leader).
+ - If detected, applies criminal rating with faction (35 for towns and 30 for village by default).
+ - Dynammic minimun received ammount of goods (RNG, minimun ammount increases with Roguery Skill).
+ - Max ammount of availiable goods scales with settlement prosperity / hearth.
+ - On steal, decreases settlement prosperity / hearth and actually affects the settlement loot pool.
+ - Configurable Steal modifiers and default values at "xxKleptomaniaSettings.xml".
+ - NLogger for debugging reasons at "KleptomaniaLog.txt".
+ 
+ ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/steal%20from%20town%20thumbnail.jpg)
+ ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/steal%20from%20villages%20thumbnail.jpg)
+ ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/different%20results%20thumbnail.jpg)
+ ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/dynamic%20loot%20thumbnail.jpg)
+ 
+# To-do
+ - Receive Roguery XP on attempt, no matter the outcome
+ - Chance of an "encounter" on detection.
+ - Bonus to detection and minimun goods from the party's best Bandit troops.
+ - Penalties from consecutive steal from same settlement / faction.
+ - Stolen good fencing (aka not being able to sell to settlement it was stolen from).
+ - Implementation of optional configuration menu with mildeww's ModLib
+ - Toggleable scalable Experience
+
+
+# Compatibility
+Currently tested and working with e.1.4.2 version. 
+
+If you have any issue, please adress it at the [Bugs tab](https://www.nexusmods.com/mountandblade2bannerlord/mods/1997?tab=bugs) in the Nexus mod page.
+
