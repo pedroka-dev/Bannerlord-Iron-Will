@@ -152,8 +152,8 @@ namespace xxKleptomania
                 detectionMsg += "\n  *Night time bonus (-10%)  ";
             }
 
-           minimunGoodsMsg = "\n - " + stealUtils.TextPrefixFromValue(currentDetectionChance) + " ammount of garanteed minimun goods (at least " + currentMinimunGoods.ToString() + "% of the storage).";
-           minimunGoodsMsg = minimunGoodsMsg + "\n  * From Roguery skill level (+" + minimunGoodsSkillBonus.ToString() + "%)  ";
+           minimunGoodsMsg = "\n - " + stealUtils.TextPrefixFromValue(currentMinimunGoods) + " ammount of garanteed minimun goods (at least " + currentMinimunGoods.ToString() + "% of the storage).";
+           minimunGoodsMsg = minimunGoodsMsg + "\n  * Roguery skill bonus (+" + minimunGoodsSkillBonus.ToString() + "%)  ";
 
            MBTextManager.SetTextVariable("SETTLEMENT_STEAL_WAIT", "Wait for some opportunity to steal the supplies to appear at " + Settlement.CurrentSettlement.Name + "...", false);
            MBTextManager.SetTextVariable("SETTLEMENT_STEAL_WAIT_DETECTION", detectionMsg, false);
@@ -176,7 +176,7 @@ namespace xxKleptomania
             }
             else
             {
-                detectMsg = "\nYou sneak out of the village without being seen by anyone. ";
+                detectMsg = "\nYou sneak out of the settlement without being seen by anyone. ";
             }
 
             lootMsg = "\nIn your bag, there is a " + stealUtils.TextPrefixFromValue(stealQuantity) + " ammount of stolen supplies (" + stealQuantity.ToString() + "% of the storage).";
