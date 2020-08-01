@@ -3,7 +3,7 @@
   
 # Current Mod List:
   - [Iron Will - Wound Experience](https://www.nexusmods.com/mountandblade2bannerlord/mods/1797)
-  - Iron Will - Kleptomania  (comming soon)
+  - [Iron Will - Kleptomania](https://www.nexusmods.com/mountandblade2bannerlord/mods/1997)
   - Iron Will - Battlefield Scavenging (comming soon)
   - Iron Will - Hunting Instinct (comming soon)
   - Iron Will - Shady Business (comming soon)
@@ -87,7 +87,7 @@ For now, only the player can interact with the steal menus.
 # Download and Links
  - [Iron Will - Kleptomania Nexus Mods page](https://www.nexusmods.com/mountandblade2bannerlord/mods/1997)
  - Iron Will - Kleptomania TaleWorlds Forums page
- - Iron Will - Kleptomania ModDB page
+ - [Iron Will - Kleptomania ModDB page](https://www.moddb.com/mods/iron-will-kleptomania)
 
 # Features
  - 3 new menus for stealing from Villages and Towns, which allows player to steal trading goods and food.
