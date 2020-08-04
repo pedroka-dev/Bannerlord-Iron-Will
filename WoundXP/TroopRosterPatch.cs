@@ -2,6 +2,7 @@
 using System.Reflection;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
@@ -20,9 +21,23 @@ namespace xxWoundXP
 
                 if (troop.IsHero)
                 {
-                    int xpValue = WoundXpSubModule.settings.HeroWoundXpValue;
+                    
+
+                    float xpValue = WoundXpSubModule.settings.HeroWoundXpValue;
 
                     Hero heroTroop = troop.HeroObject;
+
+                    DefaultCharacterDevelopmentModel characterDevelopmentModel = new DefaultCharacterDevelopmentModel();
+                    float learningRate = characterDevelopmentModel.CalculateLearningRate(heroTroop, DefaultSkills.Athletics);
+
+
+                    WoundXpSubModule.Log.Info("Hero Troop: " + troopSeed.ToString() + " | Calculated learning rate = learningRate");
+                    if (WoundXpSubModule.settings.DebugInfo)
+                    {
+                        InformationManager.DisplayMessage(new InformationMessage(heroTroop.Name + " calculated learning rate = " + learningRate.ToString(), Colors.Yellow));
+                    }
+
+                    xpValue = xpValue * learningRate / 2;
                     heroTroop.AddSkillXp(DefaultSkills.Athletics, xpValue);
 
                     if (troop.IsPlayerCharacter || heroTroop.IsPlayerCompanion || WoundXpSubModule.settings.DebugInfo)
