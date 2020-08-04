@@ -21,27 +21,24 @@ namespace xxWoundXP
 
                 if (troop.IsHero)
                 {
-                    
-
                     float xpValue = WoundXpSubModule.settings.HeroWoundXpValue;
 
                     Hero heroTroop = troop.HeroObject;
 
                     DefaultCharacterDevelopmentModel characterDevelopmentModel = new DefaultCharacterDevelopmentModel();
-                    float learningRate = characterDevelopmentModel.CalculateLearningRate(heroTroop, DefaultSkills.Athletics);
+                    float learningRateBonus = characterDevelopmentModel.CalculateLearningRate(heroTroop, DefaultSkills.Athletics);
 
-
-                    WoundXpSubModule.Log.Info("Hero Troop: " + troopSeed.ToString() + " | Calculated learning rate = learningRate");
-                    if (WoundXpSubModule.settings.DebugInfo)
-                    {
-                        InformationManager.DisplayMessage(new InformationMessage(heroTroop.Name + " calculated learning rate = " + learningRate.ToString(), Colors.Yellow));
-                    }
-
-                    xpValue = xpValue * learningRate / 2;
+                    xpValue = xpValue * learningRateBonus;
                     heroTroop.AddSkillXp(DefaultSkills.Athletics, xpValue);
 
-                    if (troop.IsPlayerCharacter || heroTroop.IsPlayerCompanion || WoundXpSubModule.settings.DebugInfo)
+                    if (WoundXpSubModule.settings.DebugInfo || troop.IsPlayerCharacter || heroTroop.IsPlayerCompanion)
                     {
+                        WoundXpSubModule.Log.Info("Hero Troop: " + troopSeed.ToString() + " | Calculated learning rate bonus = " + learningRateBonus.ToString());
+                        if (WoundXpSubModule.settings.DebugInfo)
+                        {
+                            InformationManager.DisplayMessage(new InformationMessage(heroTroop.Name + " calculated learning rate bonus = " + learningRateBonus.ToString(), Colors.Yellow));
+                        }
+
                         InformationManager.DisplayMessage(new InformationMessage(heroTroop.Name + " received " + xpValue + " Athletics XP for surviving after being wounded.", Colors.Yellow));
                         WoundXpSubModule.Log.Info("Hero Troop: " + troopSeed.ToString() + " | " + heroTroop.Name + " received Athletics XP value of " + xpValue);
                     }
@@ -50,10 +47,19 @@ namespace xxWoundXP
                 {
                     int xpValue = WoundXpSubModule.settings.TroopWoundXpValue;
 
-                    __instance.AddXpToTroop(xpValue, troop);
+                    int troopTierBonus = troop.Tier+1;
 
+                    xpValue = xpValue * troopTierBonus;
+                    __instance.AddXpToTroop(xpValue, troop);
+                    
                     if (WoundXpSubModule.settings.DebugInfo || OwnerParty.Owner != null && OwnerParty.Owner.IsHumanPlayerCharacter)
                     {
+                        WoundXpSubModule.Log.Info("Generic Troop: " + troopSeed.ToString() + " | Calculated learning troop tier bonus = " + troopTierBonus.ToString());
+                        if (WoundXpSubModule.settings.DebugInfo)
+                        {
+                            InformationManager.DisplayMessage(new InformationMessage(troop.Name + " calculated troop tier bonus = " + troopTierBonus.ToString(), Colors.Yellow));
+                        }
+
                         InformationManager.DisplayMessage(new InformationMessage(troop.Name + " received " + xpValue + " XP for surviving after being wounded.", Colors.Yellow));
                         WoundXpSubModule.Log.Info("Generic Troop: " + troopSeed.ToString() + " | " + troop.Name + " received XP value of " + xpValue);
                     }

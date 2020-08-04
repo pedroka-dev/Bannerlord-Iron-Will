@@ -3,6 +3,6 @@
   <ID>xxWoundXP</ID>
   <DebugInfo>false</DebugInfo>
   <ScalableSkillXp>true</ScalableSkillXp>
-  <TroopWoundXpValue>80</TroopWoundXpValue>
-  <HeroWoundXpValue>80</HeroWoundXpValue>
+  <TroopWoundXpValue>40</TroopWoundXpValue>
+  <HeroWoundXpValue>40</HeroWoundXpValue>
 </ModuleSettings>
