@@ -86,7 +86,7 @@ For now, only the player can interact with the steal menus.
 
 # Download and Links
  - [Iron Will - Kleptomania Nexus Mods page](https://www.nexusmods.com/mountandblade2bannerlord/mods/1997)
- - Iron Will - Kleptomania TaleWorlds Forums page
+ - [Iron Will - Kleptomania TaleWorlds Forums page](https://forums.taleworlds.com/index.php?threads/iron-will-kleptomania.428278/)
  - [Iron Will - Kleptomania ModDB page](https://www.moddb.com/mods/iron-will-kleptomania)
 
 # Features
@@ -112,7 +112,6 @@ For now, only the player can interact with the steal menus.
  - Penalties from consecutive steal from same settlement / faction.
  - Stolen good fencing (aka not being able to sell to settlement it was stolen from).
  - Implementation of optional configuration menu with mildeww's ModLib
- - Toggleable scalable Experience
 
 
 # Compatibility
