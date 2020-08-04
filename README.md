@@ -6,7 +6,6 @@
   - [Iron Will - Kleptomania](https://www.nexusmods.com/mountandblade2bannerlord/mods/1997)
   - Iron Will - Battlefield Scavenging (comming soon)
   - Iron Will - Hunting Instinct (comming soon)
-  - Iron Will - Shady Business (comming soon)
 
 ---
 
