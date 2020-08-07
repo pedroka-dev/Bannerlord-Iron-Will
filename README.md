@@ -26,13 +26,15 @@ The mod works not only for the player, but for any mobile NPC parties too! That'
   - [Iron Will - Wound Experience ModDB page](https://www.moddb.com/mods/iron-will-wound-experience)
 
 # Features 
-  - Adds Athletics Experience to **any** Hero wounded in battle (80xp by default. Almost 1/6 of the Athletics XP for level 25) 
-  - Adds Generic Experience to **any** Troop wounded in battle (80xp by default. Almost 1/3 of de XP to upgrade a Aserai Recruit)
-  - Player Character, Companions and Owned troops received XP appears in the ingame console.
+  - Adds configurable Athletics Experience to **any** Hero wounded in battle (40xp by default) .
+    - Hero XP scales with Learning Rate. Current: xpValue  * learningRateBonus. (can be turned off)
+  - Adds configurable Generic Experience to **any** Troop wounded in battle (40xp by default).
+    - Generic Troop XP scales with troop tier. Current: xpValue * (troop.Tier +1). (can be turned off)
+  - Player Character, Companions and Owned troops received XP appears in the ingame console. (can be turned off)
   - Works globally to all troops in game, both in battle and campaing map.
-  - Configurable Experience value for Heroes and  Generic Troops at "xxWoundXPSettings.xml"
-  - NLogger for debugging reasons at "WoundExperienceLog.txt"
-  - Only valid for **real** battles, so you can't cheese it by getting wounded in tournaments and arenas heh
+  - Configurable Experience value for Heroes and  Generic Troops at "xxWoundXPSettings.xml". 
+  - NLogger for debugging reasons at "WoundExperienceLog.txt".
+  - Only valid for **real** battles, so you can't cheese it by getting wounded in tournaments and arenas heh.
 
   
   ![alt text](https://github.com/pedro-ca/bannerlord_iron_will/blob/master/WoundXP/Thumbnails/heroe%20athletic%20exp%20example.JPG?raw=true)
@@ -47,8 +49,7 @@ The mod works not only for the player, but for any mobile NPC parties too! That'
   
 
 # To-do
-  - Implementation of optional configuration menu with [mildeww's ModLib](https://www.nexusmods.com/mountandblade2bannerlord/mods/592)
-  - Toggleable linear escale Experience
+  - Configurable values in game, with implementation of optional configuration menu with [mildeww's ModLib](https://www.nexusmods.com/mountandblade2bannerlord/mods/592)
   
   
 # Compatibility
@@ -68,6 +69,13 @@ v1.2.0:
   - All player owned troops that receives xp appears in the Console and Nlogger
   - WoundExperienceLog.txt NLogger is now at the mod folder and some log are more informative
   - The Information manager now shows more clearly any mod error/exception
+  
+  v1.3.0:
+  - Changed default XP value for heroes and troops to 40
+  - Hero XP scales with Learning Rate. Current: xpValue  * learningRateBonus
+  - Generic Troop XP scales with troop tier. Current: xpValue * (troop.Tier +1)
+  - Player can change to not show received XP of heroes and troops on the console (_Requested by NexusMod user dungeons0_)
+  - Compatibility with game version Bannerlord Beta Branch e1.4.3
   
 ---
   
