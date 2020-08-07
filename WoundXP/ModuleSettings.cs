@@ -17,13 +17,16 @@ namespace xxWoundXP
         [XmlElement(DataType = "boolean", ElementName = "ScalableSkillXp")]
         public bool ScalableSkillXp { get; set; } = true;
 
+        [XmlElement(DataType = "boolean", ElementName = "ReceivedXpInConsole")]
+        public bool ReceivedXpInConsole { get; set; } = true;
+
 
         [XmlElement(DataType = "int", ElementName = "TroopWoundXpValue")]
-        public int TroopWoundXpValue { get; set; } = 80;
+        public int TroopWoundXpValue { get; set; } = 40;
 
 
         [XmlElement(DataType = "int", ElementName = "HeroWoundXpValue")]
-        public int HeroWoundXpValue { get; set; } = 80;
+        public int HeroWoundXpValue { get; set; } = 40;
 
 
         public string ModName
