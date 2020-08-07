@@ -58,6 +58,9 @@ Currently tested and working with e.1.4.2 version. Should be compatible with mos
 If you have any issue, please adress it at the [Bugs tab](https://www.nexusmods.com/mountandblade2bannerlord/mods/1797?tab=bugs) in the Nexus mod page.
 
 # Changelog
+<details>
+  <summary>Versions</summary>
+  
 v1.1.0:
 - Changed the default experience value for both troops and heroes, from 20 to 80. 
 - Added NLogger to debug and find problems.
@@ -76,7 +79,8 @@ v1.2.0:
   - Generic Troop XP scales with troop tier. Current: xpValue * (troop.Tier +1)
   - Player can change to not show received XP of heroes and troops on the console (_Requested by NexusMod user dungeons0_)
   - Compatibility with game version Bannerlord Beta Branch e1.4.3
-  
+</details>
+
 ---
   
 # Iron Will - Kleptomania
