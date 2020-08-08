@@ -395,11 +395,12 @@ namespace xxKleptomania
         {
             ItemRoster itemRoster = new ItemRoster();
 
-            int lootQuantity = MathF.Ceiling(((float)(prosperityGoodsAmmount * stealQuantity/100)));  
-            
-            while (lootQuantity > 0)
+            int lootQuantity = MathF.Ceiling(((float)(prosperityGoodsAmmount * stealQuantity/100)));
+            int cheapestAnimalValue = 50;       //used to pick the cheapest animal availiable first
+
+            while (lootQuantity > 0 || Settlement.CurrentSettlement.ItemRoster.Count > 0)
             {
-                int itemSeed = MBRandom.RandomInt();
+                int itemSeed = MBRandom.RandomInt(); 
                 for (int j = 0; j < Settlement.CurrentSettlement.ItemRoster.Count; j++)
                 {
                     ItemRosterElement itemRosterElement = Settlement.CurrentSettlement.ItemRoster[(j + itemSeed) % Settlement.CurrentSettlement.ItemRoster.Count];
@@ -413,14 +414,18 @@ namespace xxKleptomania
                             itemRoster.AddToCounts(item, randomAmmount, true);
                             lootQuantity -= randomAmmount;
                         }
-                        else if (item.HorseComponent != null && item.HorseComponent.IsLiveStock)
+                        else if (item.IsAnimal || item.IsMountable)
                         {
-                            int randomAmmount = MBRandom.RandomInt(Math.Min(lootQuantity / item.HorseComponent.MeatCount, itemRosterElement.Amount));
-                            if (randomAmmount > 0)
+                            if (item.Value <= cheapestAnimalValue)
                             {
+                                int randomAmmount = MBRandom.RandomInt(Math.Min(lootQuantity, itemRosterElement.Amount) - 1) + 1;
                                 Settlement.CurrentSettlement.ItemRoster.AddToCounts(item, -randomAmmount, true);
                                 itemRoster.AddToCounts(item, randomAmmount, true);
-                                lootQuantity -= item.HorseComponent.MeatCount * randomAmmount;
+                                lootQuantity -= randomAmmount;
+                            }
+                            else
+                            {
+                                cheapestAnimalValue += 100;
                             }
                         }
                     }
