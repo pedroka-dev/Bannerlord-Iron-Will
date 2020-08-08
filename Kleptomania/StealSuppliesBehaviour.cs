@@ -13,6 +13,7 @@ using TaleWorlds.Localization;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using System.Windows.Documents;
+using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 
 namespace xxKleptomania
 {
@@ -226,8 +227,6 @@ namespace xxKleptomania
                 }
             }
 
-            
-
             int num = MathF.Ceiling((float)Settlement.CurrentSettlement.ItemRoster.TotalFood * 0.2f);
 
             if (MobileParty.MainParty.CurrentSettlement != null && num <= 0)
@@ -326,6 +325,7 @@ namespace xxKleptomania
             }
             KleptomaniaSubModule.Log.Info("Stealing | Settlement "+ Settlement.CurrentSettlement.Name + " hearth/prosperity decreased by " + prosperityGoodsAmmount.ToString());
             LootStolenGoods();
+            stealUtils.GiveRogueryXp(Hero.MainHero);
             PlayerEncounter.Current.FinalizeBattle();
             
             //PlayerEncounter.LeaveSettlement();
@@ -355,9 +355,7 @@ namespace xxKleptomania
                 {
                     ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, notableHero, stealRelationPenalty, true);
                 }
-            }
-
-            
+            } 
         }
 
         public void LootStolenGoods()
@@ -405,6 +403,7 @@ namespace xxKleptomania
                 }
             });
         }
+
 
         public Dictionary<string, CampaignTime> _settlementLastStealDetectionTimeDictionary = new Dictionary<string, CampaignTime>();
         private StealSuppliesUtils stealUtils = new StealSuppliesUtils();
