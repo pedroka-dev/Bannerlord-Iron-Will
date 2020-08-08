@@ -1,6 +1,10 @@
 ﻿
 using TaleWorlds.Core;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
+using TaleWorlds.CampaignSystem.SandBox.GameComponents;
+using System;
+using TaleWorlds.Library;
+using TaleWorlds.CampaignSystem;
 
 namespace xxKleptomania
 {
@@ -100,6 +104,18 @@ namespace xxKleptomania
             }
 
             return lootQuantityResult;
+        }
+
+        public void GiveRogueryXp(Hero heroTroop)
+        {
+            float xpValue = 20f;
+            DefaultCharacterDevelopmentModel characterDevelopmentModel = new DefaultCharacterDevelopmentModel();
+            float learningRateBonus = characterDevelopmentModel.CalculateLearningRate(heroTroop, DefaultSkills.Athletics);
+            xpValue *= (float)Math.Round(learningRateBonus, 1);
+            heroTroop.AddSkillXp(DefaultSkills.Athletics, xpValue);
+
+            InformationManager.DisplayMessage(new InformationMessage(heroTroop.Name + " received " + xpValue + " Roguery XP for steal attempt.", Colors.Yellow));
+            KleptomaniaSubModule.Log.Info("Main Hero | " + heroTroop.Name + " received Roguery XP value of " + xpValue);
         }
     }
 }

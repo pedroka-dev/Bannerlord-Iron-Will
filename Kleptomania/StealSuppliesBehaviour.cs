@@ -13,6 +13,7 @@ using TaleWorlds.Localization;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using System.Windows.Documents;
+using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 
 namespace xxKleptomania
 {
@@ -38,7 +39,6 @@ namespace xxKleptomania
         }
 
         
-        
         private void AddTownStealMenu(CampaignGameStarter campaignGameStarter)     
         {
             try
@@ -57,6 +57,10 @@ namespace xxKleptomania
                 campaignGameStarter.AddGameMenuOption("town_steal_receive", "town_steal_loot", "Loot the supplies.", this.game_menu_steal_receive_on_condition, this.game_menu_steal_receive_on_consequence, false, -1, false);
 
                 KleptomaniaSubModule.Log.Info("Behaviour intialization | Sucessfully added Town Steal Menus");
+                if (KleptomaniaSubModule.settings.DebugInfo)
+                {
+                    InformationManager.DisplayMessage(new InformationMessage("Sucessfully added Town Steal Menus", Colors.Yellow));
+                }
             }
             catch (Exception ex)
             {
@@ -83,6 +87,10 @@ namespace xxKleptomania
                 campaignGameStarter.AddGameMenuOption("village_steal_receive", "village_steal_loot", "Loot the supplies.", this.game_menu_steal_receive_on_condition, this.game_menu_steal_receive_on_consequence, false, -1, false);
 
                 KleptomaniaSubModule.Log.Info("Behaviour intialization | Sucessfully added Village Steal Menus");
+                if (KleptomaniaSubModule.settings.DebugInfo)
+                {
+                    InformationManager.DisplayMessage(new InformationMessage("Sucessfully added Village Steal Menus", Colors.Yellow));
+                }
             }
             catch (Exception ex)
             {
@@ -112,6 +120,11 @@ namespace xxKleptomania
                 MBTextManager.SetTextVariable("VILLAGE_STEAL_INTRO", settlementIntroMsg, false);
             }
 
+            if (KleptomaniaSubModule.settings.DebugInfo)
+            {
+                InformationManager.DisplayMessage(new InformationMessage("Calculated items in storage = "+ prosperityGoodsAmmount, Colors.Yellow));
+            }
+
 
             settlementIntroConsequenceMsg = "\nIf you get caught stealing you will not be able to steal from it for some time, your criminal rating with the faction will increase and ";
 
@@ -139,7 +152,7 @@ namespace xxKleptomania
             int minimunGoodsSkillBonus = MathF.Ceiling(Hero.MainHero.GetSkillValue(DefaultSkills.Roguery) / 10);
 
             currentDetectionChance = stealUtils.CalculateDetectionBonus(detectionSkillBonus, hasHighCrimeRating, isNight);
-            currentMinimunGoods = stealUtils.CalculateLootBonus(minimunGoodsSkillBonus);
+            currentMinimunGoods = stealUtils.CalculateLootBonus(minimunGoodsSkillBonus);            
 
             detectionMsg = "\n - " + stealUtils.TextPrefixFromValue(currentDetectionChance) + " chance of detection during the steal attempt (" + currentDetectionChance.ToString() + "% probability of detection).";
             detectionMsg = detectionMsg + "\n  *Roguery skill bonus (-" + detectionSkillBonus.ToString() + "%)  ";
@@ -152,13 +165,19 @@ namespace xxKleptomania
                 detectionMsg += "\n  *Night time bonus (-10%)  ";
             }
 
-           minimunGoodsMsg = "\n - " + stealUtils.TextPrefixFromValue(currentMinimunGoods) + " ammount of garanteed minimun goods (at least " + currentMinimunGoods.ToString() + "% of the storage).";
-           minimunGoodsMsg = minimunGoodsMsg + "\n  * Roguery skill bonus (+" + minimunGoodsSkillBonus.ToString() + "%)  ";
+            
 
-           MBTextManager.SetTextVariable("SETTLEMENT_STEAL_WAIT", "Wait for some opportunity to steal the supplies to appear at " + Settlement.CurrentSettlement.Name + "...", false);
-           MBTextManager.SetTextVariable("SETTLEMENT_STEAL_WAIT_DETECTION", detectionMsg, false);
-           MBTextManager.SetTextVariable("SETTLEMENT_STEAL_WAIT_MIN_GOODS", minimunGoodsMsg, false);
+            minimunGoodsMsg = "\n - " + stealUtils.TextPrefixFromValue(currentMinimunGoods) + " ammount of garanteed minimun goods (at least " + currentMinimunGoods.ToString() + "% of the storage).";
+            minimunGoodsMsg = minimunGoodsMsg + "\n  * Roguery skill bonus (+" + minimunGoodsSkillBonus.ToString() + "%)  ";
 
+            MBTextManager.SetTextVariable("SETTLEMENT_STEAL_WAIT", "Wait for some opportunity to steal the supplies to appear at " + Settlement.CurrentSettlement.Name + "...", false);
+            MBTextManager.SetTextVariable("SETTLEMENT_STEAL_WAIT_DETECTION", detectionMsg, false);
+            MBTextManager.SetTextVariable("SETTLEMENT_STEAL_WAIT_MIN_GOODS", minimunGoodsMsg, false);
+
+            if (KleptomaniaSubModule.settings.DebugInfo)
+            {
+                InformationManager.DisplayMessage(new InformationMessage("Calculated Detection Chance = " + currentDetectionChance + ". Calculated Minimun Goods Bonus = " + minimunGoodsSkillBonus, Colors.Yellow));
+            }
             KleptomaniaSubModule.Log.Info("Stealing | Bonus calculated sucessfully. Detetion Chance = " + currentDetectionChance.ToString() + "%,  Minimun ammount of goods = " + currentMinimunGoods.ToString());
         }
 
@@ -184,6 +203,7 @@ namespace xxKleptomania
             MBTextManager.SetTextVariable("SETTLEMENT_STEAL_RECEIVE", "You were able to secure the supplies stolen from " + Settlement.CurrentSettlement.Name + "\n", false);
             MBTextManager.SetTextVariable("SETTLEMENT_STEAL_RECEIVE_DETECT", detectMsg, false);
             MBTextManager.SetTextVariable("SETTLEMENT_STEAL_RECEIVE_LOOT", lootMsg, false);
+
         }
 
 
@@ -225,8 +245,6 @@ namespace xxKleptomania
                     this._settlementLastStealDetectionTimeDictionary.Remove(Settlement.CurrentSettlement.StringId);
                 }
             }
-
-            
 
             int num = MathF.Ceiling((float)Settlement.CurrentSettlement.ItemRoster.TotalFood * 0.2f);
 
@@ -310,6 +328,10 @@ namespace xxKleptomania
             float villageStealCrimeRating = KleptomaniaSubModule.settings.VillageStealCrimeRating;
             int stealRelationPenalty = KleptomaniaSubModule.settings.StealRelationPenalty;
 
+            if (KleptomaniaSubModule.settings.DebugInfo)
+            {
+                InformationManager.DisplayMessage(new InformationMessage("Detectted = " + isDetected + ". Steal Quantity = " + stealQuantity, Colors.Yellow));
+            }
             KleptomaniaSubModule.Log.Info("Stealing | Steal sucessfull. Quantity: " + stealQuantity.ToString() + " %. Detected: "+ isDetected.ToString());
 
 
@@ -324,8 +346,15 @@ namespace xxKleptomania
                 GameMenu.SwitchToMenu("village");
                 Settlement.CurrentSettlement.Village.Hearth -= prosperityGoodsAmmount;
             }
+
+
+            if (KleptomaniaSubModule.settings.DebugInfo)
+            {
+                InformationManager.DisplayMessage(new InformationMessage("Settlement Hearth / prosperity decreased by " + prosperityGoodsAmmount.ToString(), Colors.Yellow));
+            }
             KleptomaniaSubModule.Log.Info("Stealing | Settlement "+ Settlement.CurrentSettlement.Name + " hearth/prosperity decreased by " + prosperityGoodsAmmount.ToString());
             LootStolenGoods();
+            stealUtils.GiveRogueryXp(Hero.MainHero);
             PlayerEncounter.Current.FinalizeBattle();
             
             //PlayerEncounter.LeaveSettlement();
@@ -337,16 +366,19 @@ namespace xxKleptomania
                 if (Settlement.CurrentSettlement.IsTown)
                 {
                     ChangeCrimeRatingAction.Apply(Settlement.CurrentSettlement.MapFaction, currentTownStealCrimeRating, true);
+                    KleptomaniaSubModule.Log.Info("Stealing | Faction " + Settlement.CurrentSettlement.MapFaction + " crime rating increases with player by " + currentTownStealCrimeRating.ToString());
                 }
                 else if (Settlement.CurrentSettlement.IsVillage)
                 {
                     ChangeCrimeRatingAction.Apply(Settlement.CurrentSettlement.MapFaction, villageStealCrimeRating, true);
+                    KleptomaniaSubModule.Log.Info("Stealing | Faction " + Settlement.CurrentSettlement.MapFaction + " crime rating increases with player by " + villageStealCrimeRating.ToString());
                 }
 
                 if(Hero.MainHero.MapFaction == Settlement.CurrentSettlement.MapFaction)     //if from player faction: realtion penalty x2, decreases relation with players faction leader
                 {
                     stealRelationPenalty *= 2;
                     ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, Settlement.CurrentSettlement.MapFaction.Leader, stealRelationPenalty, true);
+                    KleptomaniaSubModule.Log.Info("Stealing | Faction Leader Hero " + Settlement.CurrentSettlement.MapFaction.Leader.Name + "decreases relation with player by " + stealRelationPenalty.ToString());
                 }
 
                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, Settlement.CurrentSettlement.OwnerClan.Leader, stealRelationPenalty, true);        //decreases relation with settlement owner
@@ -354,21 +386,21 @@ namespace xxKleptomania
                 foreach (Hero notableHero in Settlement.CurrentSettlement.Notables)     //decreases relation with notables
                 {
                     ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, notableHero, stealRelationPenalty, true);
+                    KleptomaniaSubModule.Log.Info("Stealing | Notable Hero " + notableHero.Name + "decreases relation with player by " + stealRelationPenalty.ToString());
                 }
-            }
-
-            
+            } 
         }
 
         public void LootStolenGoods()
         {
             ItemRoster itemRoster = new ItemRoster();
 
-            int lootQuantity = MathF.Ceiling(((float)(prosperityGoodsAmmount * stealQuantity/100)));  
-            
-            while (lootQuantity > 0)
+            int lootQuantity = MathF.Ceiling(((float)(prosperityGoodsAmmount * stealQuantity/100)));
+            int cheapestAnimalValue = 50;       //used to pick the cheapest animal availiable first
+
+            while (lootQuantity > 0 || Settlement.CurrentSettlement.ItemRoster.Count > 0)
             {
-                int itemSeed = MBRandom.RandomInt();
+                int itemSeed = MBRandom.RandomInt(); 
                 for (int j = 0; j < Settlement.CurrentSettlement.ItemRoster.Count; j++)
                 {
                     ItemRosterElement itemRosterElement = Settlement.CurrentSettlement.ItemRoster[(j + itemSeed) % Settlement.CurrentSettlement.ItemRoster.Count];
@@ -381,6 +413,20 @@ namespace xxKleptomania
                             Settlement.CurrentSettlement.ItemRoster.AddToCounts(item, -randomAmmount, true);
                             itemRoster.AddToCounts(item, randomAmmount, true);
                             lootQuantity -= randomAmmount;
+                        }
+                        else if (item.IsAnimal || item.IsMountable)
+                        {
+                            if (item.Value <= cheapestAnimalValue)
+                            {
+                                int randomAmmount = MBRandom.RandomInt(Math.Min(lootQuantity, itemRosterElement.Amount) - 1) + 1;
+                                Settlement.CurrentSettlement.ItemRoster.AddToCounts(item, -randomAmmount, true);
+                                itemRoster.AddToCounts(item, randomAmmount, true);
+                                lootQuantity -= randomAmmount;
+                            }
+                            else
+                            {
+                                cheapestAnimalValue += 100;
+                            }
                         }
                     }
                 }
