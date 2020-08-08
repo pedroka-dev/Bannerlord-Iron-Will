@@ -382,6 +382,16 @@ namespace xxKleptomania
                             itemRoster.AddToCounts(item, randomAmmount, true);
                             lootQuantity -= randomAmmount;
                         }
+                        else if (item.HorseComponent != null && item.HorseComponent.IsLiveStock)
+                        {
+                            int randomAmmount = MBRandom.RandomInt(Math.Min(lootQuantity / item.HorseComponent.MeatCount, itemRosterElement.Amount));
+                            if (randomAmmount > 0)
+                            {
+                                Settlement.CurrentSettlement.ItemRoster.AddToCounts(item, -randomAmmount, true);
+                                itemRoster.AddToCounts(item, randomAmmount, true);
+                                lootQuantity -= item.HorseComponent.MeatCount * randomAmmount;
+                            }
+                        }
                     }
                 }
             }
