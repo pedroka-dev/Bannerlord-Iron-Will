@@ -22,6 +22,7 @@ namespace xxKleptomania
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(this.OnSessionLaunched));
+            CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, new Action(this.OnDailyTick));
             KleptomaniaSubModule.Log.Info("Behaviour intialization | Sucessfully added CampaignGameStarter Listener");
         }
 
@@ -38,7 +39,25 @@ namespace xxKleptomania
             KleptomaniaSubModule.Log.Info("Behaviour intialization | Sucessfully added Steal Menus");
         }
 
-        
+        private void OnDailyTick()
+        {
+            if(this._recentFactionStealPenalty != null){
+                foreach(KeyValuePair<IFaction,int> RecentStolenFaction in this._recentFactionStealPenalty)
+                {
+                    int updatedKeyValue = RecentStolenFaction.Value - 5;
+                    if(updatedKeyValue > 0)
+                    {
+                        this._recentFactionStealPenalty.Add(RecentStolenFaction.Key, updatedKeyValue);
+                    }
+                    else
+                    {
+                        this._recentFactionStealPenalty.Remove(RecentStolenFaction.Key);
+                    }
+                }
+            }
+        }
+
+
         private void AddTownStealMenu(CampaignGameStarter campaignGameStarter)     
         {
             try
@@ -151,21 +170,33 @@ namespace xxKleptomania
             int detectionSkillBonus = MathF.Ceiling(Hero.MainHero.GetSkillValue(DefaultSkills.Roguery) / 5);
             int minimunGoodsSkillBonus = MathF.Ceiling(Hero.MainHero.GetSkillValue(DefaultSkills.Roguery) / 10);
 
-            currentDetectionChance = stealUtils.CalculateDetectionBonus(detectionSkillBonus, hasHighCrimeRating, isNight);
+            int recentStealPenalty = 0;
+            if (this._recentFactionStealPenalty.ContainsKey(Settlement.CurrentSettlement.MapFaction))
+            {
+                this._recentFactionStealPenalty.TryGetValue(Settlement.CurrentSettlement.MapFaction, out recentStealPenalty);
+            }
+
+            currentDetectionChance = stealUtils.CalculateDetectionBonus(detectionSkillBonus, isNight, hasHighCrimeRating, recentStealPenalty);
             currentMinimunGoods = stealUtils.CalculateLootBonus(minimunGoodsSkillBonus);            
 
             detectionMsg = "\n - " + stealUtils.TextPrefixFromValue(currentDetectionChance) + " chance of detection during the steal attempt (" + currentDetectionChance.ToString() + "% probability of detection).";
-            detectionMsg = detectionMsg + "\n  *Roguery skill bonus (-" + detectionSkillBonus.ToString() + "%)  ";
+            detectionMsg = detectionMsg + "\n  * Roguery skill bonus (-" + detectionSkillBonus.ToString() + "%)  ";
+
+            if (isNight)
+            {
+                detectionMsg += "\n  * Night time bonus (-10%)  ";
+            }
             if (hasHighCrimeRating)
             {
                 detectionMsg += "\n  * High crime rating penalty (+20%)  ";
             }
-            if (isNight)
+            if (this._recentFactionStealPenalty.ContainsKey(Settlement.CurrentSettlement.MapFaction))
             {
-                detectionMsg += "\n  *Night time bonus (-10%)  ";
+                detectionMsg += "\n  * Recent steal from Faction penalty (+" + recentStealPenalty  + "%)";
             }
 
-            
+
+
 
             minimunGoodsMsg = "\n - " + stealUtils.TextPrefixFromValue(currentMinimunGoods) + " ammount of garanteed minimun goods (at least " + currentMinimunGoods.ToString() + "% of the storage).";
             minimunGoodsMsg = minimunGoodsMsg + "\n  * Roguery skill bonus (+" + minimunGoodsSkillBonus.ToString() + "%)  ";
@@ -355,6 +386,16 @@ namespace xxKleptomania
             KleptomaniaSubModule.Log.Info("Stealing | Settlement "+ Settlement.CurrentSettlement.Name + " hearth/prosperity decreased by " + prosperityGoodsAmmount.ToString());
             LootStolenGoods();
             stealUtils.GiveRogueryXp(Hero.MainHero);
+            if (this._recentFactionStealPenalty.ContainsKey(Settlement.CurrentSettlement.MapFaction))
+            {
+                this._recentFactionStealPenalty.TryGetValue(Settlement.CurrentSettlement.MapFaction, out int updatedKey);
+                updatedKey += 10;
+                this._recentFactionStealPenalty.Add(Settlement.CurrentSettlement.MapFaction, updatedKey);
+            }
+            else
+            {
+                this._recentFactionStealPenalty.Add(Settlement.CurrentSettlement.MapFaction,10);
+            }
             PlayerEncounter.Current.FinalizeBattle();
             
             //PlayerEncounter.LeaveSettlement();
@@ -443,6 +484,7 @@ namespace xxKleptomania
         }
 
         public Dictionary<string, CampaignTime> _settlementLastStealDetectionTimeDictionary = new Dictionary<string, CampaignTime>();
+        public Dictionary<IFaction, int> _recentFactionStealPenalty = new Dictionary<IFaction, int>();
         private StealSuppliesUtils stealUtils = new StealSuppliesUtils();
 
         int prosperityGoodsAmmount=0;
