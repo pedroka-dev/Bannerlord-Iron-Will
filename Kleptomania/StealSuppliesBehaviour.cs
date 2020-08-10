@@ -14,6 +14,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using System.Windows.Documents;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
+using System.Linq;
 
 namespace xxKleptomania
 {
@@ -41,32 +42,39 @@ namespace xxKleptomania
 
         private void OnDailyTick()
         {
-            if(this._recentFactionStealAttemptPenalty != null){
-                foreach(KeyValuePair<IFaction,int> RecentStolenFaction in this._recentFactionStealAttemptPenalty)
+            try
+            {
+                if (this._recentFactionStealAttemptPenalty != null)
                 {
-                    int updatedKeyValue = RecentStolenFaction.Value - 5;
-                    if(updatedKeyValue > 0)
+                    foreach (IFaction RecentStolenFaction in this._recentFactionStealAttemptPenalty.Keys.ToList())
                     {
-                        this._recentFactionStealAttemptPenalty.Remove(RecentStolenFaction.Key);
-                        this._recentFactionStealAttemptPenalty.Add(RecentStolenFaction.Key, updatedKeyValue);
-
-                        if (KleptomaniaSubModule.settings.DebugInfo)
+                        this._recentFactionStealAttemptPenalty.TryGetValue(RecentStolenFaction, out int updatedValue);
+                        updatedValue -= 5;
+                        this._recentFactionStealAttemptPenalty.Remove(RecentStolenFaction);
+                        if (updatedValue > 0)
                         {
-                            InformationManager.DisplayMessage(new InformationMessage("Decreased " + RecentStolenFaction.Key.Name + " recent steal penalty by " + 5 + " during OnDailyTick", Colors.Yellow));
-                        }
-                        KleptomaniaSubModule.Log.Info("Stealing | Decreased " + RecentStolenFaction.Key.Name + " recent steal penalty by " + 5 + " during OnDailyTick");
-                    }
-                    else
-                    {
-                        this._recentFactionStealAttemptPenalty.Remove(RecentStolenFaction.Key);
+                            this._recentFactionStealAttemptPenalty.Add(RecentStolenFaction, updatedValue);
 
-                        if (KleptomaniaSubModule.settings.DebugInfo)
-                        {
-                            InformationManager.DisplayMessage(new InformationMessage("Removed " + RecentStolenFaction.Key + "from recent steal penalty dictionary during OnDailyTick", Colors.Yellow));
+                            if (KleptomaniaSubModule.settings.DebugInfo)
+                            {
+                                InformationManager.DisplayMessage(new InformationMessage("Decreased " + RecentStolenFaction.Name + " recent steal penalty by " + 5 + " during OnDailyTick", Colors.Yellow));
+                            }
+                            KleptomaniaSubModule.Log.Info("Stealing | Decreased " + RecentStolenFaction.Name + " recent steal penalty by " + 5 + " during OnDailyTick");
                         }
-                        KleptomaniaSubModule.Log.Info("Stealing | Removed " + RecentStolenFaction.Key + "from recent steal penalty dictionary during OnDailyTick");
+                        else
+                        {
+                            if (KleptomaniaSubModule.settings.DebugInfo)
+                            {
+                                InformationManager.DisplayMessage(new InformationMessage("Removed " + RecentStolenFaction.Name + "from recent steal penalty dictionary during OnDailyTick", Colors.Yellow));
+                            }
+                            KleptomaniaSubModule.Log.Info("Stealing | Removed " + RecentStolenFaction.Name + "from recent steal penalty dictionary during OnDailyTick");
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                KleptomaniaSubModule.Log.Info("Stealing | Exception OnDailyTick: " + ex.Message);
             }
         }
 
@@ -398,29 +406,29 @@ namespace xxKleptomania
             LootStolenGoods();
             stealUtils.GiveRogueryXp(Hero.MainHero);
 
-            int updatedKey = 10;
+            int updatedValue = 10;
             if (this._recentFactionStealAttemptPenalty.ContainsKey(Settlement.CurrentSettlement.MapFaction))
             {
-                this._recentFactionStealAttemptPenalty.TryGetValue(Settlement.CurrentSettlement.MapFaction, out updatedKey);
-                updatedKey += 10;
+                this._recentFactionStealAttemptPenalty.TryGetValue(Settlement.CurrentSettlement.MapFaction, out updatedValue);
+                updatedValue += 10;
                 this._recentFactionStealAttemptPenalty.Remove(Settlement.CurrentSettlement.MapFaction);
-                this._recentFactionStealAttemptPenalty.Add(Settlement.CurrentSettlement.MapFaction, updatedKey);
+                this._recentFactionStealAttemptPenalty.Add(Settlement.CurrentSettlement.MapFaction, updatedValue);
 
                 if (KleptomaniaSubModule.settings.DebugInfo)
                 {
-                    InformationManager.DisplayMessage(new InformationMessage("Increased " + Settlement.CurrentSettlement.MapFaction.Name + " recent steal penalty by "+ updatedKey, Colors.Yellow));
+                    InformationManager.DisplayMessage(new InformationMessage("Increased " + Settlement.CurrentSettlement.MapFaction.Name + " recent steal penalty by "+ updatedValue, Colors.Yellow));
                 }
-                KleptomaniaSubModule.Log.Info("Stealing | Increased " + Settlement.CurrentSettlement.MapFaction.Name + " recent steal penalty by "+ updatedKey);
+                KleptomaniaSubModule.Log.Info("Stealing | Increased " + Settlement.CurrentSettlement.MapFaction.Name + " recent steal penalty by "+ updatedValue);
             }
             else
             {
-                this._recentFactionStealAttemptPenalty.Add(Settlement.CurrentSettlement.MapFaction, updatedKey);
+                this._recentFactionStealAttemptPenalty.Add(Settlement.CurrentSettlement.MapFaction, updatedValue);
 
                 if (KleptomaniaSubModule.settings.DebugInfo)
                 {
-                    InformationManager.DisplayMessage(new InformationMessage("Added " + Settlement.CurrentSettlement.MapFaction.Name + " to recent steal penalty dictionary and increased by " + updatedKey, Colors.Yellow));
+                    InformationManager.DisplayMessage(new InformationMessage("Added " + Settlement.CurrentSettlement.MapFaction.Name + " to recent steal penalty dictionary and increased by " + updatedValue, Colors.Yellow));
                 }
-                KleptomaniaSubModule.Log.Info("Stealing | Added " + Settlement.CurrentSettlement.MapFaction.Name + " to recent steal penalty dictionary and increased by " + updatedKey);
+                KleptomaniaSubModule.Log.Info("Stealing | Added " + Settlement.CurrentSettlement.MapFaction.Name + " to recent steal penalty dictionary and increased by " + updatedValue);
             }
             PlayerEncounter.Current.FinalizeBattle();
             
@@ -465,7 +473,7 @@ namespace xxKleptomania
             int lootQuantity = MathF.Ceiling(((float)(prosperityGoodsAmmount * stealQuantity/100)));
             int cheapestAnimalValue = 50;       //used to pick the cheapest animal availiable first
 
-            while (lootQuantity > 0)
+            while (lootQuantity > 0 && Settlement.CurrentSettlement.ItemRoster.Count > 0)
             {
                 int itemSeed = MBRandom.RandomInt(); 
                 for (int j = 0; j < Settlement.CurrentSettlement.ItemRoster.Count; j++)
