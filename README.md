@@ -101,15 +101,17 @@ For now, only the player can interact with the steal menus.
  - [Iron Will - Kleptomania ModDB page](https://www.moddb.com/mods/iron-will-kleptomania)
 
 # Features
- - 3 new menus for stealing from Villages and Towns, which allows player to steal trading goods and food.
- - Can steal without being detected (RNG, chances of detection decreases with Roguery Skill, Night Time and increases by Severe Criminal rating).
- - If detected, decreases relationship with the settlement owner and settlement notables  (-15 by default, double if from same faction and also decreases with faction leader).
- - If detected, applies criminal rating with faction (35 for towns and 30 for village by default).
- - Dynammic minimun received ammount of goods (RNG, minimun ammount increases with Roguery Skill).
- - Max ammount of availiable goods scales with settlement prosperity / hearth.
- - On steal, decreases settlement prosperity / hearth and actually affects the settlement loot pool.
- - Configurable Steal modifiers and default values at "xxKleptomaniaSettings.xml".
- - NLogger for debugging reasons at "KleptomaniaLog.txt".
+  - 3 new menus for stealing from Villages and Towns, which allows player to steal trading goods, food or animal.
+  - Scalable Roguery XP on steal attempt, independent of the outcome. Current: 20 * learningRateBonus.
+  - Can steal without being detected (RNG, chances of detection decreases with Roguery Skill, Night Time and increases by Severe Criminal rating).
+  - If detected, decreases relationship with the settlement owner and settlement notables  (-15 by default, double if from same faction and also decreases with faction leader).
+  - If detected, applies criminal rating with faction (35 for towns and 30 for village by default).
+  - Dynammic minimun received ammount of goods (RNG, minimun ammount increases with Roguery Skill).
+  - Max ammount of availiable goods scales with settlement prosperity / hearth.
+  - On steal, decreases settlement prosperity / hearth and actually affects the settlement loot pool.
+  - Penalty of +10% detection chance for each consecutive steal atempt for the same Faction. Consecutive steal atempt decays by 5% every day.
+  - Configurable Steal modifiers and default values at "xxKleptomaniaSettings.xml".
+  - NLogger for debugging reasons at "KleptomaniaLog.txt".
  
  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/steal%20from%20town%20thumbnail.jpg)
  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/steal%20from%20villages%20thumbnail.jpg)
@@ -117,10 +119,8 @@ For now, only the player can interact with the steal menus.
  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/dynamic%20loot%20thumbnail.jpg)
  
 # To-do
- - Receive Roguery XP on attempt, no matter the outcome
  - Chance of an "encounter" on detection.
  - Bonus to detection and minimun goods from the party's best Bandit troops.
- - Penalties from consecutive steal from same settlement / faction.
  - Stolen good fencing (aka not being able to sell to settlement it was stolen from).
  - Implementation of optional configuration menu with mildeww's ModLib
 
@@ -139,6 +139,6 @@ v1.1.0:
  - Player can now steal any kind of animal (horse, pig cattle, etc.)
  - Added Scalable Roguery XP on steal attempt, independent of the outcome. Current: 20 * learningRateBonus.
  - Adds 10% detection chance penalty for each consecutive steal atempt for Faction.
- - Consecutive steal atemptDecays by 5% every day.
+ - Consecutive steal atempt decays by 5% every day.
  - Added Debug messages when DebugInfo is turned on in config.
 </details>
