@@ -124,9 +124,21 @@ For now, only the player can interact with the steal menus.
  - Stolen good fencing (aka not being able to sell to settlement it was stolen from).
  - Implementation of optional configuration menu with mildeww's ModLib
 
-
 # Compatibility
 Currently tested and working with e.1.4.2 version. 
 
 If you have any issue, please adress it at the [Bugs tab](https://www.nexusmods.com/mountandblade2bannerlord/mods/1997?tab=bugs) in the Nexus mod page.
 
+# Changelog
+<details>
+  <summary>Versions</summary>
+  
+v1.1.0:
+ - Fixed a crash because of horses in a settlement (Reported by NexusMod user aerosmei1).
+ - Fixed a crash when settlement doesnt have anymore supplies.
+ - Player can now steal any kind of animal (horse, pig cattle, etc.)
+ - Added Scalable Roguery XP on steal attempt, independent of the outcome. Current: 20 * learningRateBonus.
+ - Adds 10% detection chance penalty for each consecutive steal atempt for Faction.
+ - Consecutive steal atemptDecays by 5% every day.
+ - Added Debug messages when DebugInfo is turned on in config.
+</details>
