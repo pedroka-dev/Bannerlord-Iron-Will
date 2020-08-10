@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModuleSettings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ID>xxKleptomania</ID>
+  <DebugInfo>false</DebugInfo>
+  <BaseDetectionChance>75</BaseDetectionChance>
+  <BaseMinimunGoods>30</BaseMinimunGoods>
+  <HoursWaitingToSteal>4</HoursWaitingToSteal>
+  <TownStealCrimeRating>35</TownStealCrimeRating>
+  <VillageStealCrimeRating>30</VillageStealCrimeRating>
+  <StealRelationPenalty>-15</StealRelationPenalty>
+</ModuleSettings>
