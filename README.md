@@ -122,15 +122,15 @@ There are some conditions that can change the outcome of a steal attempt. To hav
 
 *Detection Penalty (75% by default. Less = Good)*
   - Current Bonuses:
-    - Roguery Skill (max bonus is 50%): -(SkillLevel / 5)% 
-    - Night time: -10%
+    - Roguery Skill (max bonus is 50%) = -(SkillLevel / 5)% 
+    - Night time = -10%
   - Penalties: 
-    - High Crime Rating: +20%
-    - Recent steal attempt at same faction (Decays by -5% every day): +(NumberOfAttempts * 10)%
+    - High Crime Rating = +20%
+    - Recent steal attempt at same faction (Decays by -5% every day) = +(NumberOfAttempts * 10)%
     
  *Minimun ammount of Goods (30% by default. More = Good)*
    - Current Bonuses:
-    - Roguery Skill (max bonus is 30%): +(SkillLevel / 10)% 
+    - Roguery Skill (max bonus is 30%) = +(SkillLevel / 10)% 
  
  
  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/steal%20from%20town%20thumbnail.jpg)
