@@ -95,6 +95,8 @@ Keep in mind Stealing is different from the Native's Hostile Action "Force Peasa
 
 For now, only the player can interact with the steal menus.
 
+![alt text](https://staticdelivery.nexusmods.com/mods/3174/images/1997/1997-1596763421-1876725097.jpeg) 
+
 # Download and Links
  - [Iron Will - Kleptomania Nexus Mods page](https://www.nexusmods.com/mountandblade2bannerlord/mods/1997)
  - [Iron Will - Kleptomania TaleWorlds Forums page](https://forums.taleworlds.com/index.php?threads/iron-will-kleptomania.428278/)
@@ -103,15 +105,33 @@ For now, only the player can interact with the steal menus.
 # Features
   - 3 new menus for stealing from Villages and Towns, which allows player to steal trading goods, food or animal.
   - Scalable Roguery XP on steal attempt, independent of the outcome. Current: 20 * learningRateBonus.
-  - Can steal without being detected (RNG, chances of detection decreases with Roguery Skill, Night Time and increases by Severe Criminal rating).
+  - Can steal without being detected (Skill Check with modifiers)
   - If detected, decreases relationship with the settlement owner and settlement notables  (-15 by default, double if from same faction and also decreases with faction leader).
   - If detected, applies criminal rating with faction (35 for towns and 30 for village by default).
-  - Dynammic minimun received ammount of goods (RNG, minimun ammount increases with Roguery Skill).
+  - Dynammic minimun received ammount of goods (Skill Check with modifiers).
   - Max ammount of availiable goods scales with settlement prosperity / hearth.
   - On steal, decreases settlement prosperity / hearth and actually affects the settlement loot pool.
   - Penalty of +10% detection chance for each consecutive steal atempt for the same Faction. Consecutive steal atempt decays by 5% every day.
   - Configurable Steal modifiers and default values at "xxKleptomaniaSettings.xml".
   - NLogger for debugging reasons at "KleptomaniaLog.txt".
+  
+![alt text](https://staticdelivery.nexusmods.com/mods/3174/images/1997/1997-1597096891-131847187.jpeg) 
+  
+# Modifiers 
+There are some conditions that can change the outcome of a steal attempt. To have the best outcome, you have to try to get as much bonuses and as little penalties as you can. Remember, some of these values are configurable at xxKleptomaniaSettings.xml.
+
+*Detection Penalty (75% by default. Less = Good)*
+  - Current Bonuses:
+    - Roguery Skill (max bonus is 50%): -(SkillLevel / 5)% 
+    - Night time: -10%
+  - Penalties: 
+    - High Crime Rating: +20%
+    - Recent steal attempt at same faction (Decays by -5% every day): +(NumberOfAttempts * 10)%
+    
+ *Minimun ammount of Goods (30% by default. More = Good)*
+   - Current Bonuses:
+    - Roguery Skill (max bonus is 30%): +(SkillLevel / 10)% 
+ 
  
  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/steal%20from%20town%20thumbnail.jpg)
  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/steal%20from%20villages%20thumbnail.jpg)
