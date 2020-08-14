@@ -117,7 +117,7 @@ namespace xxKleptomania
             DefaultCharacterDevelopmentModel characterDevelopmentModel = new DefaultCharacterDevelopmentModel();
             float learningRateBonus = characterDevelopmentModel.CalculateLearningRate(heroTroop, DefaultSkills.Athletics);
             xpValue *= (float)Math.Round(learningRateBonus, 1);
-            heroTroop.AddSkillXp(DefaultSkills.Athletics, xpValue);
+            heroTroop.AddSkillXp(DefaultSkills.Roguery, xpValue);
 
             InformationManager.DisplayMessage(new InformationMessage(heroTroop.Name + " received " + xpValue + " Roguery XP for steal attempt.", Colors.Yellow));
             KleptomaniaSubModule.Log.Info("Main Hero | " + heroTroop.Name + " received Roguery XP value of " + xpValue);
