@@ -137,7 +137,7 @@ There are some conditions that can change the outcome of a steal attempt. To hav
  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/different%20results%20thumbnail.jpg)
  
 # Results and Consequences
-Remember: there is always a risk. Once the Modifiers have been calculated and you have waited long enough to find a steal opportunity at the settlement, two Random numbers from 1 to 100 will be created. Think about this like two d100, dices 100 faces being thrown. These values will be used to calcule your steal result.
+Remember: there is always a risk. Once the Modifiers have been calculated and you have waited long enough to find a steal opportunity at the settlement, two Random numbers from 1 to 100 will be created. Think about this like two d100, dices with 100 faces being thrown. These values will be used to calcule your steal result.
 
 *For the detection check*, if the value are smaller than your "probability of detection" modifier you get detected while stealling. If you get detected, you will receive some consequences like:
   - Criminal rating with faction (25 for towns and 20 for villages by default)
