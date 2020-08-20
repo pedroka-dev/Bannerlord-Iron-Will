@@ -145,7 +145,7 @@ Remember: there is always a risk. Once the Modifiers have been calculated and yo
   - Decreases relationship with settlement owner (-15 by default, 2x if the player is from the same faction)
   - Only if from the same Faction, decreases relationship with Faction leader ( -15 x 2 by default)
 
-*For the ammount of goods check*, each settlement has a "storage with goods inside", which has a dynamic number of goods based on the settlement health/prosperity. The number will never go below "Minimun ammount of Goods" and will be a porcentage of the items inside the storage. No matter the outcome, this will take place on on loot: 
+*For the ammount of goods check*, each settlement has a "storage with goods inside", which has a dynamic number of goods based on the settlement health/prosperity. The random "dice" number will never go below "Minimun ammount of Goods" and will be a porcentage of the items inside the storage. No matter the outcome, this will take place on on loot:
   - Penalty of +10% detection chance for each consecutive steal atempt for the same Faction. Consecutive steal atempt decays by -5% every day.
   - Decreases settlement prosperity / hearth.
   - Subtract items from the settlement item pool.  (Be careful to not steal from settlement without any items, or you might get nothing.)
