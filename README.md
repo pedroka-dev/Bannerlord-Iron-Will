@@ -145,7 +145,7 @@ There are some conditions that can change the outcome of a steal attempt. To hav
  - Implementation of optional configuration menu with mildeww's ModLib
 
 # Compatibility
-Currently tested and working with e.1.4.2 version. 
+Currently tested and working with e.1.4.3 version. 
 
 If you have any issue, please adress it at the [Bugs tab](https://www.nexusmods.com/mountandblade2bannerlord/mods/1997?tab=bugs) in the Nexus mod page.
 
@@ -161,4 +161,12 @@ v1.1.0:
  - Adds 10% detection chance penalty for each consecutive steal atempt for Faction.
  - Consecutive steal atempt decays by 5% every day.
  - Added Debug messages when DebugInfo is turned on in config.
+ 
+v1.1.1
+ - Fixed a major crash when that happens when you reach severe crime rating while inside a town
+ - Fixed a bug that gives the player Athletics XP on steal attempt instead of the expected Roguery XP
+ - Decreaased default TownStealCrimeRating from 35 to 25. Makes stealling more viable.
+ - Decreased default VillageStealCrimeRating from 30 to 20. Makes stealling more viable.
+ - TownStealCrimeRating and VillageStealCrimeRating cant go above 60 (fixes crash)
+ - Substantial code refactor and more try catches, to understand any future exceptions
 </details>
