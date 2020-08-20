@@ -106,12 +106,11 @@ For now, only the player can interact with the steal menus.
   - 3 new menus for stealing from Villages and Towns, which allows player to steal trading goods, food or animal.
   - Scalable Roguery XP on steal attempt, independent of the outcome. Current: 20 * learningRateBonus.
   - Can steal without being detected (Skill Check with modifiers)
-  - If detected, decreases relationship with the settlement owner and settlement notables  (-15 by default, double if from same faction and also decreases with faction leader).
-  - If detected, applies criminal rating with faction (35 for towns and 30 for village by default).
+  - If detected, decreases relationship with the settlement owner and settlement notables
+  - If detected, applies criminal rating with faction.
   - Dynammic minimun received ammount of goods (Skill Check with modifiers).
   - Max ammount of availiable goods scales with settlement prosperity / hearth.
-  - On steal, decreases settlement prosperity / hearth and actually affects the settlement loot pool.
-  - Penalty of +10% detection chance for each consecutive steal atempt for the same Faction. Consecutive steal atempt decays by 5% every day.
+  - On steal, decreases settlement prosperity / hearth, affects the settlement loot pool and increase detection for consecutive steals atempt of the same Faction.
   - Configurable Steal modifiers and default values at "xxKleptomaniaSettings.xml".
   - NLogger for debugging reasons at "KleptomaniaLog.txt".
   
@@ -120,7 +119,7 @@ For now, only the player can interact with the steal menus.
 # Modifiers 
 There are some conditions that can change the outcome of a steal attempt. To have the best outcome, you have to try to get as much bonuses and as little penalties as you can. Remember, some of these values are configurable at xxKleptomaniaSettings.xml.
 
-*Detection Penalty (75% by default. Less = Good)*
+*Probability of detection (75% by default. Less = Good)*
   - Current Bonuses:
     - Roguery Skill (max bonus is 50%) = -(SkillLevel / 5)% 
     - Night time = -10%
@@ -136,6 +135,22 @@ There are some conditions that can change the outcome of a steal attempt. To hav
  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/steal%20from%20town%20thumbnail.jpg)
  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/steal%20from%20villages%20thumbnail.jpg)
  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/different%20results%20thumbnail.jpg)
+ 
+# Results and Consequences
+Remember: there is always a risk. Once the Modifiers have been calculated and you have waited long enough to find a steal opportunity at the settlement, two Random numbers from 1 to 100 will be created. Think about this like two d100, dices 100 faces being thrown. These values will be used to calcule your steal result.
+
+*For the detection check*, if the value are smaller than your "probability of detection" modifier you get detected while stealling. If the you get detected, you will receive some consequences like:
+  - Criminal rating with faction (25 for towns and 20 for villages by default)
+  - Decreases relationship with settlement notables (-15 by default, 2x if the player is from the same faction)
+  - Decreases relationship with settlement owner (-15 by default, 2x if the player is from the same faction)
+  - Only if from the same Faction, decreases relationship with Faction leader ( -15 x 2 by default)
+
+*For the ammount of goods check*, each settlement has a "storage with goods inside", which has a dynamic number of goods based on the settlement health/prosperity. The value will never go below "Minimun ammount of Goods". The result will be a porcentage of the items inside the storage. No matter the outcome, this will take place on on loot: 
+  - Penalty of +10% detection chance for each consecutive steal atempt for the same Faction. Consecutive steal atempt decays by -5% every day.
+  - Decreases settlement prosperity / hearth.
+  - Subtract items from the settlement item pool.  (Be careful to not steal from settlement without any items, or you might get nothing.)
+  - Roguery XP thats scales with Learning Rate. Current: 20 * learningRateBonus.
+
  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/dynamic%20loot%20thumbnail.jpg)
  
 # To-do
