@@ -139,7 +139,7 @@ There are some conditions that can change the outcome of a steal attempt. To hav
 # Results and Consequences
 Remember: there is always a risk. Once the Modifiers have been calculated and you have waited long enough to find a steal opportunity at the settlement, two Random numbers from 1 to 100 will be created. Think about this like two d100, dices 100 faces being thrown. These values will be used to calcule your steal result.
 
-*For the detection check*, if the value are smaller than your "probability of detection" modifier you get detected while stealling. If the you get detected, you will receive some consequences like:
+*For the detection check*, if the value are smaller than your "probability of detection" modifier you get detected while stealling. If you get detected, you will receive some consequences like:
   - Criminal rating with faction (25 for towns and 20 for villages by default)
   - Decreases relationship with settlement notables (-15 by default, 2x if the player is from the same faction)
   - Decreases relationship with settlement owner (-15 by default, 2x if the player is from the same faction)
