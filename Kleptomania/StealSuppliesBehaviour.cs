@@ -199,7 +199,6 @@ namespace xxKleptomania
                 if (settlement.OwnerClan.Leader != null)
                 {
                     ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, settlement.OwnerClan.Leader, stealRelationPenalty, true);        //decreases relation with settlement owner
-
                     KleptomaniaSubModule.Log.Info("Stealing | Settlement owner Hero " + settlement.OwnerClan.Leader.Name + "decreases relation with player by " + stealRelationPenalty.ToString());
                 }
 
@@ -207,7 +206,7 @@ namespace xxKleptomania
                 {
                     foreach (Hero notableHero in settlement.Notables)     //decreases relation with notables
                     {
-                        if (notableHero != null)
+                        if (notableHero != null && !notableHero.IsGangLeader)
                         {
                             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, notableHero, stealRelationPenalty, true);
                             KleptomaniaSubModule.Log.Info("Stealing | Notable Hero " + notableHero.Name + "decreases relation with player by " + stealRelationPenalty.ToString());
@@ -217,38 +216,13 @@ namespace xxKleptomania
 
                 if (settlement.IsTown)
                 {
-                    if (settlement.MapFaction.MainHeroCrimeRating + currentTownStealCrimeRating <= 60)   //this if forces to never give more crime rating than 60. fixes a bug that crashes when the faction declares war while on menu.
-                    {
                         ChangeCrimeRatingAction.Apply(settlement.MapFaction, currentTownStealCrimeRating, true);
                         KleptomaniaSubModule.Log.Info("Stealing | Faction " + settlement.MapFaction.Name + " crime rating increases with player by " + currentTownStealCrimeRating.ToString());
-                        
-                    }
-                    else
-                    {
-                        float maxCrimeRating = 60 - settlement.MapFaction.MainHeroCrimeRating;
-                        if (maxCrimeRating > 0)
-                        {
-                            ChangeCrimeRatingAction.Apply(settlement.MapFaction, maxCrimeRating, true);
-                            KleptomaniaSubModule.Log.Info("Stealing | Faction " + settlement.MapFaction.Name + " crime rating increases with player by " + maxCrimeRating.ToString());
-                        }
-                    }
                 }
                 else if (settlement.IsVillage)
                 {
-                    if (settlement.MapFaction.MainHeroCrimeRating + currentVillageStealCrimeRating <= 60)   //this if forces to never give more crime rating than 60. fixes a bug that crashes when the faction declares war while on menu.
-                    {
-                        ChangeCrimeRatingAction.Apply(settlement.MapFaction, currentVillageStealCrimeRating, true);
-                        KleptomaniaSubModule.Log.Info("Stealing | Faction " + settlement.Name + " crime rating increases with player by " + currentVillageStealCrimeRating.ToString());
-                    }
-                    else
-                    {
-                        float maxCrimeRating = 60 - settlement.MapFaction.MainHeroCrimeRating;
-                        if (maxCrimeRating > 0)
-                        {
-                            ChangeCrimeRatingAction.Apply(settlement.MapFaction, maxCrimeRating, true);
-                            KleptomaniaSubModule.Log.Info("Stealing | Faction " + settlement.MapFaction.Name + " crime rating increases with player by " + maxCrimeRating.ToString());
-                        }
-                    }
+                    ChangeCrimeRatingAction.Apply(settlement.MapFaction, currentVillageStealCrimeRating, true);
+                    KleptomaniaSubModule.Log.Info("Stealing | Faction " + settlement.Name + " crime rating increases with player by " + currentVillageStealCrimeRating.ToString());
                 }
             }
             catch (Exception ex)
@@ -363,7 +337,6 @@ namespace xxKleptomania
         {
             string detectionMsg;
             string minimunGoodsMsg;
-            bool hasHighCrimeRating = crimeModel.IsPlayerCrimeRatingSevere(Settlement.CurrentSettlement.MapFaction);
             bool isNight = CampaignTime.Now.IsNightTime;
             int detectionSkillBonus = MathF.Ceiling(Hero.MainHero.GetSkillValue(DefaultSkills.Roguery) / 5);
             int minimunGoodsSkillBonus = MathF.Ceiling(Hero.MainHero.GetSkillValue(DefaultSkills.Roguery) / 10);
@@ -374,7 +347,7 @@ namespace xxKleptomania
                 this._recentFactionStealAttemptPenalty.TryGetValue(Settlement.CurrentSettlement.MapFaction, out recentStealPenalty);
             }
 
-            currentDetectionChance = stealUtils.CalculateDetectionBonus(detectionSkillBonus, isNight, hasHighCrimeRating, recentStealPenalty);
+            currentDetectionChance = stealUtils.CalculateDetectionBonus(detectionSkillBonus, isNight, recentStealPenalty);
             currentMinimunGoods = stealUtils.CalculateLootBonus(minimunGoodsSkillBonus);            
 
             detectionMsg = "\n - " + stealUtils.TextPrefixFromValue(currentDetectionChance) + " chance of detection during the steal attempt (" + currentDetectionChance.ToString() + "% probability of detection).";
@@ -383,10 +356,6 @@ namespace xxKleptomania
             if (isNight)
             {
                 detectionMsg += "\n  * Night time bonus (-10%)  ";
-            }
-            if (hasHighCrimeRating)
-            {
-                detectionMsg += "\n  * High crime rating penalty (+20%)  ";
             }
             if (this._recentFactionStealAttemptPenalty.ContainsKey(Settlement.CurrentSettlement.MapFaction))
             {
@@ -561,7 +530,7 @@ namespace xxKleptomania
             if (currentSettlement.IsTown)
             {
                 GameMenu.SwitchToMenu("town");
-                currentSettlement.Prosperity -= prosperityGoodsAmmount;
+                currentSettlement.Prosperity -= prosperityGoodsAmmount*10;
 
             }
             else if (currentSettlement.IsVillage)
@@ -592,7 +561,7 @@ namespace xxKleptomania
         public Dictionary<string, CampaignTime> _settlementLastStealDetectionTimeDictionary = new Dictionary<string, CampaignTime>();
         public Dictionary<IFaction, int> _recentFactionStealAttemptPenalty = new Dictionary<IFaction, int>();
         private StealSuppliesUtils stealUtils = new StealSuppliesUtils();
-        DefaultCrimeModel crimeModel = new DefaultCrimeModel();
+ 
 
         int prosperityGoodsAmmount=0;
         CampaignTime GoalStealTime;

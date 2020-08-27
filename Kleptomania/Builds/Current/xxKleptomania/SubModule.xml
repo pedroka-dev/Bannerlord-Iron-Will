@@ -2,7 +2,7 @@
 <Module>
      <Name value="Iron Will - Kleptomania"/>
      <Id value="xxKleptomania"/>
-     <Version value="v1.0.0"/>
+     <Version value="v1.2.0"/>
      <SingleplayerModule value="true"/>
      <MultiplayerModule value="false"/>
      <DependedModules>
