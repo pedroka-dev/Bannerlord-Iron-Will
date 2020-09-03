@@ -300,8 +300,8 @@ namespace xxKleptomania
                 InformationManager.DisplayMessage(new InformationMessage("Something went wrong with Iron Will - Wound Experience: " + ex.Message, Colors.Red));
                 KleptomaniaSubModule.Log.Error("Error on adding StealSuppliesBehaviour for Villages | " + ex.Message);
             }
-        }
-        
+        }        
+
         //init
         private void game_menu_steal_on_init(MenuCallbackArgs args)
         {
@@ -408,9 +408,12 @@ namespace xxKleptomania
             MBTextManager.SetTextVariable("SETTLEMENT_STEAL_RECEIVE", "You were able to secure the supplies stolen from " + Settlement.CurrentSettlement.Name + "\n", false);
             MBTextManager.SetTextVariable("SETTLEMENT_STEAL_RECEIVE_DETECT", detectMsg, false);
             MBTextManager.SetTextVariable("SETTLEMENT_STEAL_RECEIVE_LOOT", lootMsg, false);
-
         }
 
+        private void game_menu_steal_encounter_on_init(MenuCallbackArgs args)
+        {
+            throw new NotImplementedException();
+        }
 
         //condition
         private bool game_menu_steal_on_condition(MenuCallbackArgs args)
@@ -474,6 +477,31 @@ namespace xxKleptomania
             return true;
         }
 
+        private bool game_menu_steal_bribe_on_condition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.BribeAndEscape;      //Option icon
+            return true;
+        }
+
+        private bool game_menu_steal_influence_on_condition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.Conversation;      //Option icon
+            return true; ;
+        }
+
+        private bool game_menu_steal_giveback_on_condition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.Escape;      //Option icon
+            return true;
+        }
+
+        private bool game_menu_steal_jailed_on_condition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.Surrender;      //Option icon
+            return true;
+        }
+
+        
         //on_tick
         private void game_menu_steal_wait_on_tick(MenuCallbackArgs args, CampaignTime dt)
         {
@@ -568,6 +596,27 @@ namespace xxKleptomania
             stealUtils.GiveRogueryXp(Hero.MainHero);
         }
 
+        private void game_menu_steal_jailed_on_consequence(MenuCallbackArgs args)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void game_menu_steal_giveback_on_consequence(MenuCallbackArgs args)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void game_menu_steal_bribe_on_consequence(MenuCallbackArgs args)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void game_menu_steal_influence_on_consequence(MenuCallbackArgs args)
+        {
+            throw new NotImplementedException();
+        }
+
+        //declarations
         public Dictionary<string, CampaignTime> _settlementLastStealDetectionTimeDictionary = new Dictionary<string, CampaignTime>();
         public Dictionary<IFaction, int> _recentFactionStealAttemptPenalty = new Dictionary<IFaction, int>();
         private StealSuppliesUtils stealUtils = new StealSuppliesUtils();
