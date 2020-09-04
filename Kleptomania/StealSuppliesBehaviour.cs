@@ -248,11 +248,10 @@ namespace xxKleptomania
                 campaignGameStarter.AddGameMenu("town_steal_receive", "{SETTLEMENT_STEAL_RECEIVE}  \n{SETTLEMENT_STEAL_RECEIVE_DETECT}  \n  {SETTLEMENT_STEAL_RECEIVE_LOOT}", this.game_menu_steal_receive_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
                 campaignGameStarter.AddGameMenuOption("town_steal_receive", "town_steal_loot", "Loot the supplies.", this.game_menu_steal_receive_on_condition, this.game_menu_steal_receive_on_consequence, false, -1, false);
 
-                campaignGameStarter.AddGameMenu("town_steal_encounter", "The person who caught you stealling found you hidden in some bushes. He says that will call the guards on you for stealling from the settlement storage.", this.game_menu_steal_encounter_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
-                campaignGameStarter.AddGameMenuOption("town_steal_encounter", "town_steal_bribe", "Here, some denars will shut you up.", this.game_menu_steal_bribe_on_condition, this.game_menu_steal_bribe_on_consequence, false, -1, false);
-                campaignGameStarter.AddGameMenuOption("town_steal_encounter", "town_steal_influence", "Do you even know who I am?", this.game_menu_steal_influence_on_condition, this.game_menu_steal_influence_on_consequence, false, -1, false);
-                campaignGameStarter.AddGameMenuOption("town_steal_encounter", "town_steal_giveback", "Dont call the guards! I will give back the loot.", this.game_menu_steal_giveback_on_condition, this.game_menu_steal_giveback_on_consequence, false, -1, false);
-                campaignGameStarter.AddGameMenuOption("town_steal_encounter", "town_steal_jailed", "So be it, then.", this.game_menu_steal_jailed_on_condition, this.game_menu_steal_jailed_on_consequence, false, -1, false);
+                campaignGameStarter.AddGameMenu("town_steal_encounter", "{SETTLEMENT_STEAL_ENCONTER}", this.game_menu_steal_encounter_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
+                campaignGameStarter.AddGameMenuOption("town_steal_encounter", "town_steal_bribe", "Here, some denars will shut you up.", this.game_menu_steal_encounter_bribe_on_condition, this.game_menu_steal_encounter_bribe_on_consequence, false, -1, false);
+                campaignGameStarter.AddGameMenuOption("town_steal_encounter", "town_steal_giveback", "Don't call the guards! I will give back the loot.", this.game_menu_steal_encounter_giveback_on_condition, this.game_menu_steal_encounter_giveback_on_consequence, false, -1, false);
+                campaignGameStarter.AddGameMenuOption("town_steal_encounter", "town_steal_jailed", "So be it, then.", this.game_menu_steal_encounter_jailed_on_condition, this.game_menu_steal_encounter_jailed_on_consequence, false, -1, false);
 
                 KleptomaniaSubModule.Log.Info("Behaviour intialization | Sucessfully added Town Steal Menus");
                 if (KleptomaniaSubModule.settings.DebugInfo)
@@ -283,11 +282,10 @@ namespace xxKleptomania
                 campaignGameStarter.AddGameMenu("village_steal_receive", "{SETTLEMENT_STEAL_RECEIVE}  \n{SETTLEMENT_STEAL_RECEIVE_DETECT}  \n  {SETTLEMENT_STEAL_RECEIVE_LOOT}", this.game_menu_steal_receive_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
                 campaignGameStarter.AddGameMenuOption("village_steal_receive", "village_steal_loot", "Loot the supplies.", this.game_menu_steal_receive_on_condition, this.game_menu_steal_receive_on_consequence, false, -1, false);
 
-                campaignGameStarter.AddGameMenu("village_steal_encounter", "The person who caught you stealling found you hidden in some bushes. He says that will call the guards on you for stealling from the settlement storage.", this.game_menu_steal_encounter_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
-                campaignGameStarter.AddGameMenuOption("village_steal_encounter", "village_steal_bribe", "Here, some denars will shut you up.", this.game_menu_steal_bribe_on_condition, this.game_menu_steal_bribe_on_consequence, false, -1, false);
-                campaignGameStarter.AddGameMenuOption("village_steal_encounter", "village_steal_influence", "Do you even know who I am?", this.game_menu_steal_influence_on_condition, this.game_menu_steal_influence_on_consequence, false, -1, false);
-                campaignGameStarter.AddGameMenuOption("village_steal_encounter", "village_steal_giveback", "Dont call the guards! I will give back the loot.", this.game_menu_steal_giveback_on_condition, this.game_menu_steal_giveback_on_consequence, false, -1, false);
-                campaignGameStarter.AddGameMenuOption("village_steal_encounter", "village_steal_jailed", "So be it, then.", this.game_menu_steal_jailed_on_condition, this.game_menu_steal_jailed_on_consequence, false, -1, false);
+                campaignGameStarter.AddGameMenu("village_steal_encounter", "{SETTLEMENT_STEAL_ENCONTER}", this.game_menu_steal_encounter_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
+                campaignGameStarter.AddGameMenuOption("village_steal_encounter", "village_steal_bribe", "Here, some denars will shut you up.", this.game_menu_steal_encounter_bribe_on_condition, this.game_menu_steal_encounter_bribe_on_consequence, false, -1, false);
+                campaignGameStarter.AddGameMenuOption("village_steal_encounter", "village_steal_giveback", "Dont call the guards! I will give back the loot.", this.game_menu_steal_encounter_giveback_on_condition, this.game_menu_steal_encounter_giveback_on_consequence, false, -1, false);
+                campaignGameStarter.AddGameMenuOption("village_steal_encounter", "village_steal_jailed", "So be it, then.", this.game_menu_steal_encounter_jailed_on_condition, this.game_menu_steal_encounter_jailed_on_consequence, false, -1, false);
 
                 KleptomaniaSubModule.Log.Info("Behaviour intialization | Sucessfully added Village Steal Menus");
                 if (KleptomaniaSubModule.settings.DebugInfo)
@@ -412,7 +410,7 @@ namespace xxKleptomania
 
         private void game_menu_steal_encounter_on_init(MenuCallbackArgs args)
         {
-            throw new NotImplementedException();
+            MBTextManager.SetTextVariable("SETTLEMENT_STEAL_ENCONTER", "The person who caught you stealling found you hidden in some bushes. He says that will call the guards on you for stealling from the settlement storage.", false);
         }
 
         //condition
@@ -477,25 +475,26 @@ namespace xxKleptomania
             return true;
         }
 
-        private bool game_menu_steal_bribe_on_condition(MenuCallbackArgs args)
+        private bool game_menu_steal_encounter_bribe_on_condition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.BribeAndEscape;      //Option icon
+
+            if (Hero.MainHero.Gold < prosperityGoodsAmmount*5)     //change value
+            {
+                args.IsEnabled = false;
+                args.Tooltip = new TextObject("You dont have enough money to bribe.", null);
+            }
+
             return true;
         }
 
-        private bool game_menu_steal_influence_on_condition(MenuCallbackArgs args)
-        {
-            args.optionLeaveType = GameMenuOption.LeaveType.Conversation;      //Option icon
-            return true; ;
-        }
-
-        private bool game_menu_steal_giveback_on_condition(MenuCallbackArgs args)
+        private bool game_menu_steal_encounter_giveback_on_condition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Escape;      //Option icon
             return true;
         }
 
-        private bool game_menu_steal_jailed_on_condition(MenuCallbackArgs args)
+        private bool game_menu_steal_encounter_jailed_on_condition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Surrender;      //Option icon
             return true;
@@ -561,14 +560,14 @@ namespace xxKleptomania
 
             if (KleptomaniaSubModule.settings.DebugInfo)
             {
-                InformationManager.DisplayMessage(new InformationMessage("Detectted = " + isDetected + ". Steal Quantity = " + stealQuantity, Colors.Yellow));
+                InformationManager.DisplayMessage(new InformationMessage("Detected = " + isDetected + ". Steal Quantity = " + stealQuantity, Colors.Yellow));
             }
             KleptomaniaSubModule.Log.Info("Stealing | Steal sucessfull. Quantity: " + stealQuantity.ToString() + " %. Detected: " + isDetected.ToString());
 
             if (currentSettlement.IsTown)
             {
                 GameMenu.SwitchToMenu("town");
-                currentSettlement.Prosperity -= prosperityGoodsAmmount*10;
+                currentSettlement.Prosperity -= prosperityGoodsAmmount*5;
 
             }
             else if (currentSettlement.IsVillage)
@@ -596,27 +595,25 @@ namespace xxKleptomania
             stealUtils.GiveRogueryXp(Hero.MainHero);
         }
 
-        private void game_menu_steal_jailed_on_consequence(MenuCallbackArgs args)
+        private void game_menu_steal_encounter_bribe_on_consequence(MenuCallbackArgs args)
         {
-            throw new NotImplementedException();
+            Hero.MainHero.ChangeHeroGold(prosperityGoodsAmmount * 5);
+            //GameMenu.SwitchToMenu(" ");
+
         }
 
-        private void game_menu_steal_giveback_on_consequence(MenuCallbackArgs args)
+        private void game_menu_steal_encounter_giveback_on_consequence(MenuCallbackArgs args)
         {
-            throw new NotImplementedException();
+            stealQuantity = 0;
+            //GameMenu.SwitchToMenu(" ");
         }
 
-        private void game_menu_steal_bribe_on_consequence(MenuCallbackArgs args)
+        private void game_menu_steal_encounter_jailed_on_consequence(MenuCallbackArgs args)
         {
-            throw new NotImplementedException();
+            GameMenu.SwitchToMenu("menu_sneak_into_town_caught");
         }
 
-        private void game_menu_steal_influence_on_consequence(MenuCallbackArgs args)
-        {
-            throw new NotImplementedException();
-        }
-
-        //declarations
+        //declaration
         public Dictionary<string, CampaignTime> _settlementLastStealDetectionTimeDictionary = new Dictionary<string, CampaignTime>();
         public Dictionary<IFaction, int> _recentFactionStealAttemptPenalty = new Dictionary<IFaction, int>();
         private StealSuppliesUtils stealUtils = new StealSuppliesUtils();
