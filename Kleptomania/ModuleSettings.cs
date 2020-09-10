@@ -31,6 +31,11 @@ namespace xxKleptomania
         [XmlElement(DataType = "int", ElementName = "StealRelationPenalty")]
         public int StealRelationPenalty { get; set; } = -15;
 
+        [XmlElement(DataType = "int", ElementName = "EncounterBribeCost")]
+        public int EncounterBribeCost { get; set; } = 150;
+        [XmlElement(DataType = "int", ElementName = "EncounterInfluenceCost")]
+        public int EncounterInfluenceCost { get; set; } = 2;
+
         public string ModName
         {
             get {

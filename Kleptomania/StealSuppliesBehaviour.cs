@@ -291,8 +291,8 @@ namespace xxKleptomania
 
                 campaignGameStarter.AddGameMenu("town_steal_receive", "{SETTLEMENT_STEAL_RECEIVE}  \n{SETTLEMENT_STEAL_RECEIVE_DETECT}  \n  {SETTLEMENT_STEAL_RECEIVE_LOOT}", this.game_menu_steal_receive_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
                 campaignGameStarter.AddGameMenuOption("town_steal_receive", "town_steal_loot", "Take away the supplies.", this.game_menu_steal_receive_on_condition, this.game_menu_steal_receive_on_consequence, false, -1, false);
-                campaignGameStarter.AddGameMenuOption("town_steal_receive", "town_steal_encounter_bribe", "Here, some denars will shut you up. 200{GOLD_ICON}", this.game_menu_steal_encounter_bribe_on_condition, this.game_menu_steal_encounter_bribe_on_consequence, false, 0, false);
-                campaignGameStarter.AddGameMenuOption("town_steal_receive", "town_steal_encounter_influence", "Do you even know who I am? 5 Influence", this.game_menu_steal_encounter_influence_on_condition, this.game_menu_steal_encounter_influence_on_consequence, false, 1, false);
+                campaignGameStarter.AddGameMenuOption("town_steal_receive", "town_steal_encounter_bribe", "Here, some denars will shut you up. "+KleptomaniaSubModule.settings.EncounterBribeCost+"{GOLD_ICON}", this.game_menu_steal_encounter_bribe_on_condition, this.game_menu_steal_encounter_bribe_on_consequence, false, 0, false);
+                campaignGameStarter.AddGameMenuOption("town_steal_receive", "town_steal_encounter_influence", "Do you even know who I am? "+KleptomaniaSubModule.settings.EncounterInfluenceCost + " Influence", this.game_menu_steal_encounter_influence_on_condition, this.game_menu_steal_encounter_influence_on_consequence, false, 1, false);
                 campaignGameStarter.AddGameMenuOption("town_steal_receive", "town_steal_encounter_threat", "Don't mess with gang business, or else...", this.game_menu_steal_encounter_threat_on_condition, this.game_menu_steal_threat_on_consequence, false, 2, false);
                 campaignGameStarter.AddGameMenuOption("town_steal_receive", "town_steal_encounter_giveback", "Fine, you can have all the supplies back.", this.game_menu_steal_encounter_giveback_on_condition, this.game_menu_steal_giveback_on_consequence, false, 3, false);
 
@@ -324,8 +324,8 @@ namespace xxKleptomania
 
                 campaignGameStarter.AddGameMenu("village_steal_receive", "{SETTLEMENT_STEAL_RECEIVE}  \n{SETTLEMENT_STEAL_RECEIVE_DETECT}  \n  {SETTLEMENT_STEAL_RECEIVE_LOOT}", this.game_menu_steal_receive_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
                 campaignGameStarter.AddGameMenuOption("village_steal_receive", "village_steal_loot", "Take away the supplies.", this.game_menu_steal_receive_on_condition, this.game_menu_steal_receive_on_consequence, false, -1, false);
-                campaignGameStarter.AddGameMenuOption("village_steal_receive", "village_steal_encounter_bribe", "Here, some denars will shut you up. 200{GOLD_ICON}", this.game_menu_steal_encounter_bribe_on_condition, this.game_menu_steal_encounter_bribe_on_consequence, false, 0, false);
-                campaignGameStarter.AddGameMenuOption("village_steal_receive", "village_steal_encounter_influence", "Do you even know who I am? 5 Influence", this.game_menu_steal_encounter_influence_on_condition, this.game_menu_steal_encounter_influence_on_consequence, false, 1, false);
+                campaignGameStarter.AddGameMenuOption("village_steal_receive", "village_steal_encounter_bribe", "Here, some denars will shut you up. " + KleptomaniaSubModule.settings.EncounterBribeCost + "{GOLD_ICON}", this.game_menu_steal_encounter_bribe_on_condition, this.game_menu_steal_encounter_bribe_on_consequence, false, 0, false);
+                campaignGameStarter.AddGameMenuOption("village_steal_receive", "village_steal_encounter_influence", "Do you even know who I am? " + KleptomaniaSubModule.settings.EncounterInfluenceCost + " Influence", this.game_menu_steal_encounter_influence_on_condition, this.game_menu_steal_encounter_influence_on_consequence, false, 1, false);
                 campaignGameStarter.AddGameMenuOption("village_steal_receive", "village_steal_encounter_threat", "Don't mess with gang business, or else...", this.game_menu_steal_encounter_threat_on_condition, this.game_menu_steal_threat_on_consequence, false, 2, false);
                 campaignGameStarter.AddGameMenuOption("village_steal_receive", "village_steal_encounter_giveback", "Fine, you can have all the supplies back.", this.game_menu_steal_encounter_giveback_on_condition, this.game_menu_steal_giveback_on_consequence, false, 3, false);
 
@@ -526,7 +526,7 @@ namespace xxKleptomania
                 return false;
             }
 
-            int bribeCost = 200;
+            int bribeCost = KleptomaniaSubModule.settings.EncounterBribeCost;
 
             if (Hero.MainHero.Gold < bribeCost)     //change value
             {
@@ -546,7 +546,7 @@ namespace xxKleptomania
                 return false;
             }
 
-            float influenceCost = 5; 
+            float influenceCost = KleptomaniaSubModule.settings.EncounterInfluenceCost; 
 
             if(Hero.MainHero.Clan.Influence < influenceCost)
             {
@@ -650,13 +650,13 @@ namespace xxKleptomania
 
         private void game_menu_steal_encounter_bribe_on_consequence(MenuCallbackArgs args)
         {
-            GiveGoldAction.ApplyForCharacterToSettlement(Hero.MainHero, Settlement.CurrentSettlement, 200);
+            GiveGoldAction.ApplyForCharacterToSettlement(Hero.MainHero, Settlement.CurrentSettlement, KleptomaniaSubModule.settings.EncounterBribeCost);
             OnStealAttempt(Settlement.CurrentSettlement);
         }
 
         private void game_menu_steal_encounter_influence_on_consequence(MenuCallbackArgs args)
         {
-            Hero.MainHero.AddInfluenceWithKingdom(-5);
+            Hero.MainHero.AddInfluenceWithKingdom(-KleptomaniaSubModule.settings.EncounterInfluenceCost);
             OnStealAttempt(Settlement.CurrentSettlement);
         }
 

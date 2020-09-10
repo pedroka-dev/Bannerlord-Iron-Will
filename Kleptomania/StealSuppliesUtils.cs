@@ -53,7 +53,12 @@ namespace xxKleptomania
 
             if(recentAtemptPenalty > 0)
             {
-                detectionChanceBonus += 10;
+                detectionChanceBonus += recentAtemptPenalty;
+            }
+
+            if(detectionChanceBonus > 100)
+            {
+                detectionChanceBonus = 100;
             }
 
             return detectionChanceBonus;
