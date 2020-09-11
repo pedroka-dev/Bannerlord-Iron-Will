@@ -79,38 +79,38 @@ namespace xxKleptomania
             }
         }
 
-        public void OnStealAttempt(Settlement currentSettlement)
+        public void OnStealAttempt(Settlement currentSettlement, bool wasDetected, int ammountFromProsperity, int quantityStolen)
         {
             if (KleptomaniaSubModule.settings.DebugInfo)
             {
-                InformationManager.DisplayMessage(new InformationMessage("Detected = " + isDetected + ". Steal Quantity = " + stealQuantity, Colors.Yellow));
+                InformationManager.DisplayMessage(new InformationMessage("Detected = " + wasDetected + ". Steal Quantity = " + quantityStolen, Colors.Yellow));
             }
-            KleptomaniaSubModule.Log.Info("Stealing | Steal sucessfull. Quantity: " + stealQuantity.ToString() + " %. Detected: " + isDetected.ToString());
+            KleptomaniaSubModule.Log.Info("Stealing | Steal sucessfull. Quantity: " + quantityStolen.ToString() + " %. Detected: " + wasDetected.ToString());
 
             if (currentSettlement.IsTown)
             {
                 GameMenu.SwitchToMenu("town");
-                if (stealQuantity > 0)
+                if (quantityStolen > 0)
                 {
-                    currentSettlement.Prosperity -= prosperityGoodsAmmount * 5;
+                    currentSettlement.Prosperity -= ammountFromProsperity * 5;
                 }
             }
             else if (currentSettlement.IsVillage)
             {
                 GameMenu.SwitchToMenu("village");
-                if (stealQuantity > 0)
+                if (quantityStolen > 0)
                 {
-                    currentSettlement.Village.Hearth -= prosperityGoodsAmmount;
+                    currentSettlement.Village.Hearth -= ammountFromProsperity;
                 }
             }
             if (KleptomaniaSubModule.settings.DebugInfo)
             {
-                InformationManager.DisplayMessage(new InformationMessage("Settlement Hearth / prosperity decreased by " + prosperityGoodsAmmount.ToString(), Colors.Yellow));
+                InformationManager.DisplayMessage(new InformationMessage("Settlement Hearth / prosperity decreased by " + ammountFromProsperity.ToString(), Colors.Yellow));
             }
-            KleptomaniaSubModule.Log.Info("Stealing | Settlement " + currentSettlement.Name + " hearth/prosperity decreased by " + prosperityGoodsAmmount.ToString());
+            KleptomaniaSubModule.Log.Info("Stealing | Settlement " + currentSettlement.Name + " hearth/prosperity decreased by " + ammountFromProsperity.ToString());
 
             IncreaseRecentStealPenalty(currentSettlement.MapFaction);
-            if (isDetected)
+            if (wasDetected)
             {
                 OnDetection(currentSettlement);
                 if (this._settlementLastStealDetectionTimeDictionary != null)
@@ -119,7 +119,7 @@ namespace xxKleptomania
                 }
             }
 
-            LootStolenGoods(currentSettlement);
+            LootStolenGoods(currentSettlement, ammountFromProsperity, quantityStolen);
             stealUtils.GiveRogueryXp(Hero.MainHero);
         }
 
@@ -213,13 +213,13 @@ namespace xxKleptomania
             }
         }
 
-        public void LootStolenGoods(Settlement settlement)
+        public void LootStolenGoods(Settlement settlement, int ammountFromProsperity, int goodsQuantity)
         {
             try
             {
                 ItemRoster itemRoster = new ItemRoster();
 
-                int lootQuantity = MathF.Ceiling(((float)(prosperityGoodsAmmount * stealQuantity / 100)));
+                int lootQuantity = MathF.Ceiling(((float)(ammountFromProsperity * goodsQuantity / 100)));
                 int cheapestAnimalValue = 50;       //used to pick the cheapest animal availiable first
 
                 while (lootQuantity > 0 && settlement.ItemRoster.Count > 0)
@@ -645,31 +645,31 @@ namespace xxKleptomania
 
         private void game_menu_steal_receive_on_consequence(MenuCallbackArgs args)
         {
-            OnStealAttempt(Settlement.CurrentSettlement);
+            OnStealAttempt(Settlement.CurrentSettlement,isDetected,prosperityGoodsAmmount,stealQuantity);
         }
 
         private void game_menu_steal_encounter_bribe_on_consequence(MenuCallbackArgs args)
         {
             GiveGoldAction.ApplyForCharacterToSettlement(Hero.MainHero, Settlement.CurrentSettlement, KleptomaniaSubModule.settings.EncounterBribeCost);
-            OnStealAttempt(Settlement.CurrentSettlement);
+            OnStealAttempt(Settlement.CurrentSettlement,isDetected, prosperityGoodsAmmount, stealQuantity);
         }
 
         private void game_menu_steal_encounter_influence_on_consequence(MenuCallbackArgs args)
         {
             Hero.MainHero.AddInfluenceWithKingdom(-KleptomaniaSubModule.settings.EncounterInfluenceCost);
-            OnStealAttempt(Settlement.CurrentSettlement);
+            OnStealAttempt(Settlement.CurrentSettlement,isDetected, prosperityGoodsAmmount, stealQuantity);
         }
 
         private void game_menu_steal_threat_on_consequence(MenuCallbackArgs args)
         {
             ChangeCrimeRatingAction.Apply(Settlement.CurrentSettlement.MapFaction, 5, true);
-            OnStealAttempt(Settlement.CurrentSettlement);
+            OnStealAttempt(Settlement.CurrentSettlement,isDetected, prosperityGoodsAmmount, stealQuantity);
         }
 
         private void game_menu_steal_giveback_on_consequence(MenuCallbackArgs args)
         {
             stealQuantity = 0;
-            OnStealAttempt(Settlement.CurrentSettlement);
+            OnStealAttempt(Settlement.CurrentSettlement,isDetected, prosperityGoodsAmmount, stealQuantity);
         }
 
         //private void game_menu_steal_encounter_callguards_on_consequence(MenuCallbackArgs args)
