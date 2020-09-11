@@ -18,7 +18,7 @@ using System.Linq;
 
 namespace xxKleptomania
 {
-    class StealSuppliesBehaviour : CampaignBehaviorBase
+    class StealSuppliesBehavior : CampaignBehaviorBase
     {
         public override void RegisterEvents()
         {

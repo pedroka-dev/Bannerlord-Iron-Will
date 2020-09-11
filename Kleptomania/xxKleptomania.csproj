@@ -217,7 +217,7 @@
     <Compile Include="KleptomaniaSubModule.cs" />
     <Compile Include="ModuleSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StealSuppliesBehaviour.cs" />
+    <Compile Include="StealSuppliesBehavior.cs" />
     <Compile Include="StealSuppliesUtils.cs" />
   </ItemGroup>
   <ItemGroup>

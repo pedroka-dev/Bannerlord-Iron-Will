@@ -55,7 +55,7 @@ namespace xxKleptomania
             try
             {
                 CampaignGameStarter campaignGameStarter = (CampaignGameStarter)gameStarterObject;
-                campaignGameStarter.AddBehavior(new StealSuppliesBehaviour());
+                campaignGameStarter.AddBehavior(new StealSuppliesBehavior());
 
                 InformationManager.DisplayMessage(new InformationMessage("Sucessfully Loaded Iron Will - Kleptomania", Colors.Green));
                 Log.Info("Module intialization | Campaing Game Initialized.");
