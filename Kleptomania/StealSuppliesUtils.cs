@@ -36,7 +36,7 @@ namespace xxKleptomania
             return message;
         }
 
-        public int CalculateDetectionBonus(int skillBonus, bool isNight, bool hasHighCrime, int recentAtemptPenalty)      //current bonuses: Night = -10%, From Skill = Roguery LvL /5. current penalty: High crime rating = 15%
+        public int CalculateDetectionBonus(int skillBonus, bool isNight, int recentAtemptPenalty)      //current bonuses: Night = -10%, From Skill = Roguery LvL /5. current penalty: High crime rating = 15%
         {
             int detectionChanceBonus = KleptomaniaSubModule.settings.BaseDetectionChance;
 
@@ -46,11 +46,6 @@ namespace xxKleptomania
             }
             detectionChanceBonus -= skillBonus;
 
-            if (hasHighCrime)
-            {
-                detectionChanceBonus += 20;
-            }
-
             if (isNight)
             {
                 detectionChanceBonus -= 10;
@@ -58,7 +53,12 @@ namespace xxKleptomania
 
             if(recentAtemptPenalty > 0)
             {
-                detectionChanceBonus += 10;
+                detectionChanceBonus += recentAtemptPenalty;
+            }
+
+            if(detectionChanceBonus > 100)
+            {
+                detectionChanceBonus = 100;
             }
 
             return detectionChanceBonus;

@@ -18,7 +18,7 @@ using System.Linq;
 
 namespace xxKleptomania
 {
-    class StealSuppliesBehaviour : CampaignBehaviorBase
+    class StealSuppliesBehavior : CampaignBehaviorBase
     {
         public override void RegisterEvents()
         {
@@ -79,13 +79,147 @@ namespace xxKleptomania
             }
         }
 
-        public void LootStolenGoods(Settlement settlement)
+        public void OnStealAttempt(Settlement currentSettlement, bool wasDetected, int ammountFromProsperity, int quantityStolen)
+        {
+            if (KleptomaniaSubModule.settings.DebugInfo)
+            {
+                InformationManager.DisplayMessage(new InformationMessage("Detected = " + wasDetected + ". Steal Quantity = " + quantityStolen, Colors.Yellow));
+            }
+            KleptomaniaSubModule.Log.Info("Stealing | Steal sucessfull. Quantity: " + quantityStolen.ToString() + " %. Detected: " + wasDetected.ToString());
+
+            if (currentSettlement.IsTown)
+            {
+                GameMenu.SwitchToMenu("town");
+                if (quantityStolen > 0)
+                {
+                    currentSettlement.Prosperity -= ammountFromProsperity * 5;
+                }
+            }
+            else if (currentSettlement.IsVillage)
+            {
+                GameMenu.SwitchToMenu("village");
+                if (quantityStolen > 0)
+                {
+                    currentSettlement.Village.Hearth -= ammountFromProsperity;
+                }
+            }
+            if (KleptomaniaSubModule.settings.DebugInfo)
+            {
+                InformationManager.DisplayMessage(new InformationMessage("Settlement Hearth / prosperity decreased by " + ammountFromProsperity.ToString(), Colors.Yellow));
+            }
+            KleptomaniaSubModule.Log.Info("Stealing | Settlement " + currentSettlement.Name + " hearth/prosperity decreased by " + ammountFromProsperity.ToString());
+
+            IncreaseRecentStealPenalty(currentSettlement.MapFaction);
+            if (wasDetected)
+            {
+                OnDetection(currentSettlement);
+                if (this._settlementLastStealDetectionTimeDictionary != null)
+                {
+                    _settlementLastStealDetectionTimeDictionary.Add(currentSettlement.StringId, CampaignTime.Now);
+                }
+            }
+
+            LootStolenGoods(currentSettlement, ammountFromProsperity, quantityStolen);
+            stealUtils.GiveRogueryXp(Hero.MainHero);
+        }
+
+        public void OnDetection(Settlement settlement)
+        {
+            try
+            {
+                int stealRelationPenalty = KleptomaniaSubModule.settings.StealRelationPenalty;
+                float currentTownStealCrimeRating = KleptomaniaSubModule.settings.TownStealCrimeRating;
+                float currentVillageStealCrimeRating = KleptomaniaSubModule.settings.VillageStealCrimeRating;
+
+                if (Hero.MainHero.MapFaction != null && settlement.MapFaction != null)
+                {
+                    if (Hero.MainHero.MapFaction == settlement.MapFaction)     //if from player faction: realtion penalty x2, decreases relation with players faction leader
+                    {
+                        stealRelationPenalty *= 2;
+                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, settlement.MapFaction.Leader, stealRelationPenalty, true);
+                        KleptomaniaSubModule.Log.Info("Stealing | Faction Leader Hero " + settlement.MapFaction.Leader.Name + "decreases relation with player by " + stealRelationPenalty.ToString());
+                    }
+                }
+
+                if (settlement.OwnerClan.Leader != null)
+                {
+                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, settlement.OwnerClan.Leader, stealRelationPenalty, true);        //decreases relation with settlement owner
+                    KleptomaniaSubModule.Log.Info("Stealing | Settlement owner Hero " + settlement.OwnerClan.Leader.Name + "decreases relation with player by " + stealRelationPenalty.ToString());
+                }
+
+                if (settlement.Notables != null)
+                {
+                    foreach (Hero notableHero in settlement.Notables)     //decreases relation with notables
+                    {
+                        if (notableHero != null && !notableHero.IsGangLeader)
+                        {
+                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, notableHero, stealRelationPenalty, true);
+                            KleptomaniaSubModule.Log.Info("Stealing | Notable Hero " + notableHero.Name + "decreases relation with player by " + stealRelationPenalty.ToString());
+                        }
+                    }
+                }
+
+                if (settlement.IsTown)
+                {
+                    ChangeCrimeRatingAction.Apply(settlement.MapFaction, currentTownStealCrimeRating, true);
+                    KleptomaniaSubModule.Log.Info("Stealing | Faction " + settlement.MapFaction.Name + " crime rating increases with player by " + currentTownStealCrimeRating.ToString());
+                }
+                else if (settlement.IsVillage)
+                {
+                    ChangeCrimeRatingAction.Apply(settlement.MapFaction, currentVillageStealCrimeRating, true);
+                    KleptomaniaSubModule.Log.Info("Stealing | Faction " + settlement.Name + " crime rating increases with player by " + currentVillageStealCrimeRating.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                InformationManager.DisplayMessage(new InformationMessage("Kleptomania: An error occured adding consequences for detection. Check the Log file.", Colors.Red));
+                KleptomaniaSubModule.Log.Info("Stealing | Exception in DetectionConsequence: " + ex.Message);
+            }
+        }
+
+        public void IncreaseRecentStealPenalty(IFaction faction)
+        {
+            try     //AddRecentStealPenalty(IFaction faction)
+            {
+                int updatedValue = 10;
+                if (this._recentFactionStealAttemptPenalty.ContainsKey(faction))
+                {
+                    this._recentFactionStealAttemptPenalty.TryGetValue(faction, out updatedValue);
+                    updatedValue += 10;
+                    this._recentFactionStealAttemptPenalty.Remove(faction);
+                    this._recentFactionStealAttemptPenalty.Add(faction, updatedValue);
+
+                    if (KleptomaniaSubModule.settings.DebugInfo)
+                    {
+                        InformationManager.DisplayMessage(new InformationMessage("Increased " + faction.Name + " recent steal penalty to " + updatedValue, Colors.Yellow));
+                    }
+                    KleptomaniaSubModule.Log.Info("Stealing | Increased " + faction.Name + " recent steal penalty to " + updatedValue);
+                }
+                else
+                {
+                    this._recentFactionStealAttemptPenalty.Add(faction, updatedValue);
+
+                    if (KleptomaniaSubModule.settings.DebugInfo)
+                    {
+                        InformationManager.DisplayMessage(new InformationMessage("Added " + faction.Name + " to recent steal penalty dictionary and increased by " + updatedValue, Colors.Yellow));
+                    }
+                    KleptomaniaSubModule.Log.Info("Stealing | Added " + faction.Name + " to recent steal penalty dictionary and increased by " + updatedValue);
+                }
+            }
+            catch (Exception ex)
+            {
+                InformationManager.DisplayMessage(new InformationMessage("Kleptomania: An error occured adding settlement to recent steal attempts. Check the Log file.", Colors.Red));
+                KleptomaniaSubModule.Log.Info("Stealing | Exception in AddRecentStealPenalty: " + ex.Message);
+            }
+        }
+
+        public void LootStolenGoods(Settlement settlement, int ammountFromProsperity, int goodsQuantity)
         {
             try
             {
                 ItemRoster itemRoster = new ItemRoster();
 
-                int lootQuantity = MathF.Ceiling(((float)(prosperityGoodsAmmount * stealQuantity / 100)));
+                int lootQuantity = MathF.Ceiling(((float)(ammountFromProsperity * goodsQuantity / 100)));
                 int cheapestAnimalValue = 50;       //used to pick the cheapest animal availiable first
 
                 while (lootQuantity > 0 && settlement.ItemRoster.Count > 0)
@@ -142,138 +276,25 @@ namespace xxKleptomania
             }
         }
 
-        public void IncreaseRecentStealPenalty(IFaction faction)
-        {
-            try     //AddRecentStealPenalty(IFaction faction)
-            {
-                int updatedValue = 10;
-                if (this._recentFactionStealAttemptPenalty.ContainsKey(faction))
-                {
-                    this._recentFactionStealAttemptPenalty.TryGetValue(faction, out updatedValue);
-                    updatedValue += 10;
-                    this._recentFactionStealAttemptPenalty.Remove(faction);
-                    this._recentFactionStealAttemptPenalty.Add(faction, updatedValue);
-
-                    if (KleptomaniaSubModule.settings.DebugInfo)
-                    {
-                        InformationManager.DisplayMessage(new InformationMessage("Increased " + faction.Name + " recent steal penalty to " + updatedValue, Colors.Yellow));
-                    }
-                    KleptomaniaSubModule.Log.Info("Stealing | Increased " + faction.Name + " recent steal penalty to " + updatedValue);
-                }
-                else
-                {
-                    this._recentFactionStealAttemptPenalty.Add(faction, updatedValue);
-
-                    if (KleptomaniaSubModule.settings.DebugInfo)
-                    {
-                        InformationManager.DisplayMessage(new InformationMessage("Added " + faction.Name + " to recent steal penalty dictionary and increased by " + updatedValue, Colors.Yellow));
-                    }
-                    KleptomaniaSubModule.Log.Info("Stealing | Added " + faction.Name + " to recent steal penalty dictionary and increased by " + updatedValue);
-                }
-            }
-            catch (Exception ex)
-            {
-                InformationManager.DisplayMessage(new InformationMessage("Kleptomania: An error occured adding settlement to recent steal attempts. Check the Log file.", Colors.Red));
-                KleptomaniaSubModule.Log.Info("Stealing | Exception in AddRecentStealPenalty: " + ex.Message);
-            }
-        }
-
-        public void DetectionConsequence(Settlement settlement)
-        {
-            try
-            {
-                int stealRelationPenalty = KleptomaniaSubModule.settings.StealRelationPenalty;
-                float currentTownStealCrimeRating = KleptomaniaSubModule.settings.TownStealCrimeRating;
-                float currentVillageStealCrimeRating = KleptomaniaSubModule.settings.VillageStealCrimeRating;
-
-                if (Hero.MainHero.MapFaction != null && settlement.MapFaction != null)
-                {
-                    if (Hero.MainHero.MapFaction == settlement.MapFaction)     //if from player faction: realtion penalty x2, decreases relation with players faction leader
-                    {
-                        stealRelationPenalty *= 2;
-                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, settlement.MapFaction.Leader, stealRelationPenalty, true);
-                        KleptomaniaSubModule.Log.Info("Stealing | Faction Leader Hero " + settlement.MapFaction.Leader.Name + "decreases relation with player by " + stealRelationPenalty.ToString());
-                    }
-                }
-
-                if (settlement.OwnerClan.Leader != null)
-                {
-                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, settlement.OwnerClan.Leader, stealRelationPenalty, true);        //decreases relation with settlement owner
-
-                    KleptomaniaSubModule.Log.Info("Stealing | Settlement owner Hero " + settlement.OwnerClan.Leader.Name + "decreases relation with player by " + stealRelationPenalty.ToString());
-                }
-
-                if (settlement.Notables != null)
-                {
-                    foreach (Hero notableHero in settlement.Notables)     //decreases relation with notables
-                    {
-                        if (notableHero != null)
-                        {
-                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, notableHero, stealRelationPenalty, true);
-                            KleptomaniaSubModule.Log.Info("Stealing | Notable Hero " + notableHero.Name + "decreases relation with player by " + stealRelationPenalty.ToString());
-                        }
-                    }
-                }
-
-                if (settlement.IsTown)
-                {
-                    if (settlement.MapFaction.MainHeroCrimeRating + currentTownStealCrimeRating <= 60)   //this if forces to never give more crime rating than 60. fixes a bug that crashes when the faction declares war while on menu.
-                    {
-                        ChangeCrimeRatingAction.Apply(settlement.MapFaction, currentTownStealCrimeRating, true);
-                        KleptomaniaSubModule.Log.Info("Stealing | Faction " + settlement.MapFaction.Name + " crime rating increases with player by " + currentTownStealCrimeRating.ToString());
-                        
-                    }
-                    else
-                    {
-                        float maxCrimeRating = 60 - settlement.MapFaction.MainHeroCrimeRating;
-                        if (maxCrimeRating > 0)
-                        {
-                            ChangeCrimeRatingAction.Apply(settlement.MapFaction, maxCrimeRating, true);
-                            KleptomaniaSubModule.Log.Info("Stealing | Faction " + settlement.MapFaction.Name + " crime rating increases with player by " + maxCrimeRating.ToString());
-                        }
-                    }
-                }
-                else if (settlement.IsVillage)
-                {
-                    if (settlement.MapFaction.MainHeroCrimeRating + currentVillageStealCrimeRating <= 60)   //this if forces to never give more crime rating than 60. fixes a bug that crashes when the faction declares war while on menu.
-                    {
-                        ChangeCrimeRatingAction.Apply(settlement.MapFaction, currentVillageStealCrimeRating, true);
-                        KleptomaniaSubModule.Log.Info("Stealing | Faction " + settlement.Name + " crime rating increases with player by " + currentVillageStealCrimeRating.ToString());
-                    }
-                    else
-                    {
-                        float maxCrimeRating = 60 - settlement.MapFaction.MainHeroCrimeRating;
-                        if (maxCrimeRating > 0)
-                        {
-                            ChangeCrimeRatingAction.Apply(settlement.MapFaction, maxCrimeRating, true);
-                            KleptomaniaSubModule.Log.Info("Stealing | Faction " + settlement.MapFaction.Name + " crime rating increases with player by " + maxCrimeRating.ToString());
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                InformationManager.DisplayMessage(new InformationMessage("Kleptomania: An error occured adding consequences for detection. Check the Log file.", Colors.Red));
-                KleptomaniaSubModule.Log.Info("Stealing | Exception in DetectionConsequence: " + ex.Message);
-            }
-        }
-
         private void AddTownStealMenu(CampaignGameStarter campaignGameStarter)     
         {
             try
             {
-                //Game Menus
-                campaignGameStarter.AddGameMenu("town_steal", "{TOWN_STEAL_INTRO}  \n{SETTLEMENT_STEAL_INTRO_CONSEQUENCE}", this.game_menu_steal_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
-                campaignGameStarter.AddGameMenu("town_steal_receive", "{SETTLEMENT_STEAL_RECEIVE}  \n{SETTLEMENT_STEAL_RECEIVE_DETECT}  \n  {SETTLEMENT_STEAL_RECEIVE_LOOT}", this.game_menu_steal_receive_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
-                campaignGameStarter.AddWaitGameMenu("town_steal_wait", "{SETTLEMENT_STEAL_WAIT}  \n  {SETTLEMENT_STEAL_WAIT_DETECTION}  \n  {SETTLEMENT_STEAL_WAIT_MIN_GOODS}", this.game_menu_steal_wait_on_init, this.game_menu_steal_wait_on_condition, this.game_menu_steal_wait_on_consequence, this.game_menu_steal_wait_on_tick, GameMenu.MenuAndOptionType.WaitMenuHideProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 0f, GameMenu.MenuFlags.none, null);
-
-
-                //Game Menu Options
                 campaignGameStarter.AddGameMenuOption("town", "town_steal", "Steal supplies from the traders.", this.game_menu_steal_on_condition, this.game_menu_steal_on_consequence, false, 10, false);
+
+                campaignGameStarter.AddGameMenu("town_steal", "{TOWN_STEAL_INTRO}  \n{SETTLEMENT_STEAL_INTRO_CONSEQUENCE}", this.game_menu_steal_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
                 campaignGameStarter.AddGameMenuOption("town_steal", "town_steal_atempt", "Look for opportunities to steal supplies.", this.game_menu_steal_atempt_on_condition, this.game_menu_steal_atempt_on_consequence, false, 1, false);
                 campaignGameStarter.AddGameMenuOption("town_steal", "town_steal_back", "Leave.", this.game_menu_steal_leave_on_condition, this.game_menu_steal_leave_on_consequence, false, -1, false);
+
+                campaignGameStarter.AddWaitGameMenu("town_steal_wait", "{SETTLEMENT_STEAL_WAIT}  \n  {SETTLEMENT_STEAL_WAIT_DETECTION}  \n  {SETTLEMENT_STEAL_WAIT_MIN_GOODS}", this.game_menu_steal_wait_on_init, this.game_menu_steal_wait_on_condition, this.game_menu_steal_wait_on_consequence, this.game_menu_steal_wait_on_tick, GameMenu.MenuAndOptionType.WaitMenuHideProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 0f, GameMenu.MenuFlags.none, null);
                 campaignGameStarter.AddGameMenuOption("town_steal_wait", "town_steal_wait_back", "Forget it.", this.game_menu_steal_leave_on_condition, this.game_menu_steal_leave_on_consequence, false, -1, false);
-                campaignGameStarter.AddGameMenuOption("town_steal_receive", "town_steal_loot", "Loot the supplies.", this.game_menu_steal_receive_on_condition, this.game_menu_steal_receive_on_consequence, false, -1, false);
+
+                campaignGameStarter.AddGameMenu("town_steal_receive", "{SETTLEMENT_STEAL_RECEIVE}  \n{SETTLEMENT_STEAL_RECEIVE_DETECT}  \n  {SETTLEMENT_STEAL_RECEIVE_LOOT}", this.game_menu_steal_receive_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
+                campaignGameStarter.AddGameMenuOption("town_steal_receive", "town_steal_loot", "Take away the supplies.", this.game_menu_steal_receive_on_condition, this.game_menu_steal_receive_on_consequence, false, -1, false);
+                campaignGameStarter.AddGameMenuOption("town_steal_receive", "town_steal_encounter_bribe", "Here, some denars will shut you up. "+KleptomaniaSubModule.settings.EncounterBribeCost+"{GOLD_ICON}", this.game_menu_steal_encounter_bribe_on_condition, this.game_menu_steal_encounter_bribe_on_consequence, false, 0, false);
+                campaignGameStarter.AddGameMenuOption("town_steal_receive", "town_steal_encounter_influence", "Do you even know who I am? "+KleptomaniaSubModule.settings.EncounterInfluenceCost + " Influence", this.game_menu_steal_encounter_influence_on_condition, this.game_menu_steal_encounter_influence_on_consequence, false, 1, false);
+                campaignGameStarter.AddGameMenuOption("town_steal_receive", "town_steal_encounter_threat", "Don't mess with gang business, or else...", this.game_menu_steal_encounter_threat_on_condition, this.game_menu_steal_threat_on_consequence, false, 2, false);
+                campaignGameStarter.AddGameMenuOption("town_steal_receive", "town_steal_encounter_giveback", "Fine, you can have all the supplies back.", this.game_menu_steal_encounter_giveback_on_condition, this.game_menu_steal_giveback_on_consequence, false, 3, false);
 
                 KleptomaniaSubModule.Log.Info("Behaviour intialization | Sucessfully added Town Steal Menus");
                 if (KleptomaniaSubModule.settings.DebugInfo)
@@ -292,18 +313,21 @@ namespace xxKleptomania
         {
             try
             {
-                //Game Menus
-                campaignGameStarter.AddGameMenu("village_steal", "{VILLAGE_STEAL_INTRO}  \n{SETTLEMENT_STEAL_INTRO_CONSEQUENCE}", this.game_menu_steal_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
-                campaignGameStarter.AddGameMenu("village_steal_receive", "{SETTLEMENT_STEAL_RECEIVE}  \n{SETTLEMENT_STEAL_RECEIVE_DETECT}  \n  {SETTLEMENT_STEAL_RECEIVE_LOOT}", this.game_menu_steal_receive_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
-                campaignGameStarter.AddWaitGameMenu("village_steal_wait", "{SETTLEMENT_STEAL_WAIT}  \n  {SETTLEMENT_STEAL_WAIT_DETECTION}  \n  {SETTLEMENT_STEAL_WAIT_MIN_GOODS}", this.game_menu_steal_wait_on_init, this.game_menu_steal_wait_on_condition, this.game_menu_steal_wait_on_consequence, this.game_menu_steal_wait_on_tick, GameMenu.MenuAndOptionType.WaitMenuHideProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 0f, GameMenu.MenuFlags.none, null);
-
-
-                //Game Menu Options
                 campaignGameStarter.AddGameMenuOption("village", "village_steal", "Steal supplies from the peasants.", this.game_menu_steal_on_condition, this.game_menu_steal_on_consequence, false, 6, false);
+
+                campaignGameStarter.AddGameMenu("village_steal", "{VILLAGE_STEAL_INTRO}  \n{SETTLEMENT_STEAL_INTRO_CONSEQUENCE}", this.game_menu_steal_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
                 campaignGameStarter.AddGameMenuOption("village_steal", "village_steal_atempt", "Look for opportunities to steal supplies.", this.game_menu_steal_atempt_on_condition, this.game_menu_steal_atempt_on_consequence, false, 1, false);
                 campaignGameStarter.AddGameMenuOption("village_steal", "village_steal_back", "Leave.", this.game_menu_steal_leave_on_condition, this.game_menu_steal_leave_on_consequence, false, -1, false);
+
+                campaignGameStarter.AddWaitGameMenu("village_steal_wait", "{SETTLEMENT_STEAL_WAIT}  \n  {SETTLEMENT_STEAL_WAIT_DETECTION}  \n  {SETTLEMENT_STEAL_WAIT_MIN_GOODS}", this.game_menu_steal_wait_on_init, this.game_menu_steal_wait_on_condition, this.game_menu_steal_wait_on_consequence, this.game_menu_steal_wait_on_tick, GameMenu.MenuAndOptionType.WaitMenuHideProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 0f, GameMenu.MenuFlags.none, null);
                 campaignGameStarter.AddGameMenuOption("village_steal_wait", "village_steal_wait_back", "Forget it.", this.game_menu_steal_leave_on_condition, this.game_menu_steal_leave_on_consequence, false, -1, false);
-                campaignGameStarter.AddGameMenuOption("village_steal_receive", "village_steal_loot", "Loot the supplies.", this.game_menu_steal_receive_on_condition, this.game_menu_steal_receive_on_consequence, false, -1, false);
+
+                campaignGameStarter.AddGameMenu("village_steal_receive", "{SETTLEMENT_STEAL_RECEIVE}  \n{SETTLEMENT_STEAL_RECEIVE_DETECT}  \n  {SETTLEMENT_STEAL_RECEIVE_LOOT}", this.game_menu_steal_receive_on_init, GameOverlays.MenuOverlayType.SettlementWithCharacters, GameMenu.MenuFlags.none, null);
+                campaignGameStarter.AddGameMenuOption("village_steal_receive", "village_steal_loot", "Take away the supplies.", this.game_menu_steal_receive_on_condition, this.game_menu_steal_receive_on_consequence, false, -1, false);
+                campaignGameStarter.AddGameMenuOption("village_steal_receive", "village_steal_encounter_bribe", "Here, some denars will shut you up. " + KleptomaniaSubModule.settings.EncounterBribeCost + "{GOLD_ICON}", this.game_menu_steal_encounter_bribe_on_condition, this.game_menu_steal_encounter_bribe_on_consequence, false, 0, false);
+                campaignGameStarter.AddGameMenuOption("village_steal_receive", "village_steal_encounter_influence", "Do you even know who I am? " + KleptomaniaSubModule.settings.EncounterInfluenceCost + " Influence", this.game_menu_steal_encounter_influence_on_condition, this.game_menu_steal_encounter_influence_on_consequence, false, 1, false);
+                campaignGameStarter.AddGameMenuOption("village_steal_receive", "village_steal_encounter_threat", "Don't mess with gang business, or else...", this.game_menu_steal_encounter_threat_on_condition, this.game_menu_steal_threat_on_consequence, false, 2, false);
+                campaignGameStarter.AddGameMenuOption("village_steal_receive", "village_steal_encounter_giveback", "Fine, you can have all the supplies back.", this.game_menu_steal_encounter_giveback_on_condition, this.game_menu_steal_giveback_on_consequence, false, 3, false);
 
                 KleptomaniaSubModule.Log.Info("Behaviour intialization | Sucessfully added Village Steal Menus");
                 if (KleptomaniaSubModule.settings.DebugInfo)
@@ -317,7 +341,7 @@ namespace xxKleptomania
                 KleptomaniaSubModule.Log.Error("Error on adding StealSuppliesBehaviour for Villages | " + ex.Message);
             }
         }
-        
+
         //init
         private void game_menu_steal_on_init(MenuCallbackArgs args)
         {
@@ -363,7 +387,6 @@ namespace xxKleptomania
         {
             string detectionMsg;
             string minimunGoodsMsg;
-            bool hasHighCrimeRating = crimeModel.IsPlayerCrimeRatingSevere(Settlement.CurrentSettlement.MapFaction);
             bool isNight = CampaignTime.Now.IsNightTime;
             int detectionSkillBonus = MathF.Ceiling(Hero.MainHero.GetSkillValue(DefaultSkills.Roguery) / 5);
             int minimunGoodsSkillBonus = MathF.Ceiling(Hero.MainHero.GetSkillValue(DefaultSkills.Roguery) / 10);
@@ -374,7 +397,7 @@ namespace xxKleptomania
                 this._recentFactionStealAttemptPenalty.TryGetValue(Settlement.CurrentSettlement.MapFaction, out recentStealPenalty);
             }
 
-            currentDetectionChance = stealUtils.CalculateDetectionBonus(detectionSkillBonus, isNight, hasHighCrimeRating, recentStealPenalty);
+            currentDetectionChance = stealUtils.CalculateDetectionBonus(detectionSkillBonus, isNight, recentStealPenalty);
             currentMinimunGoods = stealUtils.CalculateLootBonus(minimunGoodsSkillBonus);            
 
             detectionMsg = "\n - " + stealUtils.TextPrefixFromValue(currentDetectionChance) + " chance of detection during the steal attempt (" + currentDetectionChance.ToString() + "% probability of detection).";
@@ -383,10 +406,6 @@ namespace xxKleptomania
             if (isNight)
             {
                 detectionMsg += "\n  * Night time bonus (-10%)  ";
-            }
-            if (hasHighCrimeRating)
-            {
-                detectionMsg += "\n  * High crime rating penalty (+20%)  ";
             }
             if (this._recentFactionStealAttemptPenalty.ContainsKey(Settlement.CurrentSettlement.MapFaction))
             {
@@ -417,7 +436,7 @@ namespace xxKleptomania
 
             if (isDetected)
             {
-                detectMsg = "\nAs you leave you hear someone yell at you: 'Thief!'. You run off as quickly as you can. ";
+                detectMsg = "\nAs you leave you hear someone yell at you: 'Thief!'. The peasant who caught you comes to to confront you. He says that will call the guards on you for stealling from the settlement storage.";
             }
             else
             {
@@ -429,11 +448,10 @@ namespace xxKleptomania
             MBTextManager.SetTextVariable("SETTLEMENT_STEAL_RECEIVE", "You were able to secure the supplies stolen from " + Settlement.CurrentSettlement.Name + "\n", false);
             MBTextManager.SetTextVariable("SETTLEMENT_STEAL_RECEIVE_DETECT", detectMsg, false);
             MBTextManager.SetTextVariable("SETTLEMENT_STEAL_RECEIVE_LOOT", lootMsg, false);
-
         }
 
-
         //condition
+
         private bool game_menu_steal_on_condition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.ForceToGiveGoods;      //Option icon
@@ -491,27 +509,104 @@ namespace xxKleptomania
 
         private bool game_menu_steal_receive_on_condition(MenuCallbackArgs args)
         {
-            args.optionLeaveType = GameMenuOption.LeaveType.ForceToGiveGoods;      //Option icon
+            args.optionLeaveType = GameMenuOption.LeaveType.Trade;      //Option icon
+            if (isDetected)
+            {
+                return false;
+            }
             return true;
         }
 
-        //on_tick
-        private void game_menu_steal_wait_on_tick(MenuCallbackArgs args, CampaignTime dt)
+        private bool game_menu_steal_encounter_bribe_on_condition(MenuCallbackArgs args)
         {
-            CampaignTime currentStealTime = CampaignTime.Now;
+            args.optionLeaveType = GameMenuOption.LeaveType.RansomAndBribe ;      //Option icon
 
-            if (currentStealTime.CompareTo(GoalStealTime) == 1)     //calls if in the future of the goal time
+            if (!isDetected)
             {
-                if (Settlement.CurrentSettlement.IsTown)
-                {
-                    GameMenu.SwitchToMenu("town_steal_receive");
-                }
-                else if (Settlement.CurrentSettlement.IsVillage)
-                {
-                    GameMenu.SwitchToMenu("village_steal_receive");
-                }
+                return false;
             }
+
+            int bribeCost = KleptomaniaSubModule.settings.EncounterBribeCost;
+
+            if (Hero.MainHero.Gold < bribeCost)     //change value
+            {
+                args.IsEnabled = false;
+                args.Tooltip = new TextObject("You dont have enough denars to bribe. ("+ bribeCost+")", null);
+            }
+
+            return true;
         }
+
+        private bool game_menu_steal_encounter_influence_on_condition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.Conversation;      //Option icon
+
+            if (!isDetected)
+            {
+                return false;
+            }
+
+            float influenceCost = KleptomaniaSubModule.settings.EncounterInfluenceCost; 
+
+            if(Hero.MainHero.Clan.Influence < influenceCost)
+            {
+                args.IsEnabled = false;
+                args.Tooltip = new TextObject("You dont have enough influence to spend. ("+ influenceCost + ")", null);
+            }
+
+            return true;
+        }
+
+        private bool game_menu_steal_encounter_threat_on_condition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.ForceToGiveGoods;      //Option icon
+
+            if (!isDetected)
+            {
+                return false;
+            }
+
+            int relationCost = 50;
+
+            if (Settlement.CurrentSettlement.Notables == null)
+            {
+                args.IsEnabled = false;
+                args.Tooltip = new TextObject("There is no Gang Leader notables in this settlement.", null);
+            }
+            else
+            {
+                foreach (Hero notableHero in Settlement.CurrentSettlement.Notables)
+                {
+                    if (notableHero.IsGangLeader && CharacterRelationManager.GetHeroRelation(Hero.MainHero, notableHero) > relationCost)
+                    {
+                        args.IsEnabled = true;
+                        return true;
+                    }
+                }
+                args.IsEnabled = false;
+                args.Tooltip = new TextObject("No Gang Leader notables in this settlmenet have a relation higher than " + relationCost + " with you.", null);
+            }
+            return true;
+        }
+
+        private bool game_menu_steal_encounter_giveback_on_condition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.Escape;      //Option icon
+
+            if (!isDetected)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        //private bool game_menu_steal_encounter_callguards_on_condition(MenuCallbackArgs args)
+        //{
+        //    args.optionLeaveType = GameMenuOption.LeaveType.Surrender;      //Option icon
+        //    return true;
+        //}
+
 
         //on_consequence
         private void game_menu_steal_on_consequence(MenuCallbackArgs args)
@@ -550,49 +645,62 @@ namespace xxKleptomania
 
         private void game_menu_steal_receive_on_consequence(MenuCallbackArgs args)
         {
-            Settlement currentSettlement = Settlement.CurrentSettlement;
+            OnStealAttempt(Settlement.CurrentSettlement,isDetected,prosperityGoodsAmmount,stealQuantity);
+        }
 
-            if (KleptomaniaSubModule.settings.DebugInfo)
-            {
-                InformationManager.DisplayMessage(new InformationMessage("Detectted = " + isDetected + ". Steal Quantity = " + stealQuantity, Colors.Yellow));
-            }
-            KleptomaniaSubModule.Log.Info("Stealing | Steal sucessfull. Quantity: " + stealQuantity.ToString() + " %. Detected: " + isDetected.ToString());
+        private void game_menu_steal_encounter_bribe_on_consequence(MenuCallbackArgs args)
+        {
+            GiveGoldAction.ApplyForCharacterToSettlement(Hero.MainHero, Settlement.CurrentSettlement, KleptomaniaSubModule.settings.EncounterBribeCost);
+            OnStealAttempt(Settlement.CurrentSettlement,isDetected, prosperityGoodsAmmount, stealQuantity);
+        }
 
-            if (currentSettlement.IsTown)
-            {
-                GameMenu.SwitchToMenu("town");
-                currentSettlement.Prosperity -= prosperityGoodsAmmount;
+        private void game_menu_steal_encounter_influence_on_consequence(MenuCallbackArgs args)
+        {
+            Hero.MainHero.AddInfluenceWithKingdom(-KleptomaniaSubModule.settings.EncounterInfluenceCost);
+            OnStealAttempt(Settlement.CurrentSettlement,isDetected, prosperityGoodsAmmount, stealQuantity);
+        }
 
-            }
-            else if (currentSettlement.IsVillage)
-            {
-                GameMenu.SwitchToMenu("village");
-                currentSettlement.Village.Hearth -= prosperityGoodsAmmount;
-            }
-            if (KleptomaniaSubModule.settings.DebugInfo)
-            {
-                InformationManager.DisplayMessage(new InformationMessage("Settlement Hearth / prosperity decreased by " + prosperityGoodsAmmount.ToString(), Colors.Yellow));
-            }
-            KleptomaniaSubModule.Log.Info("Stealing | Settlement " + currentSettlement.Name + " hearth/prosperity decreased by " + prosperityGoodsAmmount.ToString());
+        private void game_menu_steal_threat_on_consequence(MenuCallbackArgs args)
+        {
+            ChangeCrimeRatingAction.Apply(Settlement.CurrentSettlement.MapFaction, 5, true);
+            OnStealAttempt(Settlement.CurrentSettlement,isDetected, prosperityGoodsAmmount, stealQuantity);
+        }
 
-            IncreaseRecentStealPenalty(Settlement.CurrentSettlement.MapFaction);
-            if (isDetected)
+        private void game_menu_steal_giveback_on_consequence(MenuCallbackArgs args)
+        {
+            stealQuantity = 0;
+            OnStealAttempt(Settlement.CurrentSettlement,isDetected, prosperityGoodsAmmount, stealQuantity);
+        }
+
+        //private void game_menu_steal_encounter_callguards_on_consequence(MenuCallbackArgs args)
+        //{
+        //    PartyBase.MainParty.AddElementToMemberRoster(CharacterObject.PlayerCharacter, -1, true);
+        //    TakePrisonerAction.Apply(Settlement.CurrentSettlement.Party, Hero.MainHero);        //doesnt work. crashes and its a dumb solution
+        //}
+
+
+        //on_tick
+        private void game_menu_steal_wait_on_tick(MenuCallbackArgs args, CampaignTime dt)
+        {
+            CampaignTime currentStealTime = CampaignTime.Now;
+
+            if (currentStealTime.CompareTo(GoalStealTime) == 1)     //calls if in the future of the goal time
             {
-                DetectionConsequence(Settlement.CurrentSettlement);
-                if (this._settlementLastStealDetectionTimeDictionary != null)
+                if (Settlement.CurrentSettlement.IsTown)
                 {
-                    _settlementLastStealDetectionTimeDictionary.Add(Settlement.CurrentSettlement.StringId, CampaignTime.Now);
+                    GameMenu.SwitchToMenu("town_steal_receive");
+                }
+                else if (Settlement.CurrentSettlement.IsVillage)
+                {
+                    GameMenu.SwitchToMenu("village_steal_receive");
                 }
             }
-
-            LootStolenGoods(currentSettlement);
-            stealUtils.GiveRogueryXp(Hero.MainHero);
         }
 
         public Dictionary<string, CampaignTime> _settlementLastStealDetectionTimeDictionary = new Dictionary<string, CampaignTime>();
         public Dictionary<IFaction, int> _recentFactionStealAttemptPenalty = new Dictionary<IFaction, int>();
         private StealSuppliesUtils stealUtils = new StealSuppliesUtils();
-        DefaultCrimeModel crimeModel = new DefaultCrimeModel();
+ 
 
         int prosperityGoodsAmmount=0;
         CampaignTime GoalStealTime;
