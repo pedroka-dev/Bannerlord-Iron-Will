@@ -117,6 +117,7 @@ For now, only the player can interact with the steal menus.
 ![alt text](https://staticdelivery.nexusmods.com/mods/3174/images/1997/1997-1597096891-131847187.jpeg) 
   
 # Modifiers 
+<details>
 There are some conditions that can change the outcome of a steal attempt. To have the best outcome, you have to try to get as much bonuses and as little penalties as you can. Remember, some of these values are configurable at xxKleptomaniaSettings.xml.
 
 *Probability of detection (75% by default. Less = Good)*
@@ -130,16 +131,17 @@ There are some conditions that can change the outcome of a steal attempt. To hav
  *Minimun ammount of Goods (30% by default. More = Good)*
    - Current Bonuses:
     - Roguery Skill (max bonus is 30%) = +(SkillLevel / 10)% 
- 
+ </details>
  
  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/steal%20from%20town%20thumbnail.jpg)
  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/steal%20from%20villages%20thumbnail.jpg)
  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/different%20results%20thumbnail.jpg)
  
 # Results and Consequences
+<details>
 Remember: there is always a risk. Once the Modifiers have been calculated and you have waited long enough to find a steal opportunity at the settlement, two Random numbers from 1 to 100 will be created. Think about this like two d100, dices with 100 faces being thrown. These values will be used to calcule your steal result.
 
-*For the detection check*, if the value are smaller than your "probability of detection" modifier you get detected while stealling. If you get detected, you will receive some consequences like:
+*For the detection check*, if the value are smaller than your "Detection Chance" modifier you get detected while stealling. If you get detected, you will receive some consequences like:
   - Criminal rating with faction (25 for towns and 20 for villages by default)
   - Decreases relationship with settlement notables (-15 by default, 2x if the player is from the same faction)
   - Decreases relationship with settlement owner (-15 by default, 2x if the player is from the same faction)
@@ -150,6 +152,7 @@ Remember: there is always a risk. Once the Modifiers have been calculated and yo
   - Decreases settlement prosperity / hearth.
   - Subtract items from the settlement item pool.  (Be careful to not steal from settlement without any items, or you might get nothing.)
   - Roguery XP thats scales with Learning Rate. Current: 20 * learningRateBonus.
+</details>
 
  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/dynamic%20loot%20thumbnail.jpg)
  
