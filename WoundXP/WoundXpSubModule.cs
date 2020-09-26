@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using System.Xml.Serialization;
 using HarmonyLib;
+using MCM.Abstractions.Settings.Providers;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
