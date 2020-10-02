@@ -79,6 +79,14 @@ v1.2.0:
   - Generic Troop XP scales with troop tier. Current: xpValue * (troop.Tier +1)
   - Player can change to not show received XP of heroes and troops on the console (_Requested by NexusMod user dungeons0_)
   - Compatibility with game version Bannerlord Beta Branch e1.4.3
+  
+  v1.4.0
+  - Minor code refactor
+  - Added soft mod compatibility with Mod Configuration Menu v3(MCM)
+  - If the player haves MCM, the code will now load stored info from MCM and then override XML file on startup .
+  - If the player doesnt have MCM, the code will deserialize the settings from the XML like usual on startup.
+  - Fixed some crashes for e1.5.2 and above
+  
 </details>
 
 ---
@@ -187,4 +195,18 @@ v1.1.1
  - Decreased default VillageStealCrimeRating from 30 to 20. Makes stealling more viable.
  - TownStealCrimeRating and VillageStealCrimeRating cant go above 60 (fixes crash)
  - Substantial code refactor and more try catches, to understand any future exceptions
+ 
+v1.2.0
+- MAJOR code refator to prevent future bugs and crashes
+- Added soft mod compatibility with Mod Configuration Menu v3(MCM)
+- If the player haves MCM, the code will now load stored info from MCM and then override XML file on startup .
+- If the player doesnt have MCM, the code will deserialize the settings from the XML like usual on startup.
+- Fixed a bug that made Consecutive Steal Penalty not affect detection chance modifiers
+- Fixed a bug that gave relationship penalty to Settlement's Gang Leaders Notables on detection. This was not supposed to happen.
+- Removed TownStealCrimeRating and VillageStealCrimeRating max of 60
+- Removed unecessary penalty for high crime rating
+- No penalty to prosperity / hearth if there is no steal quantity
+- Added encounter game menu when detected. The player can either bribe, persuade, call friendly gang leader support or give back. 
+- Persuade and Bribe values are configurable (XML file or MCM)
+
 </details>
