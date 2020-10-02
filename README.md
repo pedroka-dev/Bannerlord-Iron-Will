@@ -89,6 +89,10 @@ v1.2.0:
   
 </details>
 
+![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/WoundXP/Thumbnails/woundxp%20inspiration%20header.JPG)
+
+*Kenshi, one of the major creative influences for this mod series.*
+
 ---
   
 # Iron Will - Kleptomania
@@ -210,3 +214,8 @@ v1.2.0
 - Persuade and Bribe values are configurable (XML file or MCM)
 
 </details>
+
+![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/kleptomania%20inspiration%20header.JPG)
+
+*Kenshi, one of the major creative influences for this mod series.*
+
