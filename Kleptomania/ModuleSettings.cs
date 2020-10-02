@@ -26,8 +26,6 @@ namespace xxKleptomania
         public override string FolderName { get; } = "xxKleptomania";
         public string LogFileTarget { get; } = "KleptomaniaLogFile";
 
-        // DebugInfo = false , BaseDetectionChance = 75 , BaseMinimunGoods = 30 , HoursWaitingToSteal = 4 , 
-        // TownStealCrimeRating = 35f , VillageStealCrimeRating = 30f, StealRelationPenalty = -15 , EncounterBribeCost = 150, EncounterInfluenceCost = 2
 
         private bool _debugInfo = false;
         private int _baseDetectionChance = 75;
