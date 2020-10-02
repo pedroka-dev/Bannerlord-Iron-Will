@@ -19,6 +19,8 @@ This decreases the grind for upgrading low tier troops and actually rewards the 
 
 The mod works not only for the player, but for any mobile NPC parties too! That's right, even for the poor and dirty Looters! It only show as a message for the player character, his companions and owned troops by default.
 
+This mod is compatible with the amazing [Mod Configuration Menu (MCM)](https://www.nexusmods.com/mountandblade2bannerlord/mods/612) by [Aragasas](https://www.nexusmods.com/mountandblade2bannerlord/users/2355906). This is a SOFT dependency and thus entirely optional but highly recommended. 
+
 # Download and Links
 
   - [Iron Will - Wound Experience Nexus Mods page](https://www.nexusmods.com/mountandblade2bannerlord/mods/1797)
@@ -32,10 +34,11 @@ The mod works not only for the player, but for any mobile NPC parties too! That'
     - Generic Troop XP scales with troop tier. Current: xpValue * (troop.Tier +1). (can be turned off)
   - Player Character, Companions and Owned troops received XP appears in the ingame console. (can be turned off)
   - Works globally to all troops in game, both in battle and campaing map.
-  - Configurable Experience value for Heroes and  Generic Troops at "xxWoundXPSettings.xml". 
+  - Optional in-game configurable values with Mod Configuration Menu (MCM). This is a soft dependency.
+  - Configurable Experience value for Heroes and  Generic Troops at "xxWoundXPSettings.xml". (note: MCM configuration takes priority and overrides this file)
   - NLogger for debugging reasons at "WoundExperienceLog.txt".
   - Only valid for **real** battles, so you can't cheese it by getting wounded in tournaments and arenas heh.
-
+# Settings
   
   ![alt text](https://github.com/pedro-ca/bannerlord_iron_will/blob/master/WoundXP/Thumbnails/heroe%20athletic%20exp%20example.JPG?raw=true)
   
@@ -46,11 +49,19 @@ The mod works not only for the player, but for any mobile NPC parties too! That'
   ![alt text](https://github.com/pedro-ca/bannerlord_iron_will/blob/master/WoundXP/Thumbnails/Configurable%20xp%20example.JPG?raw=true)
   
   ![alt text](https://github.com/pedro-ca/bannerlord_iron_will/blob/master/WoundXP/Thumbnails/debug%20on%20example.JPG?raw=trueG)
-  
+ 
 
 # To-do
-  - Configurable values in game, with implementation of optional configuration menu with [mildeww's ModLib](https://www.nexusmods.com/mountandblade2bannerlord/mods/592)
-  
+The mod is pretty much done :D
+There might be some minor tweaks/bug fixes here and there in the future.
+
+# Custom Configurations
+Downloading [Mod Configuration Menu (MCM)](https://www.nexusmods.com/mountandblade2bannerlord/mods/612) by [Aragasas](https://www.nexusmods.com/mountandblade2bannerlord/users/2355906) is highly recommended for best quality of life by changing mod settings in game. This is a SOFT dependency and thus entirely optional by the player. MCM settings takes priority before the XML settings file. So if the player haves MCM, the code will load stored info from MCM and then override XML file on startup every time.
+
+![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/WoundXP/Thumbnails/woundxp%20mcm%20screen.jpg)
+
+However, if you choose to not install Mod Configuration Menu for some reason / imcompatibility, you can change the desired values of "xxWoundXPSettings.xml
+". In this case during startup, the settings loads from the XML at "\Mount & Blade II Bannerlord\Modules\xxWoundXp\xxWoundXPSettings.xml".
   
 # Compatibility
 Currently tested and working with e.1.4.2 and e1.4.3 version. Should be compatible with most mods.
@@ -107,6 +118,8 @@ Keep in mind Stealing is different from the Native's Hostile Action "Force Peasa
 
 For now, only the player can interact with the steal menus.
 
+This mod is compatible with the amazing [Mod Configuration Menu (MCM)](https://www.nexusmods.com/mountandblade2bannerlord/mods/612) by [Aragasas](https://www.nexusmods.com/mountandblade2bannerlord/users/2355906). This is a SOFT dependency and thus entirely optional but highly recommended. 
+
 ![alt text](https://staticdelivery.nexusmods.com/mods/3174/images/1997/1997-1596763421-1876725097.jpeg) 
 
 # Download and Links
@@ -123,14 +136,15 @@ For now, only the player can interact with the steal menus.
   - Dynammic minimun received ammount of goods (Skill Check with modifiers).
   - Max ammount of availiable goods scales with settlement prosperity / hearth.
   - On steal, decreases settlement prosperity / hearth, affects the settlement loot pool and increase detection for consecutive steals atempt of the same Faction.
-  - Configurable Steal modifiers and default values at "xxKleptomaniaSettings.xml".
+  - Optional in-game configurable values with Mod Configuration Menu (MCM). This is a soft dependency.
+  - Configurable Experience value for Heroes and  Generic Troops at "xxWoundXPSettings.xml". (note: MCM configuration takes priority and overrides this file)
   - NLogger for debugging reasons at "KleptomaniaLog.txt".
   
 ![alt text](https://staticdelivery.nexusmods.com/mods/3174/images/1997/1997-1597096891-131847187.jpeg) 
   
 # Modifiers 
 <details>
-There are some conditions that can change the outcome of a steal attempt. To have the best outcome, you have to try to get as much bonuses and as little penalties as you can. Remember, some of these values are configurable at xxKleptomaniaSettings.xml.
+There are some conditions that can change the outcome of a steal attempt. To have the best outcome, you have to try to get as much bonuses and as little penalties as you can.
 
 *Probability of detection (75% by default. Less = Good)*
   - Current Bonuses:
@@ -169,10 +183,19 @@ Remember: there is always a risk. Once the Modifiers have been calculated and yo
  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/dynamic%20loot%20thumbnail.jpg)
  
 # To-do
- - Chance of an "encounter" on detection.
+ - Pickpocketing 
+ - Stealing from rich traders house
  - Bonus to detection and minimun goods from the party's best Bandit troops.
  - Stolen good fencing (aka not being able to sell to settlement it was stolen from).
- - Implementation of optional configuration menu with mildeww's ModLib
+ 
+ # Custom Configurations
+Downloading [Mod Configuration Menu (MCM)](https://www.nexusmods.com/mountandblade2bannerlord/mods/612) by [Aragasas](https://www.nexusmods.com/mountandblade2bannerlord/users/2355906) is highly recommended for best quality of life by changing mod settings in game. This is a SOFT dependency and thus entirely optional by the player. MCM settings takes priority before the XML settings file. So if the player haves MCM, the code will load stored info from MCM and then override XML file on startup every time.
+
+![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/kleptomania%20mcm%20screen.jpg)
+
+However, if you choose to not install Mod Configuration Menu for some reason / imcompatibility, you can change the desired values of "xxKleptomaniaSettings.xml
+". In this case during startup, the settings loads from the XML at "\Mount & Blade II Bannerlord\Modules\xxKleptomania\xxKleptomaniaSettings.xml".
+
 
 # Compatibility
 Currently tested and working with e.1.4.3 version. 
