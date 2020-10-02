@@ -30,16 +30,26 @@ namespace xxWoundXP
             };
             loggingConfiguration.AddRule(LogLevel.Debug, LogLevel.Fatal, target, "*");
             LogManager.Configuration = loggingConfiguration;
-
+            
             try
             {
-                if (!File.Exists(settings.SettingsFilePath))
+                if (BaseSettingsProvider.Instance != null)
                 {
+                    Log.Info("Module intialization | Settings initialized sucessfully. Using MCM Config.");
+                    settings = ModuleSettings.Instance;
                     SerializeSettings(settings.SettingsFilePath);
                 }
+                else
+                {
+                    if (!File.Exists(settings.SettingsFilePath))
+                    {
+                        SerializeSettings(settings.SettingsFilePath);
+                    }
 
-                settings = DeserializeSettings(settings.SettingsFilePath);
-                Log.Info("Module intialization | Settings initialized sucessfully.");
+                    settings = DeserializeSettings(settings.SettingsFilePath);
+                    Log.Info("Module intialization | Settings initialized sucessfully. Using XML Config.");
+                    
+                }
             }
             catch (Exception ex)
             {
