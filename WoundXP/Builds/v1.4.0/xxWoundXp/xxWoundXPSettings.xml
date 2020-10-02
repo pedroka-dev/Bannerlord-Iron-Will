@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModuleSettings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DebugInfo>false</DebugInfo>
+  <ScalableSkillXp>true</ScalableSkillXp>
+  <ReceivedXpInConsole>true</ReceivedXpInConsole>
+  <TroopWoundXpValue>40</TroopWoundXpValue>
+  <HeroWoundXpValue>40</HeroWoundXpValue>
+</ModuleSettings>

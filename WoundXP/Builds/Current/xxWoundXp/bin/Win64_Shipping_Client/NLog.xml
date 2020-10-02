@@ -4653,7 +4653,7 @@
         </member>
         <member name="M:NLog.Fluent.Log.Level(NLog.LogLevel,System.String)">
             <summary>
-            Starts building a log event with the specified <see cref="T:NLog.LogLevel" />.
+            Starts building a log event with the specified <see cref="T:System.LogLevel" />.
             </summary>
             <param name="logLevel">The log level.</param>
             <param name="callerFilePath">The full path of the source file that contains the caller. This is the file path at the time of compile.</param>
@@ -16306,6 +16306,11 @@
             <param name="disposing"><c>True</c> to release both managed and unmanaged resources;
             <c>false</c> to release only unmanaged resources.</param>
         </member>
+        <member name="M:NLog.LogFactory.Shutdown">
+            <summary>
+            Dispose all targets, and shutdown logging.
+            </summary>
+        </member>
         <member name="M:NLog.LogFactory.GetCandidateConfigFilePaths">
             <summary>
             Get file paths (including filename) for the possible NLog config files. 
@@ -23537,6 +23542,12 @@
             </summary>
             <docgen category='Parameter Options' order='9' />
         </member>
+        <member name="P:NLog.Targets.DatabaseParameterInfo.AllowDbNull">
+            <summary>
+            Gets or sets whether empty value should translate into DbNull. Requires database column to allow NULL values.
+            </summary>
+            <docgen category='Parameter Options' order='8' />
+        </member>
         <member name="T:NLog.Targets.DatabaseTarget">
             <summary>
             Writes log messages to the database using an ADO.NET provider.
@@ -23836,12 +23847,10 @@
             <param name="logEvent">Current logevent.</param>
             <param name="parameterInfo">Parameter configuration info.</param>
         </member>
-        <member name="M:NLog.Targets.DatabaseTarget.CreateDefaultValue(System.Type)">
+        <member name="M:NLog.Targets.DatabaseTarget.CreateDefaultValue(System.Type,System.Boolean)">
             <summary>
             Create Default Value of Type
             </summary>
-            <param name="dbParameterType"></param>
-            <returns></returns>
         </member>
         <member name="T:NLog.Targets.DateAndSequenceArchive">
             <summary>

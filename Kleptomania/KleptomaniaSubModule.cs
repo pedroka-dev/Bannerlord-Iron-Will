@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using MCM.Abstractions.Settings.Providers;
+using NLog;
 using NLog.Config;
 using NLog.Fluent;
 using NLog.Targets;
@@ -31,17 +32,27 @@ namespace xxKleptomania
 
             try
             {
-                if (!File.Exists(settings.SettingsFilePath))
+                if (BaseSettingsProvider.Instance != null)
                 {
+                    Log.Info("Module intialization | Settings initialized sucessfully. Using MCM Config.");
+                    settings = ModuleSettings.Instance;
                     SerializeSettings(settings.SettingsFilePath);
                 }
+                else
+                {
+                    if (!File.Exists(settings.SettingsFilePath))
+                    {
+                        SerializeSettings(settings.SettingsFilePath);
+                    }
 
-                settings = DeserializeSettings(settings.SettingsFilePath);
-                Log.Info("Module intialization | Settings initialized sucessfully.");
+                    settings = DeserializeSettings(settings.SettingsFilePath);
+                    Log.Info("Module intialization | Settings initialized sucessfully. Using XML Config.");
+
+                }
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to Serialize/Deserialize for " + settings.SettingsFilePath); 
+                Log.Error(ex, "Failed to Serialize/Deserialize for " + settings.SettingsFilePath); ;
             }
         }
 
