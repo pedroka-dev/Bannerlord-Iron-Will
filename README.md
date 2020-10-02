@@ -53,6 +53,7 @@ This mod is compatible with the amazing [Mod Configuration Menu (MCM)](https://w
 
 # To-do
 The mod is pretty much done :D
+
 There might be some minor tweaks/bug fixes here and there in the future.
 
 # Custom Configurations
@@ -60,7 +61,7 @@ Downloading [Mod Configuration Menu (MCM)](https://www.nexusmods.com/mountandbla
 
 ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/WoundXP/Thumbnails/woundxp%20mcm%20screen.jpg)
 
-However, if you choose to not install Mod Configuration Menu for some reason / imcompatibility, you can change the desired values of "xxWoundXPSettings.xml
+However, if you choose to not install Mod Configuration Menu for some reason, you can change the desired values of "xxWoundXPSettings.xml
 ". In this case during startup, the settings loads from the XML at "\Mount & Blade II Bannerlord\Modules\xxWoundXp\xxWoundXPSettings.xml".
   
 # Compatibility
@@ -133,6 +134,7 @@ This mod is compatible with the amazing [Mod Configuration Menu (MCM)](https://w
   - Can steal without being detected (Skill Check with modifiers)
   - If detected, decreases relationship with the settlement owner and settlement notables
   - If detected, applies criminal rating with faction.
+  - If detected, player is confronted by civilian. The player can either bribe, persuade, call friendly gang leader support or give back. 
   - Dynammic minimun received ammount of goods (Skill Check with modifiers).
   - Max ammount of availiable goods scales with settlement prosperity / hearth.
   - On steal, decreases settlement prosperity / hearth, affects the settlement loot pool and increase detection for consecutive steals atempt of the same Faction.
@@ -193,7 +195,7 @@ Downloading [Mod Configuration Menu (MCM)](https://www.nexusmods.com/mountandbla
 
 ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/kleptomania%20mcm%20screen.jpg)
 
-However, if you choose to not install Mod Configuration Menu for some reason / imcompatibility, you can change the desired values of "xxKleptomaniaSettings.xml
+However, if you choose to not install Mod Configuration Menu for some reason, you can change the desired values of "xxKleptomaniaSettings.xml
 ". In this case during startup, the settings loads from the XML at "\Mount & Blade II Bannerlord\Modules\xxKleptomania\xxKleptomaniaSettings.xml".
 
 
@@ -225,6 +227,8 @@ v1.1.1
  
 v1.2.0
 - MAJOR code refator to prevent future bugs and crashes
+- Added encounter game menu when detected. The player can either bribe, persuade, call friendly gang leader support or give back. 
+- Persuade and Bribe values are configurable (XML file or MCM)
 - Added soft mod compatibility with Mod Configuration Menu v3(MCM)
 - If the player haves MCM, the code will now load stored info from MCM and then override XML file on startup .
 - If the player doesnt have MCM, the code will deserialize the settings from the XML like usual on startup.
@@ -233,8 +237,7 @@ v1.2.0
 - Removed TownStealCrimeRating and VillageStealCrimeRating max of 60
 - Removed unecessary penalty for high crime rating
 - No penalty to prosperity / hearth if there is no steal quantity
-- Added encounter game menu when detected. The player can either bribe, persuade, call friendly gang leader support or give back. 
-- Persuade and Bribe values are configurable (XML file or MCM)
+
 
 </details>
 
