@@ -8,4 +8,5 @@
   <TownStealCrimeRating>25</TownStealCrimeRating>
   <VillageStealCrimeRating>20</VillageStealCrimeRating>
   <StealRelationPenalty>-15</StealRelationPenalty>
+  <ReceivedXpInConsole>true</ReceivedXpInConsole>
 </ModuleSettings>

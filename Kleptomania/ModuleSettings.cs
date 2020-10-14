@@ -36,6 +36,7 @@ namespace xxKleptomania
         private int _stealRelationPenalty = -15;
         private int _encounterBribeCost = 150;
         private int _encounterInfluenceCost = 2;
+        private bool _receivedXpInConsole = true;
 
 
         public string SettingsFilePath
@@ -183,6 +184,21 @@ namespace xxKleptomania
                 if (_encounterInfluenceCost != value)
                 {
                     _encounterInfluenceCost = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [SettingProperty("Received Experience In Console", RequireRestart = false, HintText = "Shows informational messages in the console when the player receives experience.")]
+        [SettingPropertyGroup("General")]
+        [XmlElement(DataType = "boolean", ElementName = "ReceivedXpInConsole")]
+        public bool ReceivedXpInConsole
+        {
+            get => _receivedXpInConsole;
+            set {
+                if (_receivedXpInConsole != value)
+                {
+                    _receivedXpInConsole = value;
                     OnPropertyChanged();
                 }
             }
