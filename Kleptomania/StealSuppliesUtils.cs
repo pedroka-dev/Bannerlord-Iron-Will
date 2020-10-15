@@ -113,10 +113,15 @@ namespace xxKleptomania
 
         public void GiveRogueryXp(Hero heroTroop)
         {
-            float xpValue = 20f;
+            float xpValue = KleptomaniaSubModule.settings.StealXpValue;
             DefaultCharacterDevelopmentModel characterDevelopmentModel = new DefaultCharacterDevelopmentModel();
             float learningRateBonus = characterDevelopmentModel.CalculateLearningRate(heroTroop, DefaultSkills.Roguery);
-            xpValue *= (float)Math.Round(learningRateBonus, 1);
+
+            if(KleptomaniaSubModule.settings.ScalableSkillXp)
+            {
+                xpValue *= (float)Math.Round(learningRateBonus, 1);
+            }
+         
             heroTroop.AddSkillXp(DefaultSkills.Roguery, xpValue);
 
             if (KleptomaniaSubModule.settings.ReceivedXpInConsole)
