@@ -9,4 +9,6 @@
   <VillageStealCrimeRating>20</VillageStealCrimeRating>
   <StealRelationPenalty>-15</StealRelationPenalty>
   <ReceivedXpInConsole>true</ReceivedXpInConsole>
+  <StealXpValue>20</StealXpValue>
+  <ScalableSkillXp>true</ScalableSkillXp>
 </ModuleSettings>
