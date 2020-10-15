@@ -115,7 +115,7 @@ namespace xxKleptomania
         {
             float xpValue = 20f;
             DefaultCharacterDevelopmentModel characterDevelopmentModel = new DefaultCharacterDevelopmentModel();
-            float learningRateBonus = characterDevelopmentModel.CalculateLearningRate(heroTroop, DefaultSkills.Athletics);
+            float learningRateBonus = characterDevelopmentModel.CalculateLearningRate(heroTroop, DefaultSkills.Roguery);
             xpValue *= (float)Math.Round(learningRateBonus, 1);
             heroTroop.AddSkillXp(DefaultSkills.Roguery, xpValue);
 

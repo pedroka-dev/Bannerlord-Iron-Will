@@ -37,7 +37,8 @@ namespace xxKleptomania
         private int _encounterBribeCost = 150;
         private int _encounterInfluenceCost = 2;
         private bool _receivedXpInConsole = true;
-
+        private int _stealXpValue = 40;
+        private bool _scalableSkillXp = true;
 
         public string SettingsFilePath
         {
@@ -199,6 +200,36 @@ namespace xxKleptomania
                 if (_receivedXpInConsole != value)
                 {
                     _receivedXpInConsole = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [SettingProperty("Hero Wound Experience", minValue: 0, maxValue: 500, RequireRestart = false, HintText = "Roguery Experience value received by the player on steal attempt. Scales by xpValue * (troop.Tier +1) if 'Scalable Experience Values' is true.")]
+        [SettingPropertyGroup("General")]
+        [XmlElement(DataType = "int", ElementName = "StealXpValue")]
+        public int StealXpValue
+        {
+            get => _stealXpValue;
+            set {
+                if (_stealXpValue != value)
+                {
+                    _stealXpValue = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [SettingProperty("Scalable Experience", RequireRestart = false, HintText = "The earned Experience will scale with Hero Learning Rate.")]
+        [SettingPropertyGroup("General")]
+        [XmlElement(DataType = "boolean", ElementName = "ScalableSkillXp")]
+        public bool ScalableSkillXp
+        {
+            get => _scalableSkillXp;
+            set {
+                if (_scalableSkillXp != value)
+                {
+                    _scalableSkillXp = value;
                     OnPropertyChanged();
                 }
             }
