@@ -36,7 +36,8 @@ namespace xxKleptomania
         private int _stealRelationPenalty = -15;
         private int _encounterBribeCost = 150;
         private int _encounterInfluenceCost = 2;
-
+        private bool _receivedXpInConsole = true;
+        private int _stealXpValue = 40;
 
         public string SettingsFilePath
         {
@@ -183,6 +184,36 @@ namespace xxKleptomania
                 if (_encounterInfluenceCost != value)
                 {
                     _encounterInfluenceCost = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [SettingProperty("Received Experience In Console", RequireRestart = false, HintText = "Shows informational messages in the console when the player receives experience.")]
+        [SettingPropertyGroup("General")]
+        [XmlElement(DataType = "boolean", ElementName = "ReceivedXpInConsole")]
+        public bool ReceivedXpInConsole
+        {
+            get => _receivedXpInConsole;
+            set {
+                if (_receivedXpInConsole != value)
+                {
+                    _receivedXpInConsole = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [SettingProperty("Hero Roguery Experience", minValue: 0, maxValue: 500, RequireRestart = false, HintText = "Roguery Experience value received by the player on steal attempt. Scales by Learning Rate.")]
+        [SettingPropertyGroup("General")]
+        [XmlElement(DataType = "int", ElementName = "StealXpValue")]
+        public int StealXpValue
+        {
+            get => _stealXpValue;
+            set {
+                if (_stealXpValue != value)
+                {
+                    _stealXpValue = value;
                     OnPropertyChanged();
                 }
             }

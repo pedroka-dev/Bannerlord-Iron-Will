@@ -30,6 +30,7 @@ namespace xxKleptomania
         public override void SyncData(IDataStore dataStore)
         {
             dataStore.SyncData<Dictionary<string, CampaignTime>>("_settlementLastStealDetectionTimeDictionary", ref this._settlementLastStealDetectionTimeDictionary);
+            dataStore.SyncData<Dictionary<IFaction, int>>("_recentFactionStealAttemptPenalty", ref this._recentFactionStealAttemptPenalty);
         }
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
