@@ -238,6 +238,13 @@ v1.2.0
 - Removed unecessary penalty for high crime rating
 - No penalty to prosperity / hearth if there is no steal quantity
 
+v1.2.1
+  - Recent Faction Steal Attempt Penalty is now stored in the current save file as it's supposed to
+  - Fixed a bug that showed the wrong value of earned Roguery XP by not taking accounts the calculations with Learning Rate
+  - Fixed a bug that made earned Roguery XP scale by Athletics Learning Rate instead of Roguery Learning Rate 
+  - User can configure to not show received roguery XP from steal attempts on the console (on MCM or XML settings)
+  - User can configure its  own value roguery XP from steal attempts. Always scales with learning rate. (on MCM or XML settings)
+
 
 </details>
 
