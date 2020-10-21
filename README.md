@@ -182,6 +182,7 @@ Remember: there is always a risk. Once the Modifiers have been calculated and yo
   - Roguery XP thats scales with Learning Rate. Current: 20 * learningRateBonus.
 </details>
 
+ ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/steal%20caught%20screen.jpg)
  ![alt text](https://raw.githubusercontent.com/pedro-ca/bannerlord_iron_will/master/Kleptomania/Thumbnails/dynamic%20loot%20thumbnail.jpg)
  
 # To-do
@@ -239,11 +240,11 @@ v1.2.0
 - No penalty to prosperity / hearth if there is no steal quantity
 
 v1.2.1
-  - Recent Faction Steal Attempt Penalty is now stored in the current save file as it's supposed to
-  - Fixed a bug that showed the wrong value of earned Roguery XP by not taking accounts the calculations with Learning Rate
-  - Fixed a bug that made earned Roguery XP scale by Athletics Learning Rate instead of Roguery Learning Rate 
-  - User can configure to not show received roguery XP from steal attempts on the console (on MCM or XML settings)
-  - User can configure its  own value roguery XP from steal attempts. Always scales with learning rate. (on MCM or XML settings)
+- Recent Faction Steal Attempt Penalty is now stored in the current save file as it's supposed to
+- Fixed a bug that showed the wrong value of earned Roguery XP by not taking accounts the calculations with Learning Rate
+- Fixed a bug that made earned Roguery XP scale by Athletics Learning Rate instead of Roguery Learning Rate 
+- User can configure to not show received roguery XP from steal attempts on the console (on MCM or XML settings)
+- User can configure its  own value roguery XP from steal attempts. Always scales with learning rate. (on MCM or XML settings)
 
 
 </details>
