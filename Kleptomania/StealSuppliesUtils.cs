@@ -117,18 +117,13 @@ namespace xxKleptomania
             DefaultCharacterDevelopmentModel characterDevelopmentModel = new DefaultCharacterDevelopmentModel();
             float learningRateBonus = characterDevelopmentModel.CalculateLearningRate(heroTroop, DefaultSkills.Roguery);
 
-            if(KleptomaniaSubModule.settings.ScalableSkillXp)
-            {
-                xpValue *= (float)Math.Round(learningRateBonus, 1);
-            }
-         
             heroTroop.AddSkillXp(DefaultSkills.Roguery, xpValue);
 
             if (KleptomaniaSubModule.settings.ReceivedXpInConsole)
             {
-                InformationManager.DisplayMessage(new InformationMessage(heroTroop.Name + " received " + xpValue + " Roguery XP for steal attempt.", Colors.Yellow));
+                InformationManager.DisplayMessage(new InformationMessage(heroTroop.Name + " received " + Math.Round(xpValue * learningRateBonus, 1) + " Roguery XP for steal attempt.", Colors.Yellow));
             }
-            KleptomaniaSubModule.Log.Info("Main Hero | " + heroTroop.Name + " received Roguery XP value of " + xpValue);
+            KleptomaniaSubModule.Log.Info("Main Hero | " + heroTroop.Name + " received Roguery XP value of " + Math.Round(xpValue * learningRateBonus, 1));
         }
     }
 }
